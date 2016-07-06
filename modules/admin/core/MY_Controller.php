@@ -7,12 +7,12 @@ class MY_Controller extends CI_Controller {
     {
         parent::__construct();
 
-        // ログイン有無チェック
-        //if ($this->session->userdata('w_login') == TRUE) {
-        //	$this->smarty->assign('login_chk', $this->session->userdata('w_login'));
-        //} else {
-        //	$this->smarty->assign('login_chk', FALSE);
-        //}
+//         // ログイン有無チェック
+//         if ($_SESSION['a_login'] == TRUE) {
+//         	$this->smarty->assign('login_chk', $_SESSION['a_login']);
+//         } else {
+//         	$this->smarty->assign('login_chk', FALSE);
+//         }
 
         // Smarty 設定
         $this->smarty->template_dir = APPPATH . 'views/contents';
