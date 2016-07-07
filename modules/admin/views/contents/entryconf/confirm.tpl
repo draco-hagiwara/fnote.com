@@ -51,6 +51,7 @@
   {form_hidden('ac_type', $ac_type)}
   {form_hidden('ac_pw', set_value('ac_pw', ''))}
   {form_hidden('retype_password', set_value('retype_password', ''))}
+  {form_hidden('ticket', $ticket)}
 
 {form_close()}
 

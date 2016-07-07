@@ -25,11 +25,18 @@ array(
 
 
 // 管理者：仮登録制限時間デフォルト値
+$config['ADMIN_ADD_LIMITTIME'] = '60';									// 「分」指定 (60)
+// $config['ADMIN_ADD_LIMITTIME'] = '6024';								// 「分」指定 (24h)
+
+// クライアント：仮登録制限時間デフォルト値
+// $config['CLIENT_ADD_LIMITTIME'] = '60';									// 「分」指定 (60)
 $config['ADMIN_ADD_LIMITTIME'] = '6024';								// 「分」指定 (24h)
 
 
 
-
+// Pagination 設定:1ページ当たりの表示件数
+// ※ ～/system/libraries/Pagination.php に不具合あり
+$config['PAGINATION_PER_PAGE'] = '10';
 
 
 /* End of file config_comm.php */

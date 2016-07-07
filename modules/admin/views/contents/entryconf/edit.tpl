@@ -5,7 +5,7 @@
 {* ヘッダー部分　END *}
 
 <div class="jumbotron">
-  <h3>管理者アカウント情報　　<span class="label label-success">新規登録</span></h3>
+  <h3>アカウント情報　　<span class="label label-success">新規登録</span></h3>
 </div>
 
 
@@ -56,6 +56,7 @@
 
   {form_hidden('ac_seq',  $ac_seq)}
   {form_hidden('ac_type', $ac_type)}
+  {form_hidden('ticket', $ticket)}
 
   <div class="form-group">
     <div class="col-sm-offset-4 col-sm-8">

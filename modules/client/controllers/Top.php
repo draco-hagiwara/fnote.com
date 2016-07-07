@@ -1,14 +1,28 @@
 <?php
 
-//class Top extends CI_Controller {
 class Top extends MY_Controller
 {
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
+
+        if ($_SESSION['c_login'] == TRUE)
+        {
+            $this->smarty->assign('login_chk', TRUE);
+            $this->smarty->assign('mem_Seq',   $_SESSION['c_memSeq']);
+            $this->smarty->assign('mem_Name',  $_SESSION['c_memName']);
+        } else {
+            $this->smarty->assign('login_chk', FALSE);
+            $this->smarty->assign('mem_Seq',   "");
+            $this->smarty->assign('mem_Name',  "");
+
+            redirect('/login/');
+        }
+
     }
 
+    // ログイン 初期表示
     public function index()
     {
 
@@ -16,78 +30,4 @@ class Top extends MY_Controller
 
     }
 
-    // ご利用ガイド
-    public function guide()
-    {
-
-        // バリデーション・チェック
-        $this->_set_validation();                                            // バリデーション設定
-        $this->form_validation->run();
-
-        $this->view('top/guide.tpl');
-
-    }
-
-    // 会社概要
-    public function aboutus()
-    {
-
-        // バリデーション・チェック
-        $this->_set_validation();                                            // バリデーション設定
-        $this->form_validation->run();
-
-        $this->view('top/aboutus.tpl');
-
-    }
-
-    // 個人情報保護方針
-    public function privacy()
-    {
-
-        // バリデーション・チェック
-        $this->_set_validation();                                            // バリデーション設定
-        $this->form_validation->run();
-
-        $this->view('top/privacy.tpl');
-
-    }
-
-    // サイトマップ
-    public function sitemap()
-    {
-
-        // バリデーション・チェック
-        $this->_set_validation();                                            // バリデーション設定
-        $this->form_validation->run();
-
-        $this->view('top/sitemap.tpl');
-
-    }
-
-    // 項目 初期値セット
-    private function _form_item_set00()
-    {
-
-        // ジャンル 選択項目セット
-        $this->load->model('comm_select', 'select', TRUE);
-        $genre_list = $this->select->get_genre();
-
-        $this->smarty->assign('options_genre_list',   $genre_list);
-
-    }
-
-    // フォーム・バリデーションチェック
-    private function _set_validation()
-    {
-
-        $rule_set = array(
-        );
-
-        $this->load->library('form_validation', $rule_set);                        // バリデーションクラス読み込み
-
-    }
-
 }
-
-/* End of file top.php */
-/* Location: ./application/controllers/top.php */

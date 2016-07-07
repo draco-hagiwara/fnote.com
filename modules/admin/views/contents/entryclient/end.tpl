@@ -4,10 +4,8 @@
 <body>
 {* ヘッダー部分　END *}
 
-<div class="jumbotron">
-  <h3>ログイン TOP画面　　<span class="label label-danger">クライアント</span></h3>
-</div>
 
+<h3>フォームは正しく送信されました!</h3>
 
 
 {* フッター部分　START *}

@@ -7,7 +7,21 @@ class Entryadmin extends MY_Controller
     {
         parent::__construct();
 
-        // セッション書き込み
+        if ($_SESSION['a_login'] == TRUE)
+        {
+            $this->smarty->assign('login_chk', TRUE);
+            $this->smarty->assign('mem_type',  $_SESSION['a_memType']);
+            $this->smarty->assign('mem_Seq',   $_SESSION['a_memSeq']);
+        } else {
+            $this->smarty->assign('login_chk', FALSE);
+            $this->smarty->assign('mem_type',  "");
+            $this->smarty->assign('mem_Seq',   "");
+
+            redirect('/login/');
+        }
+
+        $this->smarty->assign('err_email',  FALSE);
+        $this->smarty->assign('err_passwd', FALSE);
 
     }
 
@@ -24,8 +38,8 @@ class Entryadmin extends MY_Controller
     	// 初期値セット
     	$this->_item_set01();
 
-    	$this->smarty->assign('err_email',  FALSE);
-    	$this->smarty->assign('err_passwd', FALSE);
+//     	$this->smarty->assign('err_email',  FALSE);
+//     	$this->smarty->assign('err_passwd', FALSE);
 
         $this->view('entryadmin/index.tpl');
 
@@ -43,8 +57,8 @@ class Entryadmin extends MY_Controller
     	// バリデーション・チェック
     	$this->_set_validation();
     	if ($this->form_validation->run() == FALSE) {
-    		$this->smarty->assign('err_email',  FALSE);
-    		$this->smarty->assign('err_passwd', FALSE);
+//     		$this->smarty->assign('err_email',  FALSE);
+//     		$this->smarty->assign('err_passwd', FALSE);
     		$this->view('entryadmin/index.tpl');
     	} else {
     		// パスワード再入力チェック
@@ -73,8 +87,8 @@ class Entryadmin extends MY_Controller
 
     	// 「戻る」ボタン押下の場合
     	if ( $this->input->post('_back') ) {
-    		$this->smarty->assign('err_email',  FALSE);
-    		$this->smarty->assign('err_passwd', FALSE);
+//     		$this->smarty->assign('err_email',  FALSE);
+//     		$this->smarty->assign('err_passwd', FALSE);
     		$this->view('entryadmin/index.tpl');
     		return;
     	}
@@ -84,7 +98,7 @@ class Entryadmin extends MY_Controller
 
     	if ($this->ac->check_loginid($this->input->post('ac_id'))) {
     		$this->smarty->assign('err_email',  TRUE);
-    		$this->smarty->assign('err_passwd', FALSE);
+//     		$this->smarty->assign('err_passwd', FALSE);
     		$this->view('entryadmin/index.tpl');
     		return;
     	}
@@ -233,7 +247,7 @@ class Entryadmin extends MY_Controller
     			array(
     					'field'   => 'ac_id',
     					'label'   => 'メールアドレス＆ログインID',
-    					'rules'   => 'trim|required|valid_email'
+    					'rules'   => 'trim|required|max_length[100]|valid_email'
     			),
     			array(
     					'field'   => 'ac_tel',
