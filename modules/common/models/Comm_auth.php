@@ -6,6 +6,7 @@ class Comm_auth extends CI_Model
     private $_hash_passwd;
     private $_memType;
     private $_memSeq;
+    private $_memSiteid;
     private $_memName;
 
     public function __construct()
@@ -65,7 +66,7 @@ class Comm_auth extends CI_Model
                     } else {
                         $this->_hash_passwd = $arrData[0]['cl_pw'];
                     	$this->_memSeq      = $arrData[0]['cl_seq'];
-                        $this->_memName     = $arrData[0]['cl_company'];
+                    	$this->_memName     = $arrData[0]['cl_company'];
 
                         $this->_update_Session($login_member);
                     }
@@ -197,9 +198,10 @@ class Comm_auth extends CI_Model
         switch ($login_member)
         {
             case 'client':
-                $_SESSION['c_login']   = TRUE;                 // ログイン有無
-                $_SESSION['c_memSeq']  = $this->_memSeq;       // メンバーseq
-                $_SESSION['c_memName'] = $this->_memName;      // 会社名
+                $_SESSION['c_login']     = TRUE;               // ログイン有無
+                $_SESSION['c_memSeq']    = $this->_memSeq;     // メンバーseq
+                $_SESSION['c_memSiteid'] = $this->_memSiteid;  // サイトID
+                $_SESSION['c_memName']   = $this->_memName;    // 会社名
 
                 break;
             case 'admin':
@@ -224,9 +226,10 @@ class Comm_auth extends CI_Model
         switch ($login_member)
         {
             case 'client':
-                $backup_c_login   = $_SESSION['c_login'];
-                $backup_c_memSeq  = $_SESSION['c_memSeq'];
-                $backup_c_memName = $_SESSION['c_memName'];
+                $backup_c_login     = $_SESSION['c_login'];
+                $backup_c_memSeq    = $_SESSION['c_memSeq'];
+                $backup_c_memSiteid = $_SESSION['c_memSiteid'];
+                $backup_c_memName   = $_SESSION['c_memName'];
 
                 $get_data = $this->session->all_userdata();
                 foreach ($get_data as $key => $val)
@@ -237,9 +240,10 @@ class Comm_auth extends CI_Model
                     }
                 }
 
-                $_SESSION['c_login'] =   $backup_c_login;         // ログイン有無
-                $_SESSION['c_memSeq'] =  $backup_c_memSeq;        // メンバーID
-                $_SESSION['c_memName'] = $backup_c_memName;       // メンバー名前
+                $_SESSION['c_login']     =  $backup_c_login;        // ログイン有無
+                $_SESSION['c_memSeq']    = $backup_c_memSeq;        // メンバーID
+                $_SESSION['c_memSiteid'] = $backup_c_memSiteid;     // メンバーID
+                $_SESSION['c_memName']   = $backup_c_memName;       // メンバー名前
 
                 break;
             case 'admin':

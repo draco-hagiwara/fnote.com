@@ -32,6 +32,30 @@ class Client extends CI_Model
     }
 
     /**
+     * クライアントSEQから営業＆編集者情報を取得する
+     *
+     * @param    int
+     * @return   bool
+     */
+    public function get_clac_seq($cl_seq, $cl_id)
+    {
+
+    	if (isset($cl_seq))
+    	{
+    		$set_where["cl_seq"]    = $cl_seq;
+    	} else {
+    		$set_where["cl_id"]    = $cl_id;
+    	}
+
+    	$query = $this->db->get_where('vw_a_clientlist', $set_where);
+
+    	$get_data = $query->result('array');
+
+    	return $get_data;
+
+    }
+
+    /**
      * クライアントメンバーの取得
      *
      * @param    array() : 検索項目値

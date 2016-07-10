@@ -96,7 +96,8 @@ function fmSubmit(formName, url, method, num) {
                     {elseif $cl.cl_status == "6"}<font color="#ffffff" style="background-color:#0000ff">クライアント確認</font>
                     {elseif $cl.cl_status == "7"}<font color="#ffffff" style="background-color:#0000ff">編集最終確認</font>
                     {elseif $cl.cl_status == "8"}<font color="#ffffff" style="background-color:#0000ff">掲　載</font>
-                    {elseif $cl.cl_status == "9"}<font color="#ffffff" style="background-color:#ff6347">解　約</font>
+                    {elseif $cl.cl_status == "9"}<font color="#ffffff" style="background-color:#ff6347">再編集</font>
+                    {elseif $cl.cl_status == "20"}<font color="#ffffff" style="background-color:#ff6347">解　約</font>
                     {else}}エラー
                     {/if}
                 </td>
@@ -116,12 +117,16 @@ function fmSubmit(formName, url, method, num) {
                     {$cl.adminname01|escape} {$cl.adminname02|escape}
                 </td>
                 <td>
-                    <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/clientlist/detail/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">編集</button>
-
-                    <button type="submit" class="btn btn-success btn-xs" name="cl_uniq" value="{$cl.cl_seq}">編集</button>
-                    <button type="submit" class="btn btn-success btn-xs" name="cl_uniq" value="{$cl.cl_seq}">記事</button>
-                    <button type="submit" class="btn btn-success btn-xs" name="cl_uniq" value="{$cl.cl_seq}">画像</button>
+                    <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/clientlist/detail/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">編 集</button>
+                    {if $smarty.session.a_memType!=1}
+                    <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/entrytenpo/tenpo_edit/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">店舗情報</button>
+                    <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/entrytenpo/report_edit/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">記事本文</button>
+                    <button type="submit" class="btn btn-success btn-xs" name="cl_uniq" value="{$cl.cl_seq}">画 像</button>
+                    {/if}
                     <button type="submit" class="btn btn-success btn-xs" name="cl_uniq" value="{$cl.cl_seq}">URL</button>
+                    {if $smarty.session.a_memType==1}
+                    <button type="button" class="btn btn-warning btn-xs" onclick="fmSubmit('detailForm', '/admin/entrytenpo/tenpo_pre/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">営業承認</button>
+                    {/if}
                 </td>
             </tr>
         </tbody>

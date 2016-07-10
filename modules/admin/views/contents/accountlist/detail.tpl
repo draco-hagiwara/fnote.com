@@ -13,7 +13,7 @@
   {$mess}
   {if $smarty.session.a_memType==2}
   <div class="form-group">
-    <label for="ac_type" class="col-sm-4 control-label">管理種類選択<font color=red>【必須】</font></label>
+    <label for="ac_type" class="col-sm-4 control-label">アカウント種類選択<font color=red>【必須】</font></label>
     <div class="col-sm-2 btn-lg">
       {form_dropdown('ac_type', $options_ac_type, set_value('ac_type', $info.ac_type))}
       {if form_error('ac_type')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ac_type')}</font></label>{/if}
@@ -89,19 +89,35 @@
   {form_hidden('ac_seq', $info.ac_seq)}
   {form_hidden('ac_id', $info.ac_id)}
 
-  <div class="form-group">
-    <div class="col-sm-offset-4 col-sm-8">
-      {$attr02['name'] = 'submit'}
-      {$attr02['type'] = 'submit'}
-      {$attr['value'] = '_submit'}
-      {form_button($attr02 , '更　　新' , 'class="btn btn-default"')}
-    </div>
+  <!-- Button trigger modal -->
+  <div class="row">
+  <div class="col-sm-2 col-sm-offset-4">
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">更新する</button>
   </div>
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">アカウント情報　更新</h4>
+        </div>
+        <div class="modal-body">
+          <p>更新しますか。&hellip;</p>
+        </div>
+        <div class="modal-footer">
+          <button type='submit' name='submit' value='submit' class="btn btn-sm btn-primary">O  K</button>
+          <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 
 {form_close()}
 <!-- </form> -->
 
-
+<br><br>
 {* フッター部分　START *}
     <!-- Bootstrapのグリッドシステムclass="row"で終了 -->
     </div>

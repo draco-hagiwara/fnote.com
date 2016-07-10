@@ -5,7 +5,7 @@
 {* ヘッダー部分　END *}
 
 <div class="jumbotron">
-  <h3>アカウント情報　　<span class="label label-success">更新</span></h3>
+  <h3>クライアント情報　　<span class="label label-success">更新</span></h3>
 </div>
 
 {form_open('/clientlist/detailchk/' , 'name="clientDetailForm" class="form-horizontal"')}
@@ -33,6 +33,10 @@
       {if form_error('cl_editor_id')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_editor_id')}</font></label>{/if}
     </div>
   </div>
+  {/if}
+
+  {if $smarty.session.a_memType!=0}
+
   <div class="form-group">
     <label for="cl_contract" class="col-sm-4 control-label">契約期間</label>
     <div class="col-sm-4">
@@ -132,24 +136,41 @@
       {if form_error('cl_mailsub')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_mailsub')}</font></label>{/if}
     </div>
   </div>
-{/if}
 
   {form_hidden('cl_seq', $info.cl_seq)}
   {form_hidden('cl_id', $info.cl_id)}
 
-  <div class="form-group">
-    <div class="col-sm-offset-4 col-sm-8">
-      {$attr02['name'] = 'submit'}
-      {$attr02['type'] = 'submit'}
-      {$attr['value'] = '_submit'}
-      {form_button($attr02 , '更　　新' , 'class="btn btn-default"')}
-    </div>
+  <!-- Button trigger modal -->
+  <div class="row">
+  <div class="col-sm-2 col-sm-offset-4">
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">更新する</button>
   </div>
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">クライアント情報　更新</h4>
+        </div>
+        <div class="modal-body">
+          <p>更新しますか。&hellip;</p>
+        </div>
+        <div class="modal-footer">
+          <button type='submit' name='submit' value='submit' class="btn btn-sm btn-primary">O  K</button>
+          <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+{/if}
 
 {form_close()}
 <!-- </form> -->
 
-
+<br><br>
 {* フッター部分　START *}
     <!-- Bootstrapのグリッドシステムclass="row"で終了 -->
     </div>

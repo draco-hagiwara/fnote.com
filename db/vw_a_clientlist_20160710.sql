@@ -42,12 +42,10 @@ select
   T2.ac_department,
   T2.ac_name01 as salsename01,
   T2.ac_name02 as salsename02,
-  T2.ac_mail   as salseacmail,
 
   T3.ac_department,
   T3.ac_name01 as editorname01,
-  T3.ac_name02 as editorname02,
-  T3.ac_mail   as editoracmail
+  T3.ac_name02 as editorname02
 
   from mb_client AS T1
     LEFT JOIN mb_account AS T2 ON T1.cl_sales_id = T2.ac_seq
@@ -89,17 +87,14 @@ CREATE ALGORITHM = UNDEFINED VIEW vw_a_clientlist
   T2.ac_department as salsedep,
   T2.ac_name01 as salsename01,
   T2.ac_name02 as salsename02,
-  T2.ac_mail   as salseacmail,
 
   T3.ac_department as editordep,
   T3.ac_name01 as editorname01,
   T3.ac_name02 as editorname02,
-  T3.ac_mail   as editoracmail,
 
   T4.ac_department as admindep,
   T4.ac_name01 as adminname01,
-  T4.ac_name02 as adminname02,
-  T4.ac_mail   as adminacmail
+  T4.ac_name02 as adminname02
 
   from mb_client AS T1
     LEFT JOIN mb_account AS T2 ON T1.cl_sales_id  = T2.ac_seq
