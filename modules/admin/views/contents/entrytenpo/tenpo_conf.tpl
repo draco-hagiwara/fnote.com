@@ -221,6 +221,13 @@
     </div>
   </div>
   <div class="form-group">
+    <label for="en_google_map" class="col-sm-3 control-label">googleマップコード</label>
+    <div class="col-sm-9">
+      {set_value('en_google_map', '')}
+      {form_hidden('en_google_map', set_value('en_google_map', ''))}
+    </div>
+  </div>
+  <div class="form-group">
     <label for="en_free01" class="col-sm-3 control-label">フリー１</label>
     <div class="col-sm-9">
       {set_value('en_free01', '')}

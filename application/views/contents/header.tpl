@@ -8,11 +8,11 @@
 <meta name="author" content="">
 <title>CS &#xB7; Crowd Sourcing</title>
 
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-
-<link rel="stylesheet" href="../../css/bootstrap.min.css">
-<link rel="stylesheet" href="../../css/normalize.css">
+{* Versionと並び順に注意 *}
+<link href="../../css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="../../css/main.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 <script src="../../js/jquery-2.1.4.min.js"></script>
 <script src="../../js/jquery-ui-3.0.2.custom.min.js"></script>
@@ -29,8 +29,8 @@
 
     <div class="page-header">
       <ul class="list-inline text-right">
-        <li><a href="/entrywriter/">新規会員登録</a></li>
-        <li><a href="/writer/login/">ログイン</a></li>
+        <li><a href="#">新規会員登録</a></li>
+        <li><a href="#">ログイン</a></li>
       </ul>
 
       <nav class="navbar navbar-inverse">
@@ -47,9 +47,8 @@
       </nav>
 
       <ul class="list-inline text-right">
-        <li><a href="../../entryclient">クライアント新規登録</a></li>
-        <li><a href="/client/login/">Clientログイン</a></li>
-        <li><a href="/admin/login/">ADMIINログイン</a></li>
+        <li><a href="/pf/client/login/">Clientログイン</a></li>
+        <li><a href="/pf/admin/login/">ADMIINログイン</a></li>
       </ul>
     </div>
   </div>

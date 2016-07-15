@@ -121,10 +121,7 @@
 	  {$list.en_sns05}
 	</div>
 	<div class="form-group">
-	  {$list.en_sns05}
-	</div>
-	<div class="form-group">
-	  {$list.en_google_map}
+	  {$list.en_free01}
 	</div>
 	<div class="form-group">
 	  {$list.en_free02}
@@ -140,25 +137,25 @@
 	</div>
 
 
-<form class="form-horizontal" name="preForm" method="post" autocomplete="off" action="/admin/entrytenpo/request/">
+<form class="form-horizontal" name="preForm" method="post" autocomplete="off" action="/client/top/preview/">
 
   <input type="hidden" name="cl_seq" value={$list.en_cl_seq}>
   <input type="hidden" name="cl_id" value={$list.en_cl_id}>
 
-{if $list.cl_status == 5}
+{if $list.cl_status == 6}
 
   <div class="form-group">
     <label for="cl_comment" class="col-sm-3 control-label">承認 & 非承認 事由</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="cl_comment" name="cl_comment" placeholder="承認または非承認の理由を入力してください。max.500文字">{$list.cl_comment}</textarea>
+      <textarea class="form-control input-sm" id="cl_comment" name="cl_comment" placeholder="承認または非承認の理由を入力してください。max.500文字"></textarea>
     </div>
   </div>
 
   <!-- Button trigger modal -->
   <div class="row">
   <div class="col-sm-9 col-sm-offset-3">
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal01">営業 承認</button>
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal02">営業 非承認</button>
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal01">承　認</button>
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal02">非承認</button>
   </div>
   </div>
 
@@ -167,13 +164,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">営業 承認</h4>
+          <h4 class="modal-title">サイト 承認</h4>
         </div>
         <div class="modal-body">
-          <p>営業承認が終了し、クライアントへの確認＆承認依頼を行います。&hellip;</p>
+          <p>御社承認が終了し、サイト掲載への最終確認作業を行います。&hellip;</p>
         </div>
         <div class="modal-footer">
-          <button type='submit' name='submit' value='salse_ok' class="btn btn-sm btn-primary">O  K</button>
+          <button type='submit' name='submit' value='client_ok' class="btn btn-sm btn-primary">O  K</button>
           <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
         </div>
       </div><!-- /.modal-content -->
@@ -185,48 +182,20 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">営業 非承認</h4>
+          <h4 class="modal-title">サイト 非承認</h4>
         </div>
         <div class="modal-body">
           <p>承認せず、編集作業へステータスを戻します。&hellip;</p>
+          <p>非承認の理由につきまして記入をお願いします。&hellip;</p>
         </div>
         <div class="modal-footer">
-          <button type='submit' name='submit' value='salse_ng' class="btn btn-sm btn-primary">O  K</button>
+          <button type='submit' name='submit' value='client_ng' class="btn btn-sm btn-primary">O  K</button>
           <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 {/if}
-
-{if $list.cl_status == 7}
-  <!-- Button trigger modal -->
-  <div class="row">
-  <div class="col-sm-9 col-sm-offset-3">
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal03">最終承認（掲載開始）</button>
-  </div>
-  </div>
-
-  <div class="modal fade" id="myModal03" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">最終承認（掲載開始）</h4>
-        </div>
-        <div class="modal-body">
-          <p>全ての確認が終了し、掲載をスタートさせます。&hellip;</p>
-        </div>
-        <div class="modal-footer">
-          <button type='submit' name='submit' value='final' class="btn btn-sm btn-primary">O  K</button>
-          <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-{/if}
-
-
 
 </form>
 <!-- </form> -->

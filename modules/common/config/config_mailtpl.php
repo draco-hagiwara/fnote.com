@@ -6,9 +6,9 @@
 | -------------------------------------------------------------------
 */
 
-$config['MAILTPL_CONTACT_ID']    = '1';                 // 問合せメール（全体）
-$config['MAILTPL_CONTACT_WR_ID'] = '2';                 // 問合せメール（ライターから）
-$config['MAILTPL_CONTACT_CL_ID'] = '3';                 // 問合せメール（クライアントから）
+// $config['MAILTPL_CONTACT_TOP_ID']   = '1';                 // 問合せメール（TOPページ）
+$config['MAILTPL_CONTACT_CL_ID']    = '2';                 // 問合せメール（クライアントから）
+// $config['MAILTPL_CONTACT_TENPO_ID'] = '3';                 // 問合せメール（各サイト記事問合せ）
 
 $config['MAILTPL_ENT_ADMIN_ID']    = '11';              // 管理者新規会員登録メール
 $config['MAILTPL_ENT_ADMINPW_ID']  = '12';              // 管理者会員登録完了メール

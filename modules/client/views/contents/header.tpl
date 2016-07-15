@@ -32,14 +32,14 @@
       <div id="patern05" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
           <li><a href="/client/top/">TOP</a></li>
-          <li><a href="/client/clientinfo/">新着情報管理</a></li>
-          <li><a href="/client/clientinfo/">問合せ管理</a></li>
+          <li><a href="/client/newslist/">新着情報管理</a></li>
+          <li><a href="/client/reply/">問合せ管理</a></li>
           <li><a href="/client/clientinfo/">会社情報</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">その他<b class="caret"></b></a>
             <ul class="dropdown-menu right">
-              <li><a href="/client/Entryclient/">サポート問合せ</a></li>
+              <li><a href="/client/mypage/contact/">サポート問合せ</a></li>
               <li><a href="/client/accountlist/">パスワード変更</a></li>
             </ul>
           </li>

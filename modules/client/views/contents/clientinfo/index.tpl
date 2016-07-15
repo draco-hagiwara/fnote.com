@@ -78,7 +78,10 @@
 
 {form_close()}
 
-
+<br><br><br><br>
+  <div class="form-group col-sm-8 col-sm-offset-2">
+    <u>※登録内容の変更をご希望される場合は、<strong>メニュー 「その他->サポート問合せ」 </strong>よりご連絡ください。</u>
+  </div>
 
 {* フッター部分　START *}
     <!-- Bootstrapのグリッドシステムclass="row"で終了 -->

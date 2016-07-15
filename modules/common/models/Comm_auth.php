@@ -28,7 +28,7 @@ class Comm_auth extends CI_Model
         switch ($login_member)
         {
             case 'client':
-                $sql = 'SELECT cl_seq, cl_status, cl_id, cl_pw, cl_company FROM mb_client '
+                $sql = 'SELECT cl_seq, cl_status, cl_siteid, cl_pw, cl_company FROM mb_client '
                         . 'WHERE cl_id      = ? '
                         . 'AND ( cl_status  != 0 OR cl_status  != 9 )';
 
@@ -66,6 +66,7 @@ class Comm_auth extends CI_Model
                     } else {
                         $this->_hash_passwd = $arrData[0]['cl_pw'];
                     	$this->_memSeq      = $arrData[0]['cl_seq'];
+                    	$this->_memSiteid   = $arrData[0]['cl_siteid'];
                     	$this->_memName     = $arrData[0]['cl_company'];
 
                         $this->_update_Session($login_member);

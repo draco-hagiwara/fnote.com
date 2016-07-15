@@ -6,12 +6,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>CS &#xB7; Crowd Sourcing</title>
+<title>プラットフォーム &#xB7; FNOTE</title>
 
 {* Versionと並び順に注意 *}
 <link href="{base_url()}../../css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{base_url()}../../js/gallery/lightbox/jquery.lightbox-0.5.css"/>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="{base_url()}../../js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script type="text/javascript" src="{base_url()}../../js/gallery/common.js"></script>
+<script type="text/javascript" src="{base_url()}../../js/gallery/lightbox/jquery.lightbox-0.5.min.js"></script>
+
+
 
 </head>
 
@@ -47,8 +58,8 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">システム設定<b class="caret"></b></a>
               <ul class="dropdown-menu right">
-                <li><a href="/admin/backup/">手動バックアップ</a></li>
-                <li><a href="/admin/mailtpl/">メールテンプレ管理</a></li>
+                <li><a href="/admin/system/backup/">手動バックアップ</a></li>
+                <li><a href="/admin/system/mailtpl/">メールテンプレ管理</a></li>
               </ul>
             </li>
             <li><a href="/admin/login/logout/">ログアウト</a></li>

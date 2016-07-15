@@ -73,11 +73,13 @@ class Entrytenpo extends MY_Controller
 
 		// 店舗データの取得
     	$this->load->model('Entry', 'ent', TRUE);
-    	$entry_data = $this->ent->get_entry_clid($cl_data[0]['cl_id']);
-		if ($entry_data == FALSE)
+    	$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid']);
+//     	$entry_data = $this->ent->get_entry_clid($cl_data[0]['cl_id']);
+    	if ($entry_data == FALSE)
 		{
 			// 空データを取得
-			$entry_data = $this->ent->get_entry_clid($cl_data[0]['cl_id'], TRUE);
+			$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid'], TRUE);
+// 			$entry_data = $this->ent->get_entry_clid($cl_data[0]['cl_id'], TRUE);
 
 			$this->smarty->assign('list', $entry_data[0]);
 		} else {
@@ -193,11 +195,13 @@ class Entrytenpo extends MY_Controller
 
     	// 店舗データの取得
     	$this->load->model('Entry', 'ent', TRUE);
-    	$entry_data = $this->ent->get_entry_clid($cl_data[0]['cl_id']);
+    	$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid']);
+//     	$entry_data = $this->ent->get_entry_clid($cl_data[0]['cl_id']);
     	if ($entry_data == FALSE)
     	{
     		// 空データを取得
-    		$entry_data = $this->ent->get_entry_clid($cl_data[0]['cl_id'], TRUE);
+    		$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid'], TRUE);
+//     		$entry_data = $this->ent->get_entry_clid($cl_data[0]['cl_id'], TRUE);
 
     		$this->smarty->assign('list', $entry_data[0]);
     	} else {
@@ -237,7 +241,7 @@ class Entrytenpo extends MY_Controller
 	    		$post_data["en_cl_seq"]    = $_SESSION['a_cl_seq'];
 	    		$post_data["en_cl_id"]     = $_SESSION['a_cl_id'];
 	    		$post_data["en_cl_siteid"] = $_SESSION['a_cl_siteid'];
-	    		$post_data["en_cl_siteid"] = $_SESSION['a_cl_siteid'];
+// 	    		$post_data["en_cl_siteid"] = $_SESSION['a_cl_siteid'];
 
 	    		// 不要パラメータ削除
 	    		unset($post_data["submit"]) ;
@@ -254,7 +258,8 @@ class Entrytenpo extends MY_Controller
 
 		    	// 再表示用にデータの取得
 		    	$this->load->model('Entry', 'ent', TRUE);
-		    	$entry_data = $this->ent->get_entry_clid($post_data["en_cl_id"]);
+		    	$entry_data = $this->ent->get_entry_siteid($post_data["en_cl_siteid"]);
+// 		    	$entry_data = $this->ent->get_entry_clid($post_data["en_cl_id"]);
 
 	    		$this->smarty->assign('list', $entry_data[0]);
 
@@ -309,7 +314,8 @@ class Entrytenpo extends MY_Controller
 
 		    	// 再表示用にデータの取得
 		    	$this->load->model('Entry', 'ent', TRUE);
-		    	$entry_data = $this->ent->get_entry_clid($clac_data[0]['cl_id']);
+		    	$entry_data = $this->ent->get_entry_siteid($clac_data[0]['cl_siteid']);
+// 		    	$entry_data = $this->ent->get_entry_clid($clac_data[0]['cl_id']);
 
 		    	$this->smarty->assign('list', $entry_data[0]);
 	    	}
@@ -689,8 +695,13 @@ class Entrytenpo extends MY_Controller
     					'rules'   => 'trim|max_length[1000]'
     			),
     			array(
-    					'field'   => 'en_free01',
-    					'label'   => 'フリー１',
+    					'field'   => 'en_sns05',
+    					'label'   => 'ＳＮＳコード５',
+    					'rules'   => 'trim|max_length[1000]'
+    			),
+    			array(
+    					'field'   => 'en_google_map',
+    					'label'   => 'googleマップコード',
     					'rules'   => 'trim|max_length[1000]'
     			),
     			array(

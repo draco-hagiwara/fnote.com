@@ -89,8 +89,6 @@ class Entryclient extends MY_Controller
 	    		}
     		}
 
-
-
     		$this->view('entryclient/confirm.tpl');
     	}
     }

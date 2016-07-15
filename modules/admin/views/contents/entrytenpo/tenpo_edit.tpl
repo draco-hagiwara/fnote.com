@@ -204,36 +204,43 @@
   <div class="form-group">
     <label for="en_sns01" class="col-sm-3 control-label">ＳＮＳコード１</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_sns01" name="en_sns01" placeholder="ＳＮＳコード１を入力してください。max.500文字">{$list.en_sns01}</textarea>
+      <textarea class="form-control input-sm" id="en_sns01" name="en_sns01" placeholder="ＳＮＳコード１を入力してください。">{$list.en_sns01}</textarea>
       {if form_error('en_sns01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_sns01')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_sns02" class="col-sm-3 control-label">ＳＮＳコード２</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_sns02" name="en_sns02" placeholder="ＳＮＳコード２を入力してください。max.500文字">{$list.en_sns02}</textarea>
+      <textarea class="form-control input-sm" id="en_sns02" name="en_sns02" placeholder="ＳＮＳコード２を入力してください。">{$list.en_sns02}</textarea>
       {if form_error('en_sns02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_sns02')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_sns03" class="col-sm-3 control-label">ＳＮＳコード３</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_sns03" name="en_sns03" placeholder="ＳＮＳコード３を入力してください。max.500文字">{$list.en_sns03}</textarea>
+      <textarea class="form-control input-sm" id="en_sns03" name="en_sns03" placeholder="ＳＮＳコード３を入力してください。">{$list.en_sns03}</textarea>
       {if form_error('en_sns03')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_sns03')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_sns04" class="col-sm-3 control-label">ＳＮＳコード４</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_sns04" name="en_sns04" placeholder="ＳＮＳコード４を入力してください。max.500文字">{$list.en_sns04}</textarea>
+      <textarea class="form-control input-sm" id="en_sns04" name="en_sns04" placeholder="ＳＮＳコード４を入力してください。">{$list.en_sns04}</textarea>
       {if form_error('en_sns04')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_sns04')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_sns05" class="col-sm-3 control-label">ＳＮＳコード５</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_sns05" name="en_sns05" placeholder="ＳＮＳコード５を入力してください。max.500文字">{$list.en_sns05}</textarea>
+      <textarea class="form-control input-sm" id="en_sns05" name="en_sns05" placeholder="ＳＮＳコード５を入力してください。">{$list.en_sns05}</textarea>
       {if form_error('en_sns05')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_sns05')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="en_google_map" class="col-sm-3 control-label">googleマップコード</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="en_google_map" name="en_google_map" placeholder="googleマップコードを入力してください。">{$list.en_google_map}</textarea>
+      {if form_error('en_google_map')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_google_map')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">

@@ -42,6 +42,10 @@ class Mailtpl extends CI_Model
     			'mt_id' => $set_data['mt_id'],
     	);
 
+    	// 更新日時をセット
+    	$time = time();
+    	$set_data['mt_update_date'] = date("Y-m-d H:i:s", $time);
+
     	$result = $this->db->update('tb_mail_tpl', $set_data, $where);
     	return $result;
     }

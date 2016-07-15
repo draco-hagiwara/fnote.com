@@ -16,6 +16,7 @@
 <br><br><label>■■　お知らせ</label>
 <dl class="dl-horizontal">
   <dt>2016.07.04</dt><dd>fnote.com.dev 開発スタート</dd>
+  <dt>2016.06.13</dt><dd>プロジェクト スタート</dd>
 </dl>
 
 

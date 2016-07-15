@@ -87,17 +87,18 @@ function fmSubmit(formName, url, method, num) {
                     {$cl.cl_seq}
                 </td>
                 <td>
-                    {if $cl.cl_status == "0"}<font color="#ffffff" style="background-color:#008000">登録中</font>
-                    {elseif $cl.cl_status == "1"}<font color="#ffffff" style="background-color:#0000ff">審　査</font>
-                    {elseif $cl.cl_status == "2"}<font color="#ffffff" style="background-color:#0000ff">受　注</font>
-                    {elseif $cl.cl_status == "3"}<font color="#ffffff" style="background-color:#0000ff">取　材</font>
-                    {elseif $cl.cl_status == "4"}<font color="#ffffff" style="background-color:#0000ff">編　集</font>
-                    {elseif $cl.cl_status == "5"}<font color="#ffffff" style="background-color:#0000ff">営業確認</font>
-                    {elseif $cl.cl_status == "6"}<font color="#ffffff" style="background-color:#0000ff">クライアント確認</font>
-                    {elseif $cl.cl_status == "7"}<font color="#ffffff" style="background-color:#0000ff">編集最終確認</font>
-                    {elseif $cl.cl_status == "8"}<font color="#ffffff" style="background-color:#0000ff">掲　載</font>
-                    {elseif $cl.cl_status == "9"}<font color="#ffffff" style="background-color:#ff6347">再編集</font>
-                    {elseif $cl.cl_status == "20"}<font color="#ffffff" style="background-color:#ff6347">解　約</font>
+                    {if $cl.cl_status == "0"}<font color="#ffffff" style="background-color:royalblue">[ 登録中 ]</font>
+                    {elseif $cl.cl_status == "1"}<font color="#ffffff" style="background-color:royalblue">[ 審　査 ]</font>
+                    {elseif $cl.cl_status == "2"}<font color="#ffffff" style="background-color:royalblue">[ 受　注 ]</font>
+                    {elseif $cl.cl_status == "3"}<font color="#ffffff" style="background-color:darkorange">[ 取　材 ]</font>
+                    {elseif $cl.cl_status == "4"}<font color="#ffffff" style="background-color:darkorange">[ 編　集 ]</font>
+                    {elseif $cl.cl_status == "5"}<font color="#ffffff" style="background-color:darkorange">[ 営業確認 ]</font>
+                    {elseif $cl.cl_status == "6"}<font color="#ffffff" style="background-color:darkorange">[ クライアント確認 ]</font>
+                    {elseif $cl.cl_status == "7"}<font color="#ffffff" style="background-color:darkorange">[ 編集最終確認 ]</font>
+                    {elseif $cl.cl_status == "8"}<font color="#ffffff" style="background-color:deeppink">[ 掲　載 ]</font>
+                    {elseif $cl.cl_status == "9"}<font color="#ffffff" style="background-color:darkorange">[ 再編集 ]</font>
+                    {elseif $cl.cl_status == "19"}<font color="#ffffff" style="background-color:gray">[ 一時停止 ]</font>
+                    {elseif $cl.cl_status == "20"}<font color="#ffffff" style="background-color:gray">[ 解　約 ]</font>
                     {else}}エラー
                     {/if}
                 </td>
@@ -121,7 +122,8 @@ function fmSubmit(formName, url, method, num) {
                     {if $smarty.session.a_memType!=1}
                     <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/entrytenpo/tenpo_edit/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">店舗情報</button>
                     <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/entrytenpo/report_edit/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">記事本文</button>
-                    <button type="submit" class="btn btn-success btn-xs" name="cl_uniq" value="{$cl.cl_seq}">画 像</button>
+                    <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/imagecontrol/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">画像登録</button>
+                    <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/imagecontrol/manage/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">画像管理</button>
                     {/if}
                     <button type="submit" class="btn btn-success btn-xs" name="cl_uniq" value="{$cl.cl_seq}">URL</button>
                     {if $smarty.session.a_memType==1}
