@@ -255,6 +255,12 @@ class Client extends CI_Model
 
     	$query = $this->db->query($sql, $values);
 
+
+    	print($cl_id);
+    	print("count :: ");
+    	print($query->num_rows());
+
+
     	if ($query->num_rows() > 0) {
     		return TRUE;
     	} else {

@@ -14,6 +14,45 @@ class Image extends CI_Model
      * @param    char
      * @return   array
      */
+    public function get_image_clseq($cl_seq)
+    {
+
+    	$sql = 'SELECT
+    			  im_seq,
+    			  im_status,
+    			  im_type,
+    			  im_size,
+    			  im_width,
+    			  im_height,
+    			  im_filename,
+    			  im_title,
+    			  im_description,
+    			  im_disp_no
+    			FROM tb_image ';
+
+    	// WHERE文 作成
+    	$sql .= ' WHERE im_cl_seq = ' . $cl_seq;
+
+    	$sql .= ' ORDER BY im_disp_no ASC';
+
+    	// クエリー実行
+    	$query = $this->db->query($sql);
+
+    	// データ有無判定
+    	if ($query->num_rows() > 0) {
+    		$get_data = $query->result('array');
+    		return $get_data;
+    	} else {
+    		return FALSE;
+    	}
+    }
+
+    /**
+     * データ有無判定＆データ取得
+     *
+     * @param    char
+     * @return   array
+     */
     public function get_image_clsiteid($cl_siteid)
     {
 
@@ -30,6 +69,22 @@ class Image extends CI_Model
     	}
     }
 
+    /**
+     * 画像情報 登録
+     *
+     * @param    array()
+     * @return   int
+     */
+    public function insert_image($setData)
+    {
+
+    	// データ追加
+    	$query = $this->db->insert('tb_image', $setData);
+
+    	// 挿入した ID 番号を取得
+    	$row_id = $this->db->insert_id();
+    	return $row_id;
+    }
 
     /**
      * 1レコード更新

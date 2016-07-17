@@ -40,7 +40,7 @@
           <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">その他<b class="caret"></b></a>
             <ul class="dropdown-menu right">
               <li><a href="/client/mypage/contact/">サポート問合せ</a></li>
-              <li><a href="/client/accountlist/">パスワード変更</a></li>
+              <li><a href="/client/mypage/chgidpw/">パスワード変更</a></li>
             </ul>
           </li>
           <li><a href="/client/login/logout/">ログアウト</a></li>

@@ -40,21 +40,6 @@ class Mypage extends MY_Controller
 
     }
 
-    // 確認画面表示
-    public function confirm()
-    {
-
-        // バリデーション・チェック
-		$this->_set_validation();												// バリデーション設定
-        if ($this->form_validation->run() == FALSE)
-        {
-            $this->view('mypage/contact.tpl');
-        } else {
-            $this->view('mypage/confirm.tpl');
-        }
-
-    }
-
     // 完了画面表示
     public function end()
     {
@@ -100,6 +85,81 @@ class Mypage extends MY_Controller
 
     }
 
+    // 確認画面表示
+    public function confirm()
+    {
+
+        // バリデーション・チェック
+		$this->_set_validation();												// バリデーション設定
+        if ($this->form_validation->run() == FALSE)
+        {
+            $this->view('mypage/contact.tpl');
+        } else {
+            $this->view('mypage/confirm.tpl');
+        }
+
+    }
+
+    // パスワード変更
+    public function chgidpw()
+    {
+
+    	$this->smarty->assign('err_clid',  FALSE);
+    	$this->smarty->assign('err_passwd',  FALSE);
+
+    	$input_post = $this->input->post();
+
+    	$this->load->model('Client', 'cl', TRUE);
+    	$clseq_deta = $this->cl->get_cl_seq($_SESSION['c_memSeq'], TRUE);
+
+//     	print_r($_SESSION);
+//     	print_r($clseq_deta);
+
+
+
+    	// バリデーション・チェック
+   		$this->_set_validation01();
+    	if ($this->form_validation->run() == TRUE)
+    	{
+
+    		// パスワード再入力チェック
+    		if ($input_post['cl_pw'] !== $input_post['retype_password']) {
+    			$this->smarty->assign('err_passwd', TRUE);
+    			$this->view('mypage/chidpw.tpl');
+    			return;
+    		}
+
+
+    		// ログインID入力チェック
+    		if ($this->cl->check_loginid($clseq_deta[0]["cl_seq"], $input_post["cl_id"])) {
+
+    			$this->smarty->assign('err_clid', TRUE);
+    			$this->smarty->assign('list', $clseq_deta[0]);
+
+    			$this->view('mypage/chgidpw.tpl');
+    			return;
+    		}
+
+
+
+    		$setData["cl_seq"] = $_SESSION['c_memSeq'];
+    		$setData["cl_id"]  = $input_post['cl_id'];
+    		$setData["cl_pw"]  = $input_post['cl_pw'];
+
+    		$res = $this->cl->update_client($setData, TRUE);
+    		if (!$res)
+    		{
+    			log_message('error', 'Mypage::[chgidpw()]クライアントIDPW変更処理 update_clientエラー');
+    		}
+
+    	}
+
+    	$this->smarty->assign('list', $clseq_deta[0]);
+
+    	$this->view('mypage/chgidpw.tpl');
+
+    }
+
     // フォーム・バリデーションチェック
     private function _set_validation()
     {
@@ -127,6 +187,32 @@ class Mypage extends MY_Controller
         );
 
         $this->load->library('form_validation', $rule_set);                     // バリデーションクラス読み込み
+    }
+
+    // フォーム・バリデーションチェック::更新時
+    private function _set_validation01()
+    {
+
+    	$rule_set = array(
+    			array(
+    					'field'   => 'cl_id',
+    					'label'   => 'ログインID',
+    					'rules'   => 'trim|required|alpha_dash|max_length[20]'		// 英数字、アンダースコア("_")、ダッシュ("-") のみ
+    			),
+    			array(
+    					'field'   => 'cl_pw',
+    					'label'   => 'パスワード',
+    					'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[retype_password]'
+    			),
+    			array(
+    					'field'   => 'retype_password',
+    					'label'   => 'パスワード再入力',
+    					'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[cl_pw]'
+    			),
+    	);
+
+    	$this->load->library('form_validation', $rule_set);                     // バリデーションクラス読み込み
+
     }
 
 }
