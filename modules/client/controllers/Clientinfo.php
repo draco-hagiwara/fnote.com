@@ -31,9 +31,9 @@ class Clientinfo extends MY_Controller
 
     	// クライアント情報の読み込み
     	$this->load->model('Client', 'cl', TRUE);
-    	$getData = $this->cl->get_cl_seq($_SESSION['c_memSeq'], TRUE);
+    	$cl_data = $this->cl->get_cl_seq($_SESSION['c_memSeq'], TRUE);
 
-        $this->smarty->assign('list', $getData[0]);
+        $this->smarty->assign('list', $cl_data[0]);
 
         $this->view('clientinfo/index.tpl');
 

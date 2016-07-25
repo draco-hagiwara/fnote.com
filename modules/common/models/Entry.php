@@ -120,8 +120,4 @@ class Entry extends CI_Model
 
     }
 
-
-
-
-
 }

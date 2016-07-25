@@ -294,7 +294,8 @@ class Galleryfun
 
     //画像削除
     function fileDelFunc($img_updir,$id){
-    	global $extensionTypeList;
+//     	global $extensionTypeList;
+    	$extensionTypeList = array('jpg','gif','png');
     	foreach($extensionTypeList as $extensionTypeListVal){
     		$imgPathL = $img_updir.'/'.$id.'.'.$extensionTypeListVal;
     		$imgPathS = $img_updir.'/thumb_'.$id.'.'.$extensionTypeListVal;

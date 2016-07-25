@@ -13,6 +13,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="{base_url()}../../js/bootstrap.min.js"></script>
 
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+
 </head>
 
 <small>グリッド&レスポンシブ対応</small>
@@ -120,6 +122,7 @@
 	<div class="form-group">
 	  {$list.en_sns05}
 	</div>
+	<div id="gmap" style="width : 500px; height : 500px;"></div>
 	<div class="form-group">
 	  {$list.en_free01}
 	</div>
@@ -201,6 +204,22 @@
 <!-- </form> -->
 
 </section>
+
+
+
+<script type="text/javascript">
+  google.maps.event.addDomListener(window, 'load', function() {
+      var map = document.getElementById("gmap");
+     var options = {
+            zoom: 16,
+          center: new google.maps.LatLng(35.657062, 139.696105),
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+       };
+     new google.maps.Map(map, options);
+ });
+</script>
+
+
 
 <br><br>
 <div class="panel panel-default">

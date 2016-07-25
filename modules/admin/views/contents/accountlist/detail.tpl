@@ -11,7 +11,7 @@
 {form_open('/accountlist/detailchk/' , 'name="accountDetailForm" class="form-horizontal"')}
 
   {$mess}
-  {if $smarty.session.a_memType==2}
+  {if $smarty.session.a_memSeq==1}
   <div class="form-group">
     <label for="ac_type" class="col-sm-4 control-label">アカウント種類選択<font color=red>【必須】</font></label>
     <div class="col-sm-2 btn-lg">
@@ -21,6 +21,15 @@
   </div>
   {else}
     {form_hidden('ac_type', $info.ac_type)}
+  {/if}
+  {if $smarty.session.a_memType==2}
+  <div class="form-group">
+    <label for="ac_status" class="col-sm-4 control-label">ステータス選択<font color=red>【必須】</font></label>
+    <div class="col-sm-2 btn-lg">
+      {form_dropdown('ac_status', $options_ac_status, set_value('ac_status', $info.ac_status))}
+      {if form_error('ac_status')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ac_status')}</font></label>{/if}
+    </div>
+  </div>
   {/if}
   <div class="form-group">
     <label for="ac_department" class="col-sm-4 control-label">所属部署</label>
@@ -54,6 +63,8 @@
       {if $err_email==TRUE}<span class="label label-danger">Error : </span><label><font color=red>「メールアドレス」欄で入力したアドレスは既に他で使用されています。再度他のアドレスを入力してください。</font></label>{/if}
     </div>
   </div>
+
+  {if $smarty.session.a_memSeq==$info.ac_seq}
   <div class="form-group">
     <label for="ac_pw" class="col-sm-4 control-label">パスワード<font color=red>【必須】</font></label>
     <div class="col-sm-8">
@@ -71,6 +82,8 @@
       {if $err_passwd==TRUE}<span class="label label-danger">Error : </span><label><font color=red>「パスワード」欄で入力した文字と違います。再度入力してください。</font></label>{/if}
     </div>
   </div>
+  {/if}
+
   <div class="form-group">
     <label for="ac_tel" class="col-sm-4 control-label">担当者電話番号</label>
     <div class="col-sm-8">

@@ -5,7 +5,7 @@
 {* ヘッダー部分　END *}
 
 <div class="jumbotron">
-  <h3>ログイン TOP画面　　<span class="label label-danger">クライアント</span></h3>
+  <h3>ログイン TOP画面</h3>
 </div>
 
 <p class="bg-info">　■　現在のステータス状況</p>
@@ -99,7 +99,13 @@
 {/if}
 
 
+{if $list.cl_status == 8}
+<br><br><br><br>
+  <p class="bg-info">　■　掲載サイト確認</p>
 
+    <a href="https://{$smarty.server.HTTP_HOST}/site/pf/{$list.cl_siteid}" target="_blank">{$list.cl_siteid}</a>
+
+{/if}
 
 
 <br><br><br>

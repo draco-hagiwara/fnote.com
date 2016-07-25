@@ -45,7 +45,7 @@
     <label for="cl_siteid" class="col-sm-4 control-label">仮サイトID(URL名)</label>
     <div class="col-sm-8">
       {form_input('cl_siteid' , set_value('cl_siteid', '') , 'class="form-control" placeholder="サイトID(URL名)を英数字で入力してください"')}
-      <p class="redText"><small>※できるだけお客様と一緒に考えてください。max.20文字。</small></p>
+      <p class="redText"><small>※できるだけお客様と一緒に考えてください。max.20文字。基本後からの変更はできません。</small></p>
       {if form_error('cl_siteid')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_siteid')}</font></label>{/if}
       {if $err_siteid==TRUE}<span class="label label-danger">Error : </span><label><font color=red>「サイトID(URL名)」欄で入力したIDは既に他で使用されています。再度他のIDを入力してください。</font></label>{/if}
     </div>

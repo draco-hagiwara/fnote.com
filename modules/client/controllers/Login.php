@@ -12,7 +12,8 @@ class Login extends MY_Controller
 
         $this->_set_validation();												// バリデーション設定
 
-        if (isset($_SESSION['c_login']))
+//         if ($_SESSION['c_login'] == TRUE)
+        if (isset($_SESSION['c_login']) && $_SESSION['c_login'] == TRUE)
         {
         	$this->smarty->assign('login_chk', TRUE);
         	$this->smarty->assign('mem_Seq',   $_SESSION['c_memSeq']);

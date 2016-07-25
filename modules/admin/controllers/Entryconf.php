@@ -41,14 +41,13 @@ class Entryconf extends MY_Controller
 
     	// バリデーション・チェック
     	$this->_set_validation();												// バリデーション設定
-//     	$this->form_validation->run();
 
     	// アカウント情報の読み込み
         $this->load->model('Account', 'ac', TRUE);
-    	$arrData = $this->ac->get_ac_seq($this->_ac_seq);
-    	if (count($arrData) != 0)
+    	$ac_data = $this->ac->get_ac_seq($this->_ac_seq);
+    	if (count($ac_data) != 0)
     	{
-    		foreach ($arrData as $val) {
+    		foreach ($ac_data as $val) {
     			$_tmp_type       = $val['ac_type'];
     			$_tmp_department = $val['ac_department'];
     			$_tmp_name01     = $val['ac_name01'];
@@ -59,7 +58,6 @@ class Entryconf extends MY_Controller
     		}
     	} else {
     		show_404();
-//     		$this->view('entryconf/end_ng.tpl');
     		return;
     	}
 
@@ -67,7 +65,6 @@ class Entryconf extends MY_Controller
     	if ($this->_ac_auth != $_tmp_auth)
     	{
     		show_404();
-//     		$this->view('entryconf/end_ng.tpl');
     		return;
     	}
 
@@ -77,7 +74,6 @@ class Entryconf extends MY_Controller
     	{
     		$messages = array('登録の制限時間がオーバーしてしまいました。', '', '弊社担当営業までご連絡ください。');
     		show_error($messages, 404, '制限時間オーバー');
-//     		$this->view('entryconf/end_ng.tpl');
     		return;
     	}
 
@@ -115,8 +111,8 @@ class Entryconf extends MY_Controller
 
     	// アカウント情報の読み込み
     	$this->load->model('Account', 'ac', TRUE);
-    	$arrData = $this->ac->get_ac_seq($this->input->post('ac_seq'));
-    	foreach ($arrData as $val) {
+    	$ac_data = $this->ac->get_ac_seq($this->input->post('ac_seq'));
+    	foreach ($ac_data as $val) {
     		$_tmp_type       = $val['ac_type'];
     		$_tmp_department = $val['ac_department'];
     		$_tmp_name01     = $val['ac_name01'];
@@ -172,8 +168,8 @@ class Entryconf extends MY_Controller
 
     	// 管理者情報の読み込み
     	$this->load->model('Account', 'ac', TRUE);
-    	$arrData = $this->ac->get_ac_seq($this->input->post('ac_seq'));
-    	foreach ($arrData as $val) {
+    	$ac_data = $this->ac->get_ac_seq($this->input->post('ac_seq'));
+    	foreach ($ac_data as $val) {
     		$_tmp_type       = $val['ac_type'];
     		$_tmp_department = $val['ac_department'];
     		$_tmp_name01     = $val['ac_name01'];
@@ -207,12 +203,12 @@ class Entryconf extends MY_Controller
     	}
 
     	// DB書き込み
-    	$_setData["ac_seq"]    = $this->input->post('ac_seq');
-    	$_setData["ac_status"] = 1;
-    	$_setData["ac_pw"]     = $this->input->post('ac_pw');
-    	$_setData["ac_auth"]   = NULL;
+    	$set_data["ac_seq"]    = $this->input->post('ac_seq');
+    	$set_data["ac_status"] = 1;
+    	$set_data["ac_pw"]     = $this->input->post('ac_pw');
+    	$set_data["ac_auth"]   = NULL;
 
-    	$res = $this->ac->update_account($_setData, TRUE);
+    	$res = $this->ac->update_account($set_data, TRUE);
     	if (!$res)
     	{
     		log_message('error', 'Entryconf::[complete()]管理者PW登録処理 insert_accountエラー');
@@ -249,19 +245,6 @@ class Entryconf extends MY_Controller
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     // クライアント新規会員登録TOP
     public function cl_edit()
     {
@@ -290,10 +273,10 @@ class Entryconf extends MY_Controller
 
     	// クライアント情報の読み込み
     	$this->load->model('Client', 'cl', TRUE);
-    	$arrData = $this->cl->get_cl_seq($this->_cl_seq);
-    	if (count($arrData) != 0)
+    	$cl_data = $this->cl->get_cl_seq($this->_cl_seq);
+    	if (count($cl_data) != 0)
     	{
-    		foreach ($arrData as $val) {
+    		foreach ($cl_data as $val) {
     			$_tmp_cl_siteid      = $val['cl_siteid'];
     			$_tmp_cl_id          = $val['cl_id'];
     			$_tmp_cl_company     = $val['cl_company'];
@@ -369,25 +352,25 @@ class Entryconf extends MY_Controller
     		$this->smarty->assign('ticket', $_SESSION['ticket']);
     	}
 
-    	$getData = $this->input->post();
+    	$input_post = $this->input->post();
 
     	// クライアント情報の読み込み
-	    $this->smarty->assign('cl_seq'         , $getData['cl_seq']);
-	    $this->smarty->assign('cl_siteid'      , $getData['cl_siteid']);
-	    $this->smarty->assign('cl_id'          , $getData['cl_id']);
-	    $this->smarty->assign('cl_pw'          , $getData['cl_pw']);
-	    $this->smarty->assign('retype_password', $getData['retype_password']);
-	    $this->smarty->assign('cl_company'     , $getData['cl_company']);
-	    $this->smarty->assign('cl_president01' , $getData['cl_president01']);
-	    $this->smarty->assign('cl_president02' , $getData['cl_president02']);
-	    $this->smarty->assign('cl_department'  , $getData['cl_department']) ;
-	    $this->smarty->assign('cl_person01'    , $getData['cl_person01']);
-	    $this->smarty->assign('cl_person02'    , $getData['cl_person02']);
-	    $this->smarty->assign('cl_tel'         , $getData['cl_tel']);
-	    $this->smarty->assign('cl_mobile'      , $getData['cl_mobile']);
-	    $this->smarty->assign('cl_fax'         , $getData['cl_fax']);
-	    $this->smarty->assign('cl_mail'        , $getData['cl_mail']);
-	    $this->smarty->assign('cl_mailsub'     , $getData['cl_mailsub']);
+	    $this->smarty->assign('cl_seq'         , $input_post['cl_seq']);
+	    $this->smarty->assign('cl_siteid'      , $input_post['cl_siteid']);
+	    $this->smarty->assign('cl_id'          , $input_post['cl_id']);
+	    $this->smarty->assign('cl_pw'          , $input_post['cl_pw']);
+	    $this->smarty->assign('retype_password', $input_post['retype_password']);
+	    $this->smarty->assign('cl_company'     , $input_post['cl_company']);
+	    $this->smarty->assign('cl_president01' , $input_post['cl_president01']);
+	    $this->smarty->assign('cl_president02' , $input_post['cl_president02']);
+	    $this->smarty->assign('cl_department'  , $input_post['cl_department']) ;
+	    $this->smarty->assign('cl_person01'    , $input_post['cl_person01']);
+	    $this->smarty->assign('cl_person02'    , $input_post['cl_person02']);
+	    $this->smarty->assign('cl_tel'         , $input_post['cl_tel']);
+	    $this->smarty->assign('cl_mobile'      , $input_post['cl_mobile']);
+	    $this->smarty->assign('cl_fax'         , $input_post['cl_fax']);
+	    $this->smarty->assign('cl_mail'        , $input_post['cl_mail']);
+	    $this->smarty->assign('cl_mailsub'     , $input_post['cl_mailsub']);
 
     	$this->smarty->assign('err_siteid',      FALSE);
     	$this->smarty->assign('err_clid',        FALSE);
@@ -401,7 +384,7 @@ class Entryconf extends MY_Controller
     		$this->view('entryconf/cl_edit.tpl');
     	} else {
     		// パスワード再入力チェック
-    		if ($this->input->post('cl_pw') !== $this->input->post('retype_password')) {
+    		if ($input_post['cl_pw'] !== $input_post['retype_password']) {
     			$this->smarty->assign('err_passwd', TRUE);
     			$this->view('entryconf/cl_edit.tpl');
     			return;
@@ -410,27 +393,27 @@ class Entryconf extends MY_Controller
     		$this->load->model('Client', 'cl', TRUE);
 
     		// サイトID(URL名)入力チェック
-    		if ($this->cl->check_siteid($getData['cl_seq'], $getData['cl_siteid'])) {
+    		if ($this->cl->check_siteid($input_post['cl_seq'], $input_post['cl_siteid'])) {
     			$this->smarty->assign('err_siteid', TRUE);
     			$this->view('entryconf/cl_edit.tpl');
     			return;
     		}
 
     		// ログインID入力チェック
-    		if ($this->cl->check_loginid($getData['cl_seq'], $getData['cl_id'])) {
+    		if ($this->cl->check_loginid($input_post['cl_seq'], $input_post['cl_id'])) {
     			$this->smarty->assign('err_clid', TRUE);
     			$this->view('entryconf/cl_edit.tpl');
     			return;
     		}
 
     		// メールアドレス入力チェック
-    		if ($this->cl->check_mailaddr($getData['cl_seq'], $getData['cl_mail'])) {
+    		if ($this->cl->check_mailaddr($input_post['cl_seq'], $input_post['cl_mail'])) {
     			$this->smarty->assign('err_mail', TRUE);
     			$this->view('entryconf/cl_edit.tpl');
     			return;
     		}
 
-    		if (!isset($getData['checkKiyaku'])) {
+    		if (!isset($input_post['checkKiyaku'])) {
     			$this->smarty->assign('err_checkKiyaku', TRUE);
     			$this->view('entryconf/cl_edit.tpl');
     			return;
@@ -457,24 +440,24 @@ class Entryconf extends MY_Controller
     	$this->_set_validation02();
     	$this->form_validation->run();
 
-    	$getData = $this->input->post();
+    	$input_post = $this->input->post();
 
     	// クライアント情報の読み込み
-	    $this->smarty->assign('cl_seq'         , $getData['cl_seq']);
-	    $this->smarty->assign('cl_siteid'      , $getData['cl_siteid']);
-	    $this->smarty->assign('cl_id'          , $getData['cl_id']);
-	    $this->smarty->assign('cl_pw'          , $getData['cl_pw']);
-	    $this->smarty->assign('cl_company'     , $getData['cl_company']);
-	    $this->smarty->assign('cl_president01' , $getData['cl_president01']);
-	    $this->smarty->assign('cl_president02' , $getData['cl_president02']);
-	    $this->smarty->assign('cl_department'  , $getData['cl_department']) ;
-	    $this->smarty->assign('cl_person01'    , $getData['cl_person01']);
-	    $this->smarty->assign('cl_person02'    , $getData['cl_person02']);
-	    $this->smarty->assign('cl_tel'         , $getData['cl_tel']);
-	    $this->smarty->assign('cl_mobile'      , $getData['cl_mobile']);
-	    $this->smarty->assign('cl_fax'         , $getData['cl_fax']);
-	    $this->smarty->assign('cl_mail'        , $getData['cl_mail']);
-	    $this->smarty->assign('cl_mailsub'     , $getData['cl_mailsub']);
+	    $this->smarty->assign('cl_seq'         , $input_post['cl_seq']);
+	    $this->smarty->assign('cl_siteid'      , $input_post['cl_siteid']);
+	    $this->smarty->assign('cl_id'          , $input_post['cl_id']);
+	    $this->smarty->assign('cl_pw'          , $input_post['cl_pw']);
+	    $this->smarty->assign('cl_company'     , $input_post['cl_company']);
+	    $this->smarty->assign('cl_president01' , $input_post['cl_president01']);
+	    $this->smarty->assign('cl_president02' , $input_post['cl_president02']);
+	    $this->smarty->assign('cl_department'  , $input_post['cl_department']) ;
+	    $this->smarty->assign('cl_person01'    , $input_post['cl_person01']);
+	    $this->smarty->assign('cl_person02'    , $input_post['cl_person02']);
+	    $this->smarty->assign('cl_tel'         , $input_post['cl_tel']);
+	    $this->smarty->assign('cl_mobile'      , $input_post['cl_mobile']);
+	    $this->smarty->assign('cl_fax'         , $input_post['cl_fax']);
+	    $this->smarty->assign('cl_mail'        , $input_post['cl_mail']);
+	    $this->smarty->assign('cl_mailsub'     , $input_post['cl_mailsub']);
 
     	$this->smarty->assign('err_siteid',      FALSE);
     	$this->smarty->assign('err_clid',        FALSE);
@@ -483,23 +466,23 @@ class Entryconf extends MY_Controller
     	$this->smarty->assign('err_checkKiyaku', FALSE);
 
     	// 「戻る」ボタン押下の場合
-    	if ( $this->input->post('_back') ) {
+    	if (isset($input_post['_back'])) {
     		$this->view('entryconf/cl_edit.tpl');
     		return;
     	}
 
     	// DB書き込み
-    	$getData["cl_status"] = 2;
-    	$getData["cl_plan"]   = "basic";
-    	$getData["cl_auth"]   = NULL;
+    	$input_post["cl_status"] = 2;
+    	$input_post["cl_plan"]   = "basic";
+    	$input_post["cl_auth"]   = NULL;
 
-    	unset($getData["retype_password"]) ;
-    	unset($getData["checkKiyaku"]) ;
-    	unset($getData["ticket"]) ;
-    	unset($getData["submit"]) ;
+    	unset($input_post["retype_password"]) ;
+    	unset($input_post["checkKiyaku"]) ;
+    	unset($input_post["ticket"]) ;
+    	unset($input_post["submit"]) ;
 
     	$this->load->model('Client', 'cl', TRUE);
-    	$res = $this->cl->update_client($getData, TRUE);
+    	$res = $this->cl->update_client($input_post, TRUE);
     	if (!$res)
     	{
     		log_message('error', 'Entryconf::[complete()]クライアント承認処理 update_clientエラー');
@@ -509,16 +492,16 @@ class Entryconf extends MY_Controller
     	$mail['from']      = "";
     	$mail['from_name'] = "";
     	$mail['subject']   = "";
-    	$mail['to']        = $getData['cl_mail'];
+    	$mail['to']        = $input_post['cl_mail'];
     	$mail['cc']        = "";
     	$mail['bcc']       = "";
 
     	// メール本文置き換え文字設定
     	$arrRepList = array(
-    			'cl_company'     => $getData['cl_company'],
-    			'cl_president01' => $getData['cl_president01'],
-    			'cl_president02' => $getData['cl_president02'],
-    			'cl_id'          => $getData['cl_id'],
+    			'cl_company'     => $input_post['cl_company'],
+    			'cl_president01' => $input_post['cl_president01'],
+    			'cl_president02' => $input_post['cl_president02'],
+    			'cl_id'          => $input_post['cl_id'],
     	);
 
     	// メールテンプレートの読み込み
@@ -536,20 +519,6 @@ class Entryconf extends MY_Controller
     	}
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // 完了画面表示
@@ -583,7 +552,7 @@ class Entryconf extends MY_Controller
         $arroptions_ac_type = $this->config->item('ADMIN_ACCOUNT_TYPE');
 
     	$this->smarty->assign('options_ac_status',  $arroptions_ac_status);
-    	$this->smarty->assign('options_ac_type',  $arroptions_ac_type);
+    	$this->smarty->assign('options_ac_type',    $arroptions_ac_type);
 
     }
 
@@ -600,13 +569,10 @@ class Entryconf extends MY_Controller
     	$arroptions_ac_type = $this->config->item('ADMIN_ACCOUNT_TYPE');
 
     	$this->smarty->assign('options_ac_status',  $arroptions_ac_status);
-    	$this->smarty->assign('options_ac_type',  $arroptions_ac_type);
-    	$this->smarty->assign('account_type', $arroptions_ac_type[$_tmp_type]);
+    	$this->smarty->assign('options_ac_type',    $arroptions_ac_type);
+    	$this->smarty->assign('account_type',       $arroptions_ac_type[$_tmp_type]);
 
     }
-
-
-
 
     // 仮パスワード変更制限時間チェック
     private function _reentry_timechk($update_date)

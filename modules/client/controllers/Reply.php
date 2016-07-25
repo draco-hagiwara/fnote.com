@@ -38,17 +38,18 @@ class Reply extends MY_Controller
         if (isset($segments[3]))
         {
             $tmp_offset = $segments[3];
-			$post_data = $this->input->post();
+			$input_post = $this->input->post();
         } else {
             $tmp_offset = 0;
-			$post_data = array(
+			$input_post = array(
 								'orderid'  => '',
 								);
         }
 
         // 問合せ一覧の取得
+        $input_post['co_cl_siteid'] = $_SESSION['c_memSiteid'];
         $this->load->model('Contact', 'cont', TRUE);
-        list($contact_list, $contact_countall) = $this->cont->get_contactlist($post_data, $tmp_per_page, $tmp_offset);
+        list($contact_list, $contact_countall) = $this->cont->get_contactlist($input_post, $tmp_per_page, $tmp_offset);
 
         $this->smarty->assign('list', $contact_list);
 

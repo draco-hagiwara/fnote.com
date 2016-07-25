@@ -33,11 +33,6 @@ class Account extends CI_Model
 
     }
 
-
-
-
-
-
     /**
      * アカウントメンバーの取得
      *
@@ -131,14 +126,6 @@ class Account extends CI_Model
 
     	return array($account_list, $account_countall);
     }
-
-
-
-
-
-
-
-
 
     /**
      * 重複データのチェック：ログインID
@@ -273,13 +260,6 @@ class Account extends CI_Model
     	return $result;
     }
 
-
-
-
-
-
-
-
     /**
      * 営業or編集者担当者リスト作成
      *
@@ -312,8 +292,5 @@ class Account extends CI_Model
     	return $contact_list;
 
     }
-
-
-
 
 }

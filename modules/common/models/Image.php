@@ -9,6 +9,28 @@ class Image extends CI_Model
     }
 
     /**
+     * 該当画像データの取得
+     *
+     * @param    int
+     * @return   array
+     */
+    public function get_image_imseq($im_seq)
+    {
+
+    	$set_where["im_seq"] = $im_seq;
+
+    	$query = $this->db->get_where('tb_image', $set_where);
+
+    	// データ有無判定
+    	if ($query->num_rows() > 0) {
+    		$get_data = $query->result('array');
+    		return $get_data;
+    	} else {
+    		return FALSE;
+    	}
+    }
+
+    /**
      * データ有無判定＆データ取得
      *
      * @param    char
@@ -27,7 +49,9 @@ class Image extends CI_Model
     			  im_filename,
     			  im_title,
     			  im_description,
-    			  im_disp_no
+    			  im_disp_no,
+    			  im_cl_siteid,
+    			  im_create_date
     			FROM tb_image ';
 
     	// WHERE文 作成

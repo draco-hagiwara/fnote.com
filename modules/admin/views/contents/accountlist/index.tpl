@@ -106,7 +106,9 @@ function fmSubmit(formName, url, method, num) {
                     {$ac.ac_mail}
                 </td>
                 <td>
+                    {if $ac.ac_type != 2 || $ac.ac_seq == $smarty.session.a_memSeq || $smarty.session.a_memSeq == 1}
                     <button type="submit" class="btn btn-success btn-xs" name="ac_uniq" value="{$ac.ac_seq}">編集</button>
+                    {/if}
                 </td>
             </tr>
         </tbody>

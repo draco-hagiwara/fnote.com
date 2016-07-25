@@ -44,9 +44,6 @@ class Top extends MY_Controller
 
     	$post_data = $_POST;
 
-    	print_r($post_data);
-    	//     	exit;
-
     	switch ($post_data['submit'])
     	{
     		case 'client_ok':
@@ -158,8 +155,6 @@ class Top extends MY_Controller
     			break;
     		default:
 
-    			print("<br>preview<br>");
-
     			// クライアントデータの取得
     			$this->load->model('Client', 'cl', TRUE);
     			$cl_data = $this->cl->get_cl_seq($_SESSION['c_memSeq'], TRUE);
@@ -173,8 +168,6 @@ class Top extends MY_Controller
     			$this->view('top/preview.tpl');
 
     	}
-
-
     }
 
     // フォーム・バリデーションチェック

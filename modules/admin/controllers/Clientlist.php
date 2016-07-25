@@ -44,9 +44,6 @@ class Clientlist extends MY_Controller
         $this->config->load('config_comm');
         $tmp_per_page = $this->config->item('PAGINATION_PER_PAGE');
 
-        // 検索項目 初期値セット
-//         $this->_search_set();
-
         // Pagination 現在ページ数の取得：：URIセグメントの取得
         $segments = $this->uri->segment_array();
         if (isset($segments[3]))
@@ -151,29 +148,16 @@ class Clientlist extends MY_Controller
     	// 更新対象アカウントのデータ取得
     	$input_post = $this->input->post();
 
-//     	print_r($input_post);
-//     	exit;
-
-
-
-//     	if ($_SESSION['a_memType'] != 2)
-//     	{
-//     		$tmp_acid = $_SESSION['a_memSeq'];
-//     	} else {
-    		$tmp_clseq = $input_post['chg_uniq'];
-//     	}
+   		$tmp_clseq = $input_post['chg_uniq'];
 
     	$this->load->model('Client', 'cl', TRUE);
-    	$get_data = $this->cl->get_cl_seq($tmp_clseq, TRUE);
-
-
-//     	print_r($get_data);
+    	$cl_data = $this->cl->get_cl_seq($tmp_clseq, TRUE);
 
     	// 担当営業と編集者を保存
-    	$_SESSION['_salse_seq']  = $get_data[0]['cl_sales_id'];
-    	$_SESSION['_editor_seq'] = $get_data[0]['cl_editor_id'];
+    	$_SESSION['a_salse_seq']  = $cl_data[0]['cl_sales_id'];
+    	$_SESSION['a_editor_seq'] = $cl_data[0]['cl_editor_id'];
 
-    	$this->smarty->assign('info', $get_data[0]);
+    	$this->smarty->assign('info', $cl_data[0]);
 
     	// バリデーション設定
     	$this->_set_validation02();
@@ -181,8 +165,6 @@ class Clientlist extends MY_Controller
     	// 初期値セット
     	$this->_item_set();
 
-//         $this->smarty->assign('err_email',  FALSE);
-//         $this->smarty->assign('err_passwd', FALSE);
         $this->view('clientlist/detail.tpl');
 
     }
@@ -194,7 +176,7 @@ class Clientlist extends MY_Controller
     	// 初期値セット
     	$this->_item_set();
 
-    	$tmp_inputpost = $this->input->post();
+    	$input_post = $this->input->post();
 
     	// バリデーション・チェック
     	$this->_set_validation02();
@@ -205,43 +187,60 @@ class Clientlist extends MY_Controller
     		$this->load->model('Client', 'cl', TRUE);
 
     		// サイトID(URL名)入力チェック
-    		if ($this->cl->check_siteid($tmp_inputpost['cl_seq'], $tmp_inputpost['cl_siteid'])) {
+    		if ($this->cl->check_siteid($input_post['cl_seq'], $input_post['cl_siteid'])) {
     			$this->smarty->assign('err_siteid', TRUE);
-    			$this->smarty->assign('info', $tmp_inputpost);
+    			$this->smarty->assign('info', $input_post);
     			$this->view('clientlist/detail.tpl');
     			return;
     		}
 
     		// メールアドレス入力チェック
-    		if ($this->cl->check_mailaddr($tmp_inputpost['cl_seq'], $tmp_inputpost['cl_mail'])) {
+    		if ($this->cl->check_mailaddr($input_post['cl_seq'], $input_post['cl_mail'])) {
     			$this->smarty->assign('err_mail', TRUE);
-    			$this->smarty->assign('info', $tmp_inputpost);
+    			$this->smarty->assign('info', $input_post);
     			$this->view('clientlist/detail.tpl');
     			return;
     		}
 
 	    	// 担当編集者＆営業のＩＤを取り出す
-	    	$_tmp_editor_id = explode(' : ', $this->_arreditorlist[$tmp_inputpost['cl_editor_id']], 3);
-	    	$tmp_inputpost['cl_editor_id'] = $_tmp_editor_id[0];
-	    	$_tmp_salse_id = explode(' : ', $this->_arrsaleslist[$tmp_inputpost['cl_sales_id']], 3);
-	    	$tmp_inputpost['cl_sales_id'] = $_tmp_salse_id[0];
+	    	$_tmp_editor_id = explode(' : ', $this->_arreditorlist[$input_post['cl_editor_id']], 3);
+	    	$input_post['cl_editor_id'] = $_tmp_editor_id[0];
+	    	$_tmp_salse_id = explode(' : ', $this->_arrsaleslist[$input_post['cl_sales_id']], 3);
+	    	$input_post['cl_sales_id'] = $_tmp_salse_id[0];
 
 	    	// DB書き込み
 	    	// 不要パラメータ削除
-	    	unset($tmp_inputpost["submit"]) ;
-	    	unset($tmp_inputpost["retype_password"]) ;
+	    	unset($input_post["submit"]) ;
+	    	unset($input_post["retype_password"]) ;
 
-	    	$this->cl->update_client($tmp_inputpost);
+	    	$this->cl->update_client($input_post);
 
 	    	$this->smarty->assign('mess',  "更新が完了しました。");
+
+	    	// 「受注」ステータスで画像用ディレクトリ作成
+	    	if ($input_post['cl_status'] == 2)
+	    	{
+	    		// 存在チェック
+	    		$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'] . "/s";
+	    		if (!file_exists($dir_path))
+	    		{
+	    			$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'];
+	    			mkdir($dir_path, 0777);
+	    			chmod($dir_path, 0777);
+	    			$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'] . "/s/";	// サイト用画像ディレクトリ
+	    			mkdir($dir_path, 0775);
+	    			chmod($dir_path, 0775);
+	    			$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'] . "/b/";	// ブログ用画像ディレクトリ
+	    			mkdir($dir_path, 0775);
+	    			chmod($dir_path, 0775);
+	    		}
+	    	}
     	}
 
-    	$this->smarty->assign('info', $tmp_inputpost);
+    	$this->smarty->assign('info', $input_post);
     	$this->view('clientlist/detail.tpl');
 
     }
-
-
 
     // Pagination 設定
     private function _get_Pagination($client_countall, $tmp_per_page)
@@ -304,7 +303,6 @@ class Clientlist extends MY_Controller
     		}
     	}
 
-
     	if ($cl_sales_id == NULL)
     	{
     		$this->smarty->assign('options_cl_sales_id',  $arroptions_cl_sales);
@@ -315,8 +313,10 @@ class Clientlist extends MY_Controller
     	}
 
     	// 担当営業の抽出
-    	$get_data = $this->ac->get_ac_seq($_SESSION['_salse_seq'], TRUE);
-    	$_salse_name = $get_data[0]['ac_seq'] . ' : ' . $get_data[0]['ac_name01'] . ' ' . $get_data[0]['ac_name02'];
+    	$ac_data = $this->ac->get_ac_seq($_SESSION['a_salse_seq'], TRUE);
+    	$_salse_name = $ac_data[0]['ac_seq'] . ' : ' . $ac_data[0]['ac_name01'] . ' ' . $ac_data[0]['ac_name02'];
+
+    	$_select_salse_no = "";
     	foreach ($arroptions_cl_sales as $key => $val)
     	{
     		if ($val == $_salse_name)
@@ -357,8 +357,10 @@ class Clientlist extends MY_Controller
     	}
 
     	// 担当編集の抽出
-    	$get_data = $this->ac->get_ac_seq($_SESSION['_editor_seq'], TRUE);
-    	$_editor_name = $get_data[0]['ac_seq'] . ' : ' . $get_data[0]['ac_name01'] . ' ' . $get_data[0]['ac_name02'];
+    	$ac_data = $this->ac->get_ac_seq($_SESSION['a_editor_seq'], TRUE);
+    	$_editor_name = $ac_data[0]['ac_seq'] . ' : ' . $ac_data[0]['ac_name01'] . ' ' . $ac_data[0]['ac_name02'];
+
+    	$_select_editor_no = "";
     	foreach ($arroptions_cl_editor as $key => $val)
     	{
     		if ($val == $_editor_name)
@@ -366,6 +368,7 @@ class Clientlist extends MY_Controller
     			$_select_editor_no = $key;
     		}
     	}
+
     	$this->smarty->assign('select_editorno', $_select_editor_no);
 
     }

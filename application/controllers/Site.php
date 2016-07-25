@@ -40,9 +40,6 @@ class Site extends MY_Controller
 
     	$post_data = $this->input->post();
 
-
-//     	print_r($post_data);
-
     	// バリデーション・チェック
     	$this->_set_validation();
     	if ($this->form_validation->run() == FALSE) {
@@ -69,9 +66,6 @@ class Site extends MY_Controller
 
     	$post_data = $this->input->post();
 
-    	print_r($post_data);
-
-
     	// バリデーション・チェック
     	$this->_set_validation();
     	$this->form_validation->run();
@@ -88,9 +82,6 @@ class Site extends MY_Controller
 	    	$this->view('site/pf.tpl');
     		return;
     	}
-
-//     	exit;
-
 
     	// 不要パラメータ削除
     	$post_data['co_cl_siteid'] = $post_data['en_cl_siteid'];

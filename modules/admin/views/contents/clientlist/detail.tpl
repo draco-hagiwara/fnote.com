@@ -23,14 +23,20 @@
     <label for="cl_sales_id" class="col-sm-4 control-label">担当営業選択<font color=red>【必須】</font></label>
     <div class="col-sm-2 btn-lg">
       {form_dropdown('cl_sales_id', $options_cl_sales_id, $select_salesno)}
+    </div>
+    <div class="col-sm-4">
       {if form_error('cl_sales_id')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_sales_id')}</font></label>{/if}
+      {if $select_salesno===""}<span class="label label-danger">Error : </span><label><font color=red>該当する担当営業が存在しません。</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="cl_editor_id" class="col-sm-4 control-label">担当編集者選択<font color=red>【必須】</font></label>
     <div class="col-sm-2 btn-lg">
       {form_dropdown('cl_editor_id', $options_cl_editor_id, $select_editorno)}
+    </div>
+    <div class="col-sm-4">
       {if form_error('cl_editor_id')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_editor_id')}</font></label>{/if}
+      {if $select_editorno===""}<span class="label label-danger">Error : </span><label><font color=red>該当する担当編集者が存在しません。</font></label>{/if}
     </div>
   </div>
   {/if}
@@ -55,15 +61,25 @@
       {if form_error('cl_plan')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_plan')}</font></label>{/if}
     </div>
   </div>
+  {if $smarty.session.a_memSeq==1}
   <div class="form-group">
     <label for="cl_siteid" class="col-sm-4 control-label">サイトID(URL名)<font color=red>【必須】</font></label>
     <div class="col-sm-8">
       {form_input('cl_siteid' , set_value('cl_siteid', $info.cl_siteid) , 'class="form-control" placeholder="サイトID(URL名)を英数字で入力してください"')}
-      <p class="redText"><small>※できるだけお客様と一緒に考えてください。max.20文字。</small></p>
+      <p class="redText"><small>※できるだけお客様と一緒に考えてください。max.20文字。基本変更不可です。</small></p>
       {if form_error('cl_siteid')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_siteid')}</font></label>{/if}
       {if $err_siteid==TRUE}<span class="label label-danger">Error : </span><label><font color=red>「サイトID(URL名)」欄で入力したIDは既に他で使用されています。再度他のIDを入力してください。</font></label>{/if}
     </div>
   </div>
+  {else}
+  <div class="form-group">
+    <label for="cl_siteid" class="col-sm-4 control-label">サイトID(URL名)<font color=red>【必須】</font></label>
+    <div class="col-sm-8">
+      {$info.cl_siteid}
+      {form_hidden('cl_siteid', $info.cl_siteid)}
+    </div>
+  </div>
+  {/if}
   <div class="form-group">
     <label for="cl_company" class="col-sm-4 control-label">会社名<font color=red>【必須】</font></label>
     <div class="col-sm-8">

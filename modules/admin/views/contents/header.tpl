@@ -41,28 +41,20 @@
         </div>
         <div id="patern05" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/admin/top/">TOP</a></li>
-            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">アカウント<b class="caret"></b></a>
-              <ul class="dropdown-menu right">
-                <li><a href="/admin/accountlist/">アカウント一覧</a></li>
-                <li><a href="/admin/Entryadmin/">アカウント新規登録</a></li>
-              </ul>
-            </li>
-            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">クライアント<b class="caret"></b></a>
-              <ul class="dropdown-menu right">
-                <li><a href="/admin/clientlist">クライアント一覧</a></li>
-                <li><a href="/admin/entryclient">クライアント追加</a></li>
-              </ul>
-            </li>
+            <li class="active"><a href="/admin/top/"><i class="glyphicon glyphicon-cloud"></i>TOP</a></li>
+            <li><a href="/admin/clientlist/"><i class="glyphicon glyphicon-list"></i>クライアント一覧</a></li>
+            <li><a href="/admin/entryclient/"><i class="glyphicon glyphicon-facetime-video"></i>クライアント登録</a></li>
+            <li><a href="/admin/accountlist/"><i class="glyphicon glyphicon-list"></i>アカウント一覧</a></li>
+            <li><a href="/admin/Entryadmin/"><i class="glyphicon glyphicon-user"></i>アカウント登録</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">システム設定<b class="caret"></b></a>
+            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-wrench"></i>システム設定<b class="caret"></b></a>
               <ul class="dropdown-menu right">
-                <li><a href="/admin/system/backup/">手動バックアップ</a></li>
-                <li><a href="/admin/system/mailtpl/">メールテンプレ管理</a></li>
+                <li><a href="/admin/system/mailtpl/"><i class="glyphicon glyphicon-envelope"></i>メールテンプレ管理</a></li>
+                {if $smarty.session.a_memSeq==1}<li><a href="/admin/system/backup/"><i class="glyphicon glyphicon-chevron-right"></i>手動バックアップ</a></li>{/if}
               </ul>
             </li>
-            <li><a href="/admin/login/logout/">ログアウト</a></li>
+            <li><a href="/admin/login/logout/"><i class="glyphicon glyphicon-log-out"></i>ログアウト</a></li>
           </ul>
         </div>
         </nav>
@@ -75,12 +67,8 @@
         <div id="patern05" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="/admin/top/">TOP</a></li>
-            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">クライアント<b class="caret"></b></a>
-              <ul class="dropdown-menu right">
-                <li><a href="/admin/clientlist">クライアント一覧</a></li>
-              </ul>
-            </li>
-            <li><a href="/admin/accountlist/detail">アカウント編集</a></li>
+            <li><a href="/admin/clientlist/">クライアント一覧</a></li>
+            <li><a href="/admin/accountlist/detail/">アカウント編集</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="/admin/login/logout/">ログアウト</a></li>
@@ -95,11 +83,7 @@
         </div>
         <div id="patern05" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">クライアント<b class="caret"></b></a>
-              <ul class="dropdown-menu right">
-                <li><a href="/admin/clientlist">クライアント一覧</a></li>
-              </ul>
-            </li>
+            <li><a href="/admin/clientlist/">クライアント一覧</a></li>
             <li><a href="/admin/accountlist/detail">アカウント編集</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">

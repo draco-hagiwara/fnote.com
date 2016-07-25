@@ -175,9 +175,6 @@ class Client extends CI_Model
     		$sql .= ' AND cl_sales_id = ' . $set_select["cl_sales_id"] ;
     	}
 
-
-
-
     	// ORDER BY文 作成
     	$tmp_firstitem = FALSE;
     	foreach ($set_orderby as $key => $val)
@@ -215,16 +212,26 @@ class Client extends CI_Model
      * @param    bool         :: FALSE => 新規登録時。 TRUE => 更新時使用。
      * @return   bool
      */
-    public function check_siteid($seq, $cl_siteid)
+    public function check_siteid($seq = FALSE, $cl_siteid)
     {
 
-    	$sql = 'SELECT * FROM `mb_client` '
-    			. 'WHERE `cl_seq` != ? AND `cl_siteid` = ? ';
+    	if ($seq == FALSE)
+    	{
+    		$sql = 'SELECT * FROM `mb_client` '
+    				. 'WHERE `cl_siteid` = ? ';
 
-    	$values = array(
-    			$seq,
-    			$cl_siteid,
-    	);
+    		$values = array(
+    				$cl_siteid,
+    		);
+    	} else {
+	    	$sql = 'SELECT * FROM `mb_client` '
+	    			. 'WHERE `cl_seq` != ? AND `cl_siteid` = ? ';
+
+	    	$values = array(
+	    			$seq,
+	    			$cl_siteid,
+	    	);
+    	}
 
     	$query = $this->db->query($sql, $values);
 
@@ -242,16 +249,26 @@ class Client extends CI_Model
      * @param    bool         :: FALSE => 新規登録時。 TRUE => 更新時使用。
      * @return   bool
      */
-    public function check_loginid($seq, $cl_id)
+    public function check_loginid($seq = FALSE, $cl_id)
     {
 
-    	$sql = 'SELECT * FROM `mb_client` '
-    			. 'WHERE `cl_seq` != ? AND `cl_id` = ? ';
+    	if ($seq == FALSE)
+    	{
+    		$sql = 'SELECT * FROM `mb_client` '
+    				. 'WHERE `cl_id` = ? ';
 
-    	$values = array(
-    			$seq,
-    			$cl_id,
-    	);
+    		$values = array(
+    				$cl_id,
+    		);
+    	} else {
+	    	$sql = 'SELECT * FROM `mb_client` '
+	    			. 'WHERE `cl_seq` != ? AND `cl_id` = ? ';
+
+	    	$values = array(
+	    			$seq,
+	    			$cl_id,
+	    	);
+    	}
 
     	$query = $this->db->query($sql, $values);
 
@@ -367,10 +384,5 @@ class Client extends CI_Model
     	$result = $this->db->update('mb_client', $setData, $where);
     	return $result;
     }
-
-
-
-
-
 
 }

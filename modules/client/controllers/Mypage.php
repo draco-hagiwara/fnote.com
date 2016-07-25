@@ -112,11 +112,6 @@ class Mypage extends MY_Controller
     	$this->load->model('Client', 'cl', TRUE);
     	$clseq_deta = $this->cl->get_cl_seq($_SESSION['c_memSeq'], TRUE);
 
-//     	print_r($_SESSION);
-//     	print_r($clseq_deta);
-
-
-
     	// バリデーション・チェック
    		$this->_set_validation01();
     	if ($this->form_validation->run() == TRUE)
@@ -129,7 +124,6 @@ class Mypage extends MY_Controller
     			return;
     		}
 
-
     		// ログインID入力チェック
     		if ($this->cl->check_loginid($clseq_deta[0]["cl_seq"], $input_post["cl_id"])) {
 
@@ -140,13 +134,11 @@ class Mypage extends MY_Controller
     			return;
     		}
 
+    		$set_data["cl_seq"] = $_SESSION['c_memSeq'];
+    		$set_data["cl_id"]  = $input_post['cl_id'];
+    		$set_data["cl_pw"]  = $input_post['cl_pw'];
 
-
-    		$setData["cl_seq"] = $_SESSION['c_memSeq'];
-    		$setData["cl_id"]  = $input_post['cl_id'];
-    		$setData["cl_pw"]  = $input_post['cl_pw'];
-
-    		$res = $this->cl->update_client($setData, TRUE);
+    		$res = $this->cl->update_client($set_data, TRUE);
     		if (!$res)
     		{
     			log_message('error', 'Mypage::[chgidpw()]クライアントIDPW変更処理 update_clientエラー');

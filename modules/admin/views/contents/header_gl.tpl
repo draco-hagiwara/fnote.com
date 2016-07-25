@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>CS &#xB7; Crowd Sourcing</title>
+<title>プラットフォーム &#xB7; FNOTE</title>
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 

@@ -14,6 +14,28 @@ class Entry extends CI_Model
      * @param    char
      * @return   array
      */
+    public function get_entry_seq($en_seq)
+    {
+
+		$set_where["en_seq"] = $en_seq;
+
+    	$query = $this->db->get_where('tb_entry', $set_where);
+
+    	// データ有無判定
+    	if ($query->num_rows() > 0) {
+    		$get_data = $query->result('array');
+    		return $get_data;
+    	} else {
+    		return FALSE;
+    	}
+    }
+
+    /**
+     * データ有無判定＆データ取得
+     *
+     * @param    char
+     * @return   array
+     */
     public function get_entry_siteid($en_cl_siteid, $empty = FALSE)
     {
 

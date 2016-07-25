@@ -46,13 +46,6 @@ class Newslist extends MY_Controller
 		$this->load->model('News', 'nw', TRUE);
 		list($news_list, $news_countall) = $this->nw->get_newslist($_SESSION['c_memSeq'], $tmp_per_page, $tmp_offset);
 
-
-//     	print("<br>");
-//     	print_r($news_list);
-//     	print("<br>");
-//     	print_r($news_countall);
-//     	exit;
-
 		// Pagination 設定
 		$set_pagination = $this->_get_Pagination($news_countall, $tmp_per_page);
 
@@ -107,14 +100,6 @@ class Newslist extends MY_Controller
 	    	$this->smarty->assign('list', $news_list);
 	    	$this->smarty->assign('countall', $news_countall);
 
-
-
-// 	    	print_r($news_list);
-// 	    	print("<br>");
-// 	    	print_r($news_countall);
-// 	    	print("<br>");
-
-
     		$this->smarty->assign('low', $news_data[0]);
 
     		$this->view('newslist/index.tpl');
@@ -122,7 +107,6 @@ class Newslist extends MY_Controller
 
     	} else {
 
-// 	    	$this->_set_validation();
 	    	if ($this->form_validation->run() == FALSE)
 	    	{
 
@@ -159,26 +143,12 @@ class Newslist extends MY_Controller
 	    		return;
 	    	}
 
-
-	    	$setData['nw_status']    = $input_post['optionsRadios02'];
-	    	$setData['nw_type']      = $input_post['optionsRadios01'];
-	    	$setData['nw_title']     = $input_post['nw_title'];
-	    	$setData['nw_body']      = $input_post['input'];
-	    	$setData['nw_start_date'] = $input_post['nw_start_date'];
-	    	$setData['nw_end_date']  = $input_post['nw_end_date'];
-
-
-// 	    	print("<br>");
-// 	    	print_r($input_post['chg_uniq']);
-	//     	print("<br>");
-	    	print_r($input_post);
-	    	print("<br>");
-	//     	print_r($setData);
-	//     	print("<br>");
-// 	    	print_r($_SESSION);
-// 	    	exit;
-
-
+	    	$set_data['nw_status']     = $input_post['optionsRadios02'];
+	    	$set_data['nw_type']       = $input_post['optionsRadios01'];
+	    	$set_data['nw_title']      = $input_post['nw_title'];
+	    	$set_data['nw_body']       = $input_post['input'];
+	    	$set_data['nw_start_date'] = $input_post['nw_start_date'];
+	    	$set_data['nw_end_date']   = $input_post['nw_end_date'];
 
 	    	// 新規か更新かを判定
 	    	if ($input_post['submit'] == 'submit')
@@ -187,17 +157,17 @@ class Newslist extends MY_Controller
 	    		{
 
 		    		// 更新処理
-		    		$setData['nw_seq']    = $input_post['nw_seq'];
+		    		$set_data['nw_seq']    = $input_post['nw_seq'];
 
-		    		$this->nw->update_news($setData);
+		    		$this->nw->update_news($set_data);
 
 	    		} else {
 
 	    			// 新規登録
-	    			$setData['nw_cl_seq']    = $_SESSION['c_memSeq'];
-	    			$setData['nw_cl_siteid'] = $_SESSION['c_memSiteid'];
+	    			$set_data['nw_cl_seq']    = $_SESSION['c_memSeq'];
+	    			$set_data['nw_cl_siteid'] = $_SESSION['c_memSiteid'];
 
-	    			$_row_id = $this->nw->insert_news($setData);
+	    			$_row_id = $this->nw->insert_news($set_data);
 	    			if (!is_numeric($_row_id))
 	    			{
 	    				log_message('error', 'Newslist::[detail()]新着お知らせ登録処理 insert_newsエラー');
@@ -218,29 +188,6 @@ class Newslist extends MY_Controller
     	redirect('/newslist/');
 
     }
-
-//     // ページリスト表示
-//     private function _get_pagelist($tmp_offset)
-//     {
-
-// 	    		// 1ページ当たりの表示件数
-// 	    		$tmp_per_page = 10;
-
-// 	    		// 新着・お知らせ管理データを取得
-// 				$this->load->model('News', 'nw', TRUE);
-// 				list($news_list, $news_countall) = $this->nw->get_accountlist($_SESSION['c_memSeq'], $tmp_per_page, $tmp_offset);
-
-// 				// Pagination 設定
-// 				$set_pagination = $this->_get_Pagination($news_countall, $tmp_per_page);
-
-// 				$this->smarty->assign('set_pagination', $set_pagination['page_link']);
-// 	        	$this->smarty->assign('nw_seq', NULL);
-// 				$this->smarty->assign('list', $news_list);
-// 	        	$this->smarty->assign('countall', $news_countall);
-
-// 	    		return;
-
-//     }
 
     // Pagination 設定
     private function _get_Pagination($news_countall, $tmp_per_page)

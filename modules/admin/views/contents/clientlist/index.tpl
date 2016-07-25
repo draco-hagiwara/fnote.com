@@ -94,7 +94,7 @@ function fmSubmit(formName, url, method, num) {
                     {elseif $cl.cl_status == "4"}<font color="#ffffff" style="background-color:darkorange">[ 編　集 ]</font>
                     {elseif $cl.cl_status == "5"}<font color="#ffffff" style="background-color:darkorange">[ 営業確認 ]</font>
                     {elseif $cl.cl_status == "6"}<font color="#ffffff" style="background-color:darkorange">[ クライアント確認 ]</font>
-                    {elseif $cl.cl_status == "7"}<font color="#ffffff" style="background-color:darkorange">[ 編集最終確認 ]</font>
+                    {elseif $cl.cl_status == "7"}<font color="#ffffff" style="background-color:red">[ 編集最終確認 ]</font>
                     {elseif $cl.cl_status == "8"}<font color="#ffffff" style="background-color:deeppink">[ 掲　載 ]</font>
                     {elseif $cl.cl_status == "9"}<font color="#ffffff" style="background-color:darkorange">[ 再編集 ]</font>
                     {elseif $cl.cl_status == "19"}<font color="#ffffff" style="background-color:gray">[ 一時停止 ]</font>
@@ -106,7 +106,10 @@ function fmSubmit(formName, url, method, num) {
                     {$cl.cl_company|escape}
                 </td>
                 <td>
-                    {$cl.cl_siteid}
+                    {if $cl.cl_status == "8"}
+                        <a href="https://{$smarty.server.HTTP_HOST}/site/pf/{$cl.cl_siteid}" target="_blank">{$cl.cl_siteid}</a>
+                    {else}{$cl.cl_siteid}
+                    {/if}
                 </td>
                 <td>
                     {$cl.salsename01|escape} {$cl.salsename02|escape}
@@ -118,16 +121,21 @@ function fmSubmit(formName, url, method, num) {
                     {$cl.adminname01|escape} {$cl.adminname02|escape}
                 </td>
                 <td>
+                    {if $smarty.session.a_memType!=0}
                     <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/clientlist/detail/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">編 集</button>
+                    {/if}
                     {if $smarty.session.a_memType!=1}
                     <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/entrytenpo/tenpo_edit/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">店舗情報</button>
                     <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/entrytenpo/report_edit/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">記事本文</button>
-                    <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/imagecontrol/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">画像登録</button>
-                    <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/imagecontrol/manage/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">画像管理</button>
                     {/if}
-                    <button type="submit" class="btn btn-success btn-xs" name="cl_uniq" value="{$cl.cl_seq}">URL</button>
-                    {if $smarty.session.a_memType==1}
-                    <button type="button" class="btn btn-warning btn-xs" onclick="fmSubmit('detailForm', '/admin/entrytenpo/tenpo_pre/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">営業承認</button>
+                    {if $cl.cl_status >= "4" && $cl.cl_status <= "9"}
+                    <button type="button" class="btn btn-warning btn-xs" onclick="fmSubmit('detailForm', '/admin/gallery/gd_list/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">画像管理</button>
+                    {*<button type="button" class="btn btn-warning btn-xs" onclick="fmSubmit('detailForm', '/admin/gallery/gd_add/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">画像登録</button>*}
+                    {else}
+                    <button type="button" class="btn btn-default btn-xs");">画像管理</button>
+                    {/if}
+                    {if $smarty.session.a_memType==1 && $cl.cl_status == "5"}
+                    <button type="button" class="btn btn-primary btn-xs" onclick="fmSubmit('detailForm', '/admin/entrytenpo/tenpo_pre/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">営業承認</button>
                     {/if}
                 </td>
             </tr>

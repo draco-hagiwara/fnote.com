@@ -1,27 +1,5 @@
-<!DOCTYPE html>
-<html class="no-js" lang="jp">
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
-<meta name="author" content="">
-<title>CS &#xB7; Crowd Sourcing</title>
-
-{* Versionと並び順に注意 *}
-<link href="{base_url()}../../css/bootstrap.min.css" rel="stylesheet">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="{base_url()}../../js/bootstrap.min.js"></script>
-
-</head>
-
-<small>グリッド&レスポンシブ対応</small>
-<div>
-  <section class="container">
-  <!-- TwitterBootstrapのグリッドシステムclass="row"で開始 -->
-  <div class="row">
-
-  </div>
+{* ヘッダー部分　START *}
+    {include file="../header_pre.tpl" head_index="1"}
 
 <body>
 
@@ -40,13 +18,13 @@
 	  {$list.en_body02}
 	</div>
 	<div class="form-group">
-	  {$list.en_cate01}
+	  {$list.en_cate01|escape:"html"}
 	</div>
 	<div class="form-group">
-	  {$list.en_cate02}
+	  {$list.en_cate02|escape:"html"}
 	</div>
 	<div class="form-group">
-	  {$list.en_cate03}
+	  {$list.en_cate03|escape:"html"}
 	</div>
 	<div class="form-group">
 	  {$list.en_shopname}
@@ -55,19 +33,19 @@
 	  {$list.en_shopname_sub}
 	</div>
 	<div class="form-group">
-	  {$list.en_url}
+	  {$list.en_url|escape:"html"}
 	</div>
 	<div class="form-group">
 	  {$list.en_zip01} {$list.en_zip02}
 	</div>
 	<div class="form-group">
-	  {$list.en_pref} {$list.en_addr01} {$list.en_addr02} {$list.en_buil}
+	  {$list.en_pref|escape:"html"} {$list.en_addr01|escape:"html"} {$list.en_addr02|escape:"html"} {$list.en_buil|escape:"html"}
 	</div>
 	<div class="form-group">
-	  {$list.en_tel}
+	  {$list.en_tel|escape:"html"}
 	</div>
 	<div class="form-group">
-	  {$list.en_mail}
+	  {$list.en_mail|escape:"html"}
 	</div>
 	<div class="form-group">
 	  {$list.en_opentime}
@@ -123,8 +101,9 @@
 	<div class="form-group">
 	  {$list.en_sns05}
 	</div>
+	<div id="gmap" style="width : 500px; height : 500px;"></div>{$list.en_google_map}
 	<div class="form-group">
-	  {$list.en_google_map}
+	  {$list.en_free01}
 	</div>
 	<div class="form-group">
 	  {$list.en_free02}
@@ -140,12 +119,12 @@
 	</div>
 
 
-<form class="form-horizontal" name="preForm" method="post" autocomplete="off" action="/admin/entrytenpo/request/">
+<form class='form-horizontal' name='preForm' method='post' autocomplete='off' action='/admin/entrytenpo/request/'>
 
   <input type="hidden" name="cl_seq" value={$list.en_cl_seq}>
   <input type="hidden" name="cl_id" value={$list.en_cl_id}>
 
-{if $list.cl_status == 5}
+{if $smarty.session.a_memType==1}{if $list.cl_status == 5}
 
   <div class="form-group">
     <label for="cl_comment" class="col-sm-3 control-label">承認 & 非承認 事由</label>
@@ -197,9 +176,9 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
-{/if}
+{/if}{/if}
 
-{if $list.cl_status == 7}
+{if $smarty.session.a_memType!=1}{if $list.cl_status == 7}
   <!-- Button trigger modal -->
   <div class="row">
   <div class="col-sm-9 col-sm-offset-3">
@@ -224,7 +203,7 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
-{/if}
+{/if}{/if}
 
 
 
@@ -232,6 +211,22 @@
 <!-- </form> -->
 
 </section>
+
+{*
+<script type="text/javascript">
+  google.maps.event.addDomListener(window, 'load', function() {
+      var map = document.getElementById("gmap");
+     var options = {
+            zoom: 16,
+          center: new google.maps.LatLng(35.657062, 139.696105),
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+       };
+     new google.maps.Map(map, options);
+ });
+</script>
+*}
+
+
 
 <br><br>
 <div class="panel panel-default">

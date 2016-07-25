@@ -12,23 +12,20 @@ class Login extends MY_Controller
 
         $this->_set_validation();												// バリデーション設定
 
-        if (isset($_SESSION['a_login']))
+//         if ($_SESSION['a_login'] == TRUE)
+        if (isset($_SESSION['a_login']) && $_SESSION['a_login'] == TRUE)
         {
         	$this->smarty->assign('login_chk', TRUE);
         	$this->smarty->assign('mem_type',  $_SESSION['a_memType']);
         	$this->smarty->assign('mem_Seq',   $_SESSION['a_memSeq']);
-        	//             $this->smarty->assign('login_name', $_SESSION['a_memNAME']);
-        	//             $this->smarty->assign('auth_cd',    $_SESSION['a_authCD']);
+
         	$this->view('top/index.tpl');
         } else {
-
-        	//         	print_r($_SESSION['a_memID']);
-        	//         	exit;
-
         	$this->smarty->assign('login_chk', FALSE);
         	$this->smarty->assign('mem_type',  "");
         	$this->smarty->assign('mem_Seq',   "");
         	$this->smarty->assign('err_mess',  '');
+
         	$this->view('login/index.tpl');
         }
 
@@ -37,26 +34,6 @@ class Login extends MY_Controller
     // ログイン 初期表示
     public function index()
     {
-
-//         if (isset($_SESSION['a_login']))
-//         {
-//             $this->smarty->assign('login_chk', TRUE);
-//             $this->smarty->assign('mem_type',  $_SESSION['a_memType']);
-//             $this->smarty->assign('mem_Seq',   $_SESSION['a_memSeq']);
-//             //             $this->smarty->assign('login_name', $_SESSION['a_memNAME']);
-// //             $this->smarty->assign('auth_cd',    $_SESSION['a_authCD']);
-//             $this->view('top/index.tpl');
-//         } else {
-
-// //         	print_r($_SESSION['a_memID']);
-// //         	exit;
-
-//             $this->smarty->assign('login_chk', FALSE);
-//             $this->smarty->assign('mem_type',  "");
-//             $this->smarty->assign('mem_Seq',   "");
-//             $this->smarty->assign('err_mess',  '');
-//             $this->view('login/index.tpl');
-//         }
 
     }
 
@@ -100,6 +77,7 @@ class Login extends MY_Controller
     // ログアウト チェック
     public function logout()
     {
+
         // SESSION クリア
         $this->load->model('comm_auth', 'auth', TRUE);
         $this->auth->logout('admin');

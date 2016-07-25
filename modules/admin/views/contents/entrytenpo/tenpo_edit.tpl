@@ -7,10 +7,8 @@
 <H3><p class="bg-info">店舗（クライアント）情報設定</p></H3>
 
 
-{form_open('entrytenpo/tenpo_pre/' , 'name="EntrytenpoForm" class="form-horizontal"  target="_blank"')}
-
-  {form_hidden($list)}
-  {*form_hidden('list', set_value('list', $list))*}
+{*form_open('entrytenpo/tenpo_pre/' , 'name="EntrytenpoForm" class="form-horizontal"  target="_blank"')*}
+<form method="post" target="_blank" action="../../../preview/pf/">
 
   <div class="form-group">
     <div class="col-sm-offset-10 col-sm-2">
@@ -18,7 +16,11 @@
     </div>
   </div>
 
+  <input type="hidden" name="en_seq" value={$list.en_seq}>
+  <input type="hidden" name="ticket" value={$ticket}>
+
 </form>
+{*form_close()*}
 
 {form_open('entrytenpo/tenpo_conf/' , 'name="EntrytenpoForm" class="form-horizontal"')}
   <div class="form-group">

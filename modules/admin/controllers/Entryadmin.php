@@ -29,17 +29,12 @@ class Entryadmin extends MY_Controller
     public function index()
     {
 
-    	// セッションのチェック
-
     	// バリデーション・チェック
     	$this->_set_validation();												// バリデーション設定
     	$this->form_validation->run();
 
     	// 初期値セット
     	$this->_item_set01();
-
-//     	$this->smarty->assign('err_email',  FALSE);
-//     	$this->smarty->assign('err_passwd', FALSE);
 
         $this->view('entryadmin/index.tpl');
 
@@ -57,8 +52,6 @@ class Entryadmin extends MY_Controller
     	// バリデーション・チェック
     	$this->_set_validation();
     	if ($this->form_validation->run() == FALSE) {
-//     		$this->smarty->assign('err_email',  FALSE);
-//     		$this->smarty->assign('err_passwd', FALSE);
     		$this->view('entryadmin/index.tpl');
     	} else {
     		// パスワード再入力チェック
@@ -76,8 +69,6 @@ class Entryadmin extends MY_Controller
     public function complete()
     {
 
-    	// セッションのチェック
-
     	// バリデーション・チェック
     	$this->_set_validation();
     	$this->form_validation->run();
@@ -87,8 +78,6 @@ class Entryadmin extends MY_Controller
 
     	// 「戻る」ボタン押下の場合
     	if ( $this->input->post('_back') ) {
-//     		$this->smarty->assign('err_email',  FALSE);
-//     		$this->smarty->assign('err_passwd', FALSE);
     		$this->view('entryadmin/index.tpl');
     		return;
     	}
@@ -98,23 +87,22 @@ class Entryadmin extends MY_Controller
 
     	if ($this->ac->check_loginid($this->input->post('ac_id'))) {
     		$this->smarty->assign('err_email',  TRUE);
-//     		$this->smarty->assign('err_passwd', FALSE);
     		$this->view('entryadmin/index.tpl');
     		return;
     	}
 
     	// DB書き込み
-    	$this->setData = $this->input->post();
+    	$input_post = $this->input->post();
 
     	// authキーの作成
     	$_tmp_authkey = $this->_makeRandStr();
-    	$this->setData["ac_auth"] = $_tmp_authkey;
+    	$input_post["ac_auth"] = $_tmp_authkey;
 
     	// 不要パラメータ削除
-    	unset($this->setData["submit"]) ;
-    	unset($this->setData["retype_password"]) ;
+    	unset($input_post["submit"]) ;
+    	unset($input_post["retype_password"]) ;
 
-    	$_row_id = $this->ac->insert_account($this->setData, TRUE);
+    	$_row_id = $this->ac->insert_account($input_post, TRUE);
     	if (!is_numeric($_row_id))
     	{
     		log_message('error', 'Entryadmin::[complete()]管理者登録処理 insert_accountエラー');
@@ -124,7 +112,7 @@ class Entryadmin extends MY_Controller
     	$mail['from']      = "";
     	$mail['from_name'] = "";
     	$mail['subject']   = "";
-    	$mail['to']        = $this->setData["ac_id"];
+    	$mail['to']        = $input_post["ac_id"];
     	$mail['cc']        = "";
     	$mail['bcc']       = "";
 
@@ -156,11 +144,6 @@ class Entryadmin extends MY_Controller
     	}
 
     }
-
-
-
-
-
 
     // 初期値セット
     private function _item_set01()

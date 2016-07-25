@@ -141,50 +141,46 @@ class Comm_auth extends CI_Model
     public function logout($login_member)
     {
 
-    	$this->session->sess_destroy();
+        // 特定のセッションユーザデータを削除
+        switch ($login_member)
+        {
+            case 'client':
+                $seach_key = 'c';
+                break;
+            case 'admin':
+                $seach_key = 'a';
+                break;
+            default:
+        }
 
+        $get_data = $this->session->all_userdata();
 
-//         // 特定のセッションユーザデータを削除
-//         switch ($login_member)
-//         {
-//             case 'client':
-//                 $seach_key = 'c';
-//                 break;
-//             case 'admin':
-//                 $seach_key = 'a';
-//                 break;
-//             default:
-//         }
-
-//         $get_data = $this->session->all_userdata();
-//         $unset_data = array();
-//         foreach ($get_data as $key => $val)
-//         {
-//             if (substr($key, 0, 1) == $seach_key)
-//             {
+        $unset_data = array();
+        foreach ($get_data as $key => $val)
+        {
+            if (substr($key, 0, 1) == $seach_key)
+            {
+                unset($_SESSION[$key]);
 //                 $unset_data[$key] = '';
-//             }
-//         }
+            }
+        }
 
 //         $this->session->unset_userdata($unset_data);                               // セッションデータ削除
 
-//         // ログイン解除
-//         switch ($login_member)
-//         {
-//             case 'writer':
-//                 $setData = array('w_login' => FALSE);
-//                 break;
-//             case 'client':
-//                 $setData = array('c_login' => FALSE);
-//                 break;
-//             case 'admin':
-//                 $setData = array('a_login' => FALSE);
-//                 break;
-//             default:
-//         }
+        // ログイン解除
+        switch ($login_member)
+        {
+            case 'client':
+                $setData = array('c_login' => FALSE);
+                break;
+            case 'admin':
+                $setData = array('a_login' => FALSE);
+                break;
+            default:
+        }
 
-//         $this->session->set_userdata($setData);                                     // ログイン解除
-//         //$this->session->sess_destroy();                                           // 全セッションデータ削除
+        $this->session->set_userdata($setData);                                     // ログイン解除
+        //$this->session->sess_destroy();                                           // 全セッションデータ削除
 
     }
 

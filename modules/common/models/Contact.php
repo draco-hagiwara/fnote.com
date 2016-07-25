@@ -40,7 +40,7 @@ class Contact extends CI_Model
 
     	// 各SQL項目へセット
     	// WHERE
-    	$set_select["co_seq"]  = NULL;
+    	$set_select["co_cl_siteid"]  = $arr_post['co_cl_siteid'];
 
     	// ORDER BY
     	if ($arr_post['orderid'] == 'ASC')
@@ -69,7 +69,7 @@ class Contact extends CI_Model
     public function _select_contactlist($set_select, $set_orderby, $tmp_per_page, $tmp_offset=0)
     {
 
-    	$sql = 'SELECT
+    	$sql = "SELECT
     			  co_seq,
     			  co_status,
     			  co_cl_siteid,
@@ -78,12 +78,8 @@ class Contact extends CI_Model
     			  co_contact_tel,
     			  co_contact_mail,
     			  co_create_date
-    			FROM tb_contact ';
-
-//     	// WHERE文 作成
-//     	$sql .= ' WHERE
-//     				co_seq LIKE \'%' .        $this->db->escape_like_str($set_select['cl_siteid'] ) . '%\'' .
-//         				' AND cl_company LIKE \'%' . $this->db->escape_like_str($set_select['cl_company']) . '%\'';
+    			FROM tb_contact
+    			WHERE co_cl_siteid = '" . $set_select["co_cl_siteid"] . "'";
 
     	// ORDER BY文 作成
     	$tmp_firstitem = FALSE;
@@ -114,9 +110,6 @@ class Contact extends CI_Model
 
     	return array($contact_list, $contact_countall);
     }
-
-
-
 
     /**
      * 客先問合せ情報登録処理

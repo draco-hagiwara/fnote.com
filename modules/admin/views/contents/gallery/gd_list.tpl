@@ -7,16 +7,14 @@
 <style type="text/css">
 <!--
 /*---------------------------------
-	 ▼index.php style▼
+	 ▼Gallery.php style▼
 ---------------------------------*/
 body#admin #gallery_wrap {
-	width:840px;
+	width:992px;
 }
-
-
 body#admin #gallery_list li{
-	width:100px;
-	height:140px;
+	width:112px;
+	height:152px;
 	border:1px solid #ccc;
 	float:left;
 	margin:0 5px 5px 0;
@@ -59,7 +57,8 @@ body#admin #gallery_list a.button{
 	color:#fff;
 	margin:2px auto;
 	background:#555;
-	width:90px;
+	height:20px;
+	width:100px;
 }
 body#admin #gallery_list a.button:hover{
 	background:#000;
@@ -72,43 +71,173 @@ body#admin .submit_btn {
 -->
 </style>
 
-
-
 </head>
-
 
 <body id="admin">
 <div id="wrapper">
-<h2>画像登録・編集フォーム</h2>
 
-<br><br>
-{*<form method="post" action="/admin/gallery/gd_new/" enctype="multipart/form-data" name="form">*}
-{*form_open('/gallery/gd_new/' , 'name="galleryForm" enctype="multipart/form-data" class="form-horizontal"')*}
+<H3><p class="bg-info">画像登録・編集フォーム</p></H3>
 
-{form_open('/gallery/gd_list/' , 'name="listForm" class="form-horizontal"')}
-{*<form action="" method="post">*}
+<br>
+{if $gd_mode=='chg'}
 
-<input type="submit" id="submit" value="並び順を保存する" onClick="alert('並べ替え完了です')"/>
+  {form_open('/gallery/gd_edit/' , 'name="galleryForm" enctype="multipart/form-data" class="form-horizontal"')}
 
-<div id="gallery_wrap">
-  <ul id="gallery_list" class="sortable">
-  {*<ul  class="sortable">*}
-      {foreach from=$str_html item=list}
+  <p class="text-center">
+  <img border="1" src="/images/{$list_image.im_cl_siteid}/s/{$list_image.im_filename}" height="250">
+  </p>
 
+  <br>
+  <div class="form-group">
+    <label for="size" class="col-sm-2 control-label">IMGタグ</label>
+    <div class="col-sm-10">
+      <p>標準画像：　　＜img src="/images/{$list_image.im_cl_siteid}/s/{$list_image.im_filename}" width={$list_image.im_width} height={$list_image.im_height} alt={$list_image.im_title} /＞</p>
+      <p>スマホ画像：　　＜img src="/images/{$list_image.im_cl_siteid}/s/s_{$list_image.im_filename}" width={$list_image.im_width} height={$list_image.im_height} alt={$list_image.im_title} /＞</p>
+      <p>サムネイル：　　＜img src="/images/{$list_image.im_cl_siteid}/s/t_{$list_image.im_filename}" width={$list_image.im_width} height={$list_image.im_height} alt={$list_image.im_title} /＞</p>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="size" class="col-sm-2 control-label">画像サイズ</label>
+    <div class="col-sm-5">
+      横：{$list_image.im_width} px　,　縦：{$list_image.im_height} px　,　容量：{$list_image.im_size} Byte
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="im_title" class="col-sm-2 control-label">タイトル（alt）</label>
+    <div class="col-sm-8">
+      {form_input('im_title' , set_value('im_title', $list_image.im_title) , 'class="form-control" placeholder="タイトル（alt）を入力してください"')}
+      {if form_error('im_title')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('im_title')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="im_description" class="col-sm-2 control-label">画像説明</label>
+    <div class="col-sm-8">
+      <textarea class="form-control input-sm" id="im_description" name="im_description" placeholder="画像説明を入力してください。max.255文字">{$list_image.im_description}</textarea>
+      {if form_error('im_description')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('im_description')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="im_status" class="col-sm-2 control-label">更新削除の選択</label>
+    <div class="col-sm-8">
+      <label class="radio-inline">
+        <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0" checked> 内容の更新
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1"> 画像の削除
+      </label>
+    </div>
+  </div>
+
+  <input type="hidden" name="im_filename" value={$list_image.im_filename} />
+  <input type="hidden" name="im_cl_siteid" value={$list_image.im_cl_siteid} />
+
+  <br>
+  <p align="center"><button type='submit' name='submit' value='_chgordel' class="btn btn-sm btn-primary">更新 または 削除</button></p>
+
+  </form>
+
+{else}
+
+  {form_open('/gallery/gd_new/' , 'name="galleryForm" enctype="multipart/form-data" class="form-horizontal"')}
+
+  <p>画像アップロード（jpg、gif、pngのみ）</p>
+  <p><input type="file" name="upfile" size="50" /> （MAX 2MB）</p>
+
+  <br>
+  <div class="form-group">
+    <label for="im_title" class="col-sm-2 control-label">タイトル（alt）</label>
+    <div class="col-sm-8">
+      {form_input('im_title' , set_value('im_title', '') , 'class="form-control" placeholder="タイトル（alt）を入力してください"')}
+      {if form_error('im_title')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('im_title')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="size" class="col-sm-2 control-label">画像縮小サイズ<font color=red>【必須】</font></label>
+    <div class="col-sm-1">
+      横px{form_input('im_width' , set_value('im_width', '600') , 'class="form-control" placeholder="px(4)"')}
+    </div>
+    <div class="col-sm-1">
+      縦px{form_input('im_height' , set_value('im_height', '600') , 'class="form-control" placeholder="px(4)"')}
+    </div>
+    <div class="col-sm-4">
+      {if form_error('im_width')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('im_width')}</font></label>{/if}
+      <br>
+      {if form_error('im_height')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('im_height')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="im_description" class="col-sm-2 control-label">画像説明</label>
+    <div class="col-sm-8">
+      <textarea class="form-control input-sm" id="im_description" name="im_description" placeholder="画像説明を入力してください。max.255文字"></textarea>
+      {if form_error('im_description')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('im_description')}</font></label>{/if}
+    </div>
+  </div>
+
+  <br>
+  <p align="center"><button type='submit' name='submit' value='_new' class="btn btn-sm btn-primary">　新規登録　</button></p>
+
+  </form>
+
+{/if}
+
+<br>
+<H3><p class="bg-info">登録画像一覧</p></H3>
+
+<form method="post" action="/admin/gallery/gd_list/" enctype="multipart/form-data" name="form">
+
+  <p class="text-right">
+  {if $list_mode=='edit'}
+    <button type='submit' name='submit' value='_sort'>並び替えモードへ</button>
+    <input type="hidden" name="list_mode" value='sort' />
+  {else}
+    <button type='submit' name='submit' value='_edit'>編集モードへ</button>
+    <input type="hidden" name="list_mode" value='edit' />
+  {/if}
+  </p>
+
+</form>
+
+{if $list_mode=='edit'}
+<p>編集モード :: {$img_cnt} 枚</p>
+  <form method="post" action="/admin/gallery/gd_list/" enctype="multipart/form-data" name="form">
+
+  <div id="gallery_wrap">
+    <ul id="gallery_list" class="clearfix">
+        {foreach from=$str_html item=list}
                     {$list}
+        {foreachelse}
+          画像はありませんでした。
+        {/foreach}
+    </ul>
+  </div>
 
-      {foreachelse}
-        画像はありませんでした。
-      {/foreach}
-  </ul>
-</div>
+  <input type="hidden" name="list_mode" value={$list_mode} />
 
+  </form>
 
-<input type="hidden" id="result" name="result" />
-<input type="hidden" name="chg_uniq" value={$chg_uniq} />
+{else}
+<p>並び替えモード :: {$img_cnt} 枚</p>
 
-{*</form>*}
-{form_close()}
+  {*<form method="post" action="/admin/gallery/gd_new/" enctype="multipart/form-data" name="form">*}
+
+  {form_open('/gallery/gd_list/' , 'name="listForm" class="form-horizontal"')}
+
+  <input type="submit" id="submit" value="並び順を保存する" />
+
+  <div id="gallery_wrap">
+    <ul id="gallery_list" class="sortable">
+        {foreach from=$str_html item=list}
+                    {$list}
+        {foreachelse}
+          画像はありませんでした。
+        {/foreach}
+    </ul>
+  </div>
+
+  <input type="hidden" id="result" name="result" />
+  <input type="hidden" name="list_mode" value={$list_mode} />
+
+  {form_close()}
 
 <script>
 $(function() {
@@ -122,6 +251,7 @@ $(function() {
 });
 </script>
 
+{/if}
 
 
 {* フッター部分　START *}

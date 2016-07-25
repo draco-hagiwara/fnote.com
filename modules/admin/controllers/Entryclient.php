@@ -29,14 +29,9 @@ class Entryclient extends MY_Controller
     public function index()
     {
 
-    	// セッションのチェック
-
     	// バリデーション・チェック
     	$this->_set_validation();												// バリデーション設定
     	$this->form_validation->run();
-
-//     	// 初期値セット
-//     	$this->_item_set01();
 
     	// 担当編集リスト作成
     	$this->load->model('Account', 'ac', TRUE);
@@ -53,14 +48,14 @@ class Entryclient extends MY_Controller
     public function confirm()
     {
 
-    	$this->getData = $this->input->post();
+    	$input_post = $this->input->post();
 
     	// 担当編集リスト作成
     	$this->load->model('Account', 'ac', TRUE);
-    	$this->_item_editor($this->getData["cl_editor_id"]);
+    	$this->_item_editor($input_post["cl_editor_id"]);
 
     	// 担当営業リスト作成
-    	$this->_item_sales($this->getData["cl_sales_id"]);
+    	$this->_item_sales($input_post["cl_sales_id"]);
 
     	// バリデーション・チェック
     	$this->_set_validation();
@@ -70,9 +65,9 @@ class Entryclient extends MY_Controller
     		$this->load->model('Client', 'cl', TRUE);
 
     		// サイトID(URL名)入力チェック
-    		if (isset($this->getdata["cl_siteid"]))
+    		if ($input_post["cl_siteid"] != "")
     		{
-	    		if ($this->cl->check_siteid($this->getData["cl_seq"], $this->getData["cl_siteid"])) {
+    			if ($this->cl->check_siteid(FALSE, $input_post["cl_siteid"])) {
 	    			$this->smarty->assign('err_siteid', TRUE);
 	    			$this->view('entryclient/index.tpl');
 	    			return;
@@ -80,9 +75,9 @@ class Entryclient extends MY_Controller
     		}
 
     		// ログインID入力チェック
-    		if (isset($this->getdata["cl_id"]))
+    		if ($input_post["cl_id"] != "")
     		{
-	    		if ($this->cl->check_loginid($this->getData["cl_seq"], $this->getData["cl_id"])) {
+	    		if ($this->cl->check_loginid(FALSE, $input_post["cl_id"])) {
 	    			$this->smarty->assign('err_clid', TRUE);
 	    			$this->view('entryclient/index.tpl');
 	    			return;
@@ -97,11 +92,11 @@ class Entryclient extends MY_Controller
     public function complete()
     {
 
-    	// セッションのチェック
-
     	// バリデーション・チェック
     	$this->_set_validation();
     	$this->form_validation->run();
+
+    	$input_post = $this->input->post();
 
     	// 担当編集リスト作成
     	$this->load->model('Account', 'ac', TRUE);
@@ -110,39 +105,32 @@ class Entryclient extends MY_Controller
     	// 担当営業リスト作成
     	$this->_item_sales();
 
-//     	// 初期値セット
-//     	$this->_item_set01();
-
     	// 「戻る」ボタン押下の場合
-    	if ( $this->input->post('_back') ) {
-//     		$this->smarty->assign('err_email',  FALSE);
-//     		$this->smarty->assign('err_passwd', FALSE);
+    	if ( isset($input_post['_back'])) {
     		$this->view('entryclient/index.tpl');
     		return;
     	}
 
     	// DB書き込み
-    	$this->setData = $this->input->post();
-
     	// 担当編集者＆営業のＩＤを取り出す
-    	$_tmp_editor_id = explode(' : ', $this->setData['_editor_id'], 3);
-    	$this->setData['cl_editor_id'] = $_tmp_editor_id[0];
-    	$_tmp_salse_id = explode(' : ', $this->setData['_sales_id'], 3);
-    	$this->setData['cl_sales_id'] = $_tmp_salse_id[0];
+    	$_tmp_editor_id = explode(' : ', $input_post['_editor_id'], 3);
+    	$input_post['cl_editor_id'] = $_tmp_editor_id[0];
+    	$_tmp_salse_id = explode(' : ', $input_post['_sales_id'], 3);
+    	$input_post['cl_sales_id'] = $_tmp_salse_id[0];
 
     	// authキーの作成
     	$_tmp_authkey = $this->_makeRandStr();
-    	$this->setData["cl_auth"]     = $_tmp_authkey;
-    	$this->setData["cl_admin_id"] = $_SESSION['a_memSeq'];
+    	$input_post["cl_auth"]     = $_tmp_authkey;
+    	$input_post["cl_admin_id"] = $_SESSION['a_memSeq'];
 
     	// 不要パラメータ削除
-    	unset($this->setData["_sales_id"]) ;
-    	unset($this->setData["_editor_id"]) ;
-    	unset($this->setData["submit"]) ;
-    	unset($this->setData["retype_password"]) ;
+    	unset($input_post["_sales_id"]) ;
+    	unset($input_post["_editor_id"]) ;
+    	unset($input_post["submit"]) ;
+    	unset($input_post["retype_password"]) ;
 
     	$this->load->model('Client', 'cl', TRUE);
-    	$_row_id = $this->cl->insert_client($this->setData, TRUE);
+    	$_row_id = $this->cl->insert_client($input_post, TRUE);
     	if (!is_numeric($_row_id))
     	{
     		log_message('error', 'entryclient::[complete()]クライアント登録処理 insert_clientエラー');
@@ -152,7 +140,7 @@ class Entryclient extends MY_Controller
     	$mail['from']      = "";
     	$mail['from_name'] = "";
     	$mail['subject']   = "";
-    	$mail['to']        = $this->setData["cl_mail"];
+    	$mail['to']        = $input_post["cl_mail"];
     	$mail['cc']        = "";
     	$mail['bcc']       = "";
 
@@ -185,46 +173,6 @@ class Entryclient extends MY_Controller
     	}
 
     }
-
-
-
-
-
-
-//     // 初期値セット
-//     private function _item_set01()
-//     {
-
-//     	// 管理者登録状態セット
-//         $this->config->load('config_status');
-//         $arroptions_ac_status = $this->config->item('ADMIN_ACCOUNT_STATUS');
-
-//     	// 管理者種類セット
-//         $this->config->load('config_comm');
-//         $arroptions_ac_type = $this->config->item('ADMIN_ACCOUNT_TYPE');
-
-//     	$this->smarty->assign('options_ac_status',  $arroptions_ac_status);
-//     	$this->smarty->assign('options_ac_type',  $arroptions_ac_type);
-
-//     }
-
-//     // 初期値セット
-//     private function _item_set02()
-//     {
-
-//     	// 管理者登録状態セット
-//     	$this->config->load('config_status');
-//     	$arroptions_ac_status = $this->config->item('ADMIN_ACCOUNT_STATUS');
-
-//     	// 管理者種類セット
-//     	$this->config->load('config_comm');
-//     	$arroptions_ac_type = $this->config->item('ADMIN_ACCOUNT_TYPE');
-
-//     	$this->smarty->assign('options_ac_status',  $arroptions_ac_status);
-//     	$this->smarty->assign('options_ac_type',  $arroptions_ac_type);
-//     	$this->smarty->assign('account_type', $arroptions_ac_type[$this->input->post('ac_type')]);
-
-//     }
 
 
     // 担当営業リスト作成
@@ -282,10 +230,6 @@ class Entryclient extends MY_Controller
 	    	$this->smarty->assign('options_cl_editor_id',  $arroptions_cl_editor[$_editor_num]);
 	    }
     }
-
-
-
-
 
     /**
      * ランダム文字列の生成

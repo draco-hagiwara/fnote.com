@@ -5,7 +5,7 @@
 {* ヘッダー部分　END *}
 
 <div class="jumbotron">
-  <h3>管理者アカウント情報　　<span class="label label-success">新規登録</span></h3>
+  <h3>お問合せフォーム</h3>
 </div>
 
 {form_open('contact/complete/' , 'name="ConmpForm" class="form-horizontal"')}

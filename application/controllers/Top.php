@@ -21,7 +21,7 @@ class Top extends MY_Controller
     {
 
         // バリデーション・チェック
-        $this->_set_validation();                                            // バリデーション設定
+        $this->_set_validation();                                            // バリデーション設定1
         $this->form_validation->run();
 
         $this->view('top/guide.tpl');

@@ -3,13 +3,6 @@
 class Entrytenpo extends MY_Controller
 {
 
-// 	private $_options_pref;
-// 	private $_pref_name;
-// 	private $_cl_seq;
-// 	private $_cl_siteid;
-// 	private $_cl_id;
-// 	private $test;
-
     public function __construct()
     {
         parent::__construct();
@@ -19,6 +12,7 @@ class Entrytenpo extends MY_Controller
             $this->smarty->assign('login_chk', TRUE);
             $this->smarty->assign('mem_type',  $_SESSION['a_memType']);
             $this->smarty->assign('mem_Seq',   $_SESSION['a_memSeq']);
+    		$this->smarty->assign('ticket',    NULL);
         } else {
             $this->smarty->assign('login_chk', FALSE);
             $this->smarty->assign('mem_type',  "");
@@ -61,10 +55,10 @@ class Entrytenpo extends MY_Controller
     	$this->_item_set01();
 
     	// クライアント情報取得
-    	$post_data = $_POST;
+    	$input_post = $this->input->post();
 
     	$this->load->model('Client', 'cl', TRUE);
-    	$cl_data = $this->cl->get_cl_seq($post_data['chg_uniq'], TRUE);
+    	$cl_data = $this->cl->get_cl_seq($input_post['chg_uniq'], TRUE);
 
     	// 一時保存
 		$_SESSION['a_cl_seq']    = $cl_data[0]['cl_seq'];
@@ -74,17 +68,20 @@ class Entrytenpo extends MY_Controller
 		// 店舗データの取得
     	$this->load->model('Entry', 'ent', TRUE);
     	$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid']);
-//     	$entry_data = $this->ent->get_entry_clid($cl_data[0]['cl_id']);
     	if ($entry_data == FALSE)
 		{
 			// 空データを取得
 			$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid'], TRUE);
-// 			$entry_data = $this->ent->get_entry_clid($cl_data[0]['cl_id'], TRUE);
 
 			$this->smarty->assign('list', $entry_data[0]);
 		} else {
 			$this->smarty->assign('list', $entry_data[0]);
 		}
+
+		// プレビュー用にチェック用ticketを発行
+		$_ticket = md5(uniqid(mt_rand(), true));
+		$_SESSION['a_ticket'] = $_ticket;
+		$this->smarty->assign('ticket', $_ticket);
 
     	$this->view('entrytenpo/tenpo_edit.tpl');
 
@@ -94,16 +91,15 @@ class Entrytenpo extends MY_Controller
     public function tenpo_conf()
     {
 
-    	$post_data = $_POST;
+    	$input_post = $this->input->post();
 
-		if ($post_data['submit'] == 'preview')
+		if ($input_post['submit'] == 'preview')
 		{
-			$this->smarty->assign('list', $post_data);
+			$this->smarty->assign('list', $input_post);
 
 			$this->view('entrytenpo/tenpo_pre.tpl');
 			return;
 		}
-
 
     	// 初期値セット
     	$this->_item_set01();
@@ -117,19 +113,19 @@ class Entrytenpo extends MY_Controller
     	} else {
 
     		// データ設定
-    		$post_data["en_cl_seq"]    = $_SESSION['a_cl_seq'];
-    		$post_data["en_cl_id"]     = $_SESSION['a_cl_id'];
-    		$post_data["en_cl_siteid"] = $_SESSION['a_cl_siteid'];
+    		$input_post["en_cl_seq"]    = $_SESSION['a_cl_seq'];
+    		$input_post["en_cl_id"]     = $_SESSION['a_cl_id'];
+    		$input_post["en_cl_siteid"] = $_SESSION['a_cl_siteid'];
 
     		// 不要パラメータ削除
-    		unset($post_data["submit"]) ;
+    		unset($input_post["submit"]) ;
 
     		// DB書き込み
     		$this->load->model('Entry', 'ent', TRUE);
-    		$_row_id = $this->ent->inup_tenpo($post_data);
+    		$_row_id = $this->ent->inup_tenpo($input_post);
     	}
 
-		$this->smarty->assign('list', $post_data);
+		$this->smarty->assign('list', $input_post);
     	$this->view('entrytenpo/tenpo_edit.tpl');
 
     }
@@ -138,37 +134,29 @@ class Entrytenpo extends MY_Controller
     public function tenpo_pre()
     {
 
-    	$post_data = $_POST;
+    	$input_post = $this->input->post();
+
+    	// クライアント情報取得
+    	$this->load->model('Client', 'cl', TRUE);
+
+    	// 店舗データの取得
+    	$this->load->model('Entry', 'ent', TRUE);
 
     	// 営業アクセスの場合
     	if ($_SESSION['a_memType'] == 1)
     	{
-
-    		// クライアント情報取得
-    		$this->load->model('Client', 'cl', TRUE);
-    		$cl_data = $this->cl->get_cl_seq($post_data['chg_uniq'], TRUE);
-
-    		// 店舗データの取得
-    		$this->load->model('Entry', 'ent', TRUE);
-    		$entry_data = $this->ent->get_entry_clseq($post_data['chg_uniq']);
-
-    		$entry_data[0]['cl_status']  = $cl_data[0]['cl_status'];
-    		$entry_data[0]['cl_comment'] = $cl_data[0]['cl_comment'];
-
-
-//     		print_r($entry_data);
-//     		print("<br><br>");
-
-	    	$this->smarty->assign('list', $entry_data[0]);
-	    	$this->view('entrytenpo/tenpo_pre.tpl');
-
-	    	return;
+    		$cl_data = $this->cl->get_cl_seq($input_post['chg_uniq'], TRUE);
+    		$entry_data = $this->ent->get_entry_clseq($input_post['chg_uniq']);
+    	} else {
+    		$cl_data = $this->cl->get_cl_seq($_SESSION['a_cl_seq'], TRUE);
+    		$entry_data = $this->ent->get_entry_clseq($_SESSION['a_cl_seq']);
     	}
 
+    	$entry_data[0]['cl_status']  = $cl_data[0]['cl_status'];
+    	$entry_data[0]['cl_comment'] = $cl_data[0]['cl_comment'];
 
-
-    	$this->smarty->assign('list', $post_data);
-    	$this->view('entrytenpo/tenpo_pre.tpl');
+	    $this->smarty->assign('list', $entry_data[0]);
+	    $this->view('entrytenpo/tenpo_pre.tpl');
 
     }
 
@@ -179,34 +167,83 @@ class Entrytenpo extends MY_Controller
     	// バリデーション・チェック
     	$this->_set_validation02();												// バリデーション設定
 
-    	// 初期値セット
-//     	$this->_item_set01();
-
     	// クライアント情報取得
-    	$post_data = $_POST;
+    	$input_post = $this->input->post();
 
     	$this->load->model('Client', 'cl', TRUE);
-    	$cl_data = $this->cl->get_cl_seq($post_data['chg_uniq'], TRUE);
+    	$cl_data = $this->cl->get_cl_seq($input_post['chg_uniq'], TRUE);
 
     	// 一時保存
     	$_SESSION['a_cl_seq']    = $cl_data[0]['cl_seq'];
     	$_SESSION['a_cl_siteid'] = $cl_data[0]['cl_siteid'];
     	$_SESSION['a_cl_id']     = $cl_data[0]['cl_id'];
+    	$_SESSION['a_cl_status'] = $cl_data[0]['cl_status'];
 
     	// 店舗データの取得
     	$this->load->model('Entry', 'ent', TRUE);
     	$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid']);
-//     	$entry_data = $this->ent->get_entry_clid($cl_data[0]['cl_id']);
     	if ($entry_data == FALSE)
     	{
     		// 空データを取得
     		$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid'], TRUE);
-//     		$entry_data = $this->ent->get_entry_clid($cl_data[0]['cl_id'], TRUE);
 
     		$this->smarty->assign('list', $entry_data[0]);
     	} else {
     		$this->smarty->assign('list', $entry_data[0]);
     	}
+
+    	// リビジョンデータの取得
+    	$this->load->model('Revision', 'rev', TRUE);
+    	$rev_data = $this->rev->get_revision_siteid($cl_data[0]['cl_siteid']);
+    	if ($rev_data == FALSE)
+    	{
+    		// 空データ
+    		$this->smarty->assign('revlist', NULL);
+    	} else {
+    		$this->smarty->assign('revlist', $rev_data);
+    	}
+
+    	// プレビュー用にチェック用ticketを発行
+    	$_ticket = md5(uniqid(mt_rand(), true));
+    	$_SESSION['a_ticket'] = $_ticket;
+    	$this->smarty->assign('ticket', $_ticket);
+
+    	$this->smarty->assign('cl_status', $cl_data[0]['cl_status']);
+    	$this->view('entrytenpo/report_edit.tpl');
+
+    }
+
+    // レビジョン管理
+    public function report_rev()
+    {
+
+    	// バリデーション・チェック
+    	$this->_set_validation02();												// バリデーション設定
+
+    	// レビジョン情報取得
+    	$input_post = $this->input->post();
+
+    	$this->load->model('Revision', 'rev', TRUE);
+    	$rev_data = $this->rev->get_revision_rvseq($input_post['chg_uniq']);
+
+    	// 表示用データセット
+    	$set_data["en_title01"] = $rev_data[0]['rv_entry_title01'];
+    	$set_data["en_body01"]  = $rev_data[0]['rv_entry_body01'];
+    	$set_data["en_title02"] = $rev_data[0]['rv_entry_title02'];
+    	$set_data["en_body02"]  = $rev_data[0]['rv_entry_body02'];
+
+    	// レビジョンデータの一覧取得
+    	$rev_data = $this->rev->get_revision_clseq($rev_data[0]['rv_cl_seq']);
+    	if ($rev_data == FALSE)
+    	{
+    		// 空データ
+    		$this->smarty->assign('revlist', NULL);
+    	} else {
+    		$this->smarty->assign('revlist', $rev_data);
+    	}
+
+    	$this->smarty->assign('cl_status', $_SESSION['a_cl_status']);
+    	$this->smarty->assign('list', $set_data);
 
     	$this->view('entrytenpo/report_edit.tpl');
 
@@ -216,52 +253,112 @@ class Entrytenpo extends MY_Controller
     public function report_conf()
     {
 
-    	$post_data = $_POST;
+    	$input_post = $this->input->post();
 
-//     	print_r($post_data);
-//     	print("<br><br>");
+	    $this->load->model('Client', 'cl', TRUE);
+	    $this->load->model('Entry', 'ent', TRUE);
+	    $this->load->model('Revision', 'rev', TRUE);
 
-
-    	if ($post_data['submit'] == 'preview')
+	    if ($input_post['submit'] == 'preview')
     	{
-    		$this->smarty->assign('list', $post_data);
+    		$this->smarty->assign('list', $input_post);
 
     		$this->view('entrytenpo/report_pre.tpl');
     		return;
 
-    	} elseif ($post_data['submit'] == 'save') {
+    	} elseif ($input_post['submit'] == 'save') {
 
 	    	// バリデーション・チェック
 	    	$this->_set_validation02();
 	    	if ($this->form_validation->run() == FALSE) {
-	    		$this->smarty->assign('list', $post_data);
+	    		$this->smarty->assign('list', $input_post);
 	    	} else {
 
 	    		// データ設定
-	    		$post_data["en_cl_seq"]    = $_SESSION['a_cl_seq'];
-	    		$post_data["en_cl_id"]     = $_SESSION['a_cl_id'];
-	    		$post_data["en_cl_siteid"] = $_SESSION['a_cl_siteid'];
-// 	    		$post_data["en_cl_siteid"] = $_SESSION['a_cl_siteid'];
+	    		$input_post["en_cl_seq"]    = $_SESSION['a_cl_seq'];
+	    		$input_post["en_cl_id"]     = $_SESSION['a_cl_id'];
+	    		$input_post["en_cl_siteid"] = $_SESSION['a_cl_siteid'];
 
 	    		// 不要パラメータ削除
-	    		unset($post_data["submit"]) ;
+	    		unset($input_post["rv_description"]) ;
+	    		unset($input_post["submit"]) ;
 
 	    		// DB書き込み
-	    		$this->load->model('Entry', 'ent', TRUE);
-	    		$_row_id = $this->ent->inup_tenpo($post_data);
+	    		$_row_id = $this->ent->inup_tenpo($input_post);
 
 	    		// クライアントデータのステータス変更「編集」
-	    		$this->load->model('Client', 'cl', TRUE);
 	    		$set_data['cl_seq']    = $_SESSION['a_cl_seq'];
 	    		$set_data['cl_status'] = 4;
 	    		$this->cl->update_client($set_data);
 
 		    	// 再表示用にデータの取得
-		    	$this->load->model('Entry', 'ent', TRUE);
-		    	$entry_data = $this->ent->get_entry_siteid($post_data["en_cl_siteid"]);
-// 		    	$entry_data = $this->ent->get_entry_clid($post_data["en_cl_id"]);
+		    	$entry_data = $this->ent->get_entry_siteid($input_post["en_cl_siteid"]);
 
-	    		$this->smarty->assign('list', $entry_data[0]);
+		    	$this->smarty->assign('cl_status', $set_data['cl_status']);
+		    	$this->smarty->assign('list', $entry_data[0]);
+
+		    	// レビジョンデータの一覧取得
+		    	$rev_data = $this->rev->get_revision_clseq($input_post["en_cl_seq"]);
+		    	if ($rev_data == FALSE)
+		    	{
+		    		// 空データ
+		    		$this->smarty->assign('revlist', NULL);
+		    	} else {
+		    		$this->smarty->assign('revlist', $rev_data);
+		    	}
+	    	}
+
+	    } elseif ($input_post['submit'] == 'revision') {
+
+	    	// バリデーション・チェック
+	    	$this->_set_validation02();
+	    	if ($this->form_validation->run() == FALSE) {
+	    		$this->smarty->assign('list', $input_post);
+	    	} else {
+
+	    		// データ設定
+	    		$set_data["rv_description"]   = $input_post['rv_description'];
+	    		$set_data["rv_entry_title01"] = $input_post['en_title01'];
+	    		$set_data["rv_entry_body01"]  = $input_post['en_body01'];
+	    		$set_data["rv_length01"]      = 0;
+	    		$set_data["rv_entry_title02"] = $input_post['en_title02'];
+	    		$set_data["rv_entry_body02"]  = $input_post['en_body02'];
+	    		$set_data["rv_length02"]      = 0;
+	    		$set_data["rv_cl_seq"]        = $_SESSION['a_cl_seq'];
+	    		$set_data["rv_cl_siteid"]     = $_SESSION['a_cl_siteid'];
+
+	    		// リビジョンデータの取得
+	    		$rev_data = $this->rev->get_revision_clseq($_SESSION['a_cl_seq']);
+
+	    		$rev_cnt = count($rev_data);
+
+	    		// 振り分け
+	    		if ($rev_cnt >= 5)														// max.5 履歴まで管理
+	    		{
+
+	    			// 一番古いデータを読み込み→上書き
+
+	    			// リビジョンデータの取得
+	    			$rev_olddata = $this->rev->get_revision_old($_SESSION['a_cl_seq']);
+
+	    			// DB書き込み
+	    			$set_data["rv_seq"] = $rev_olddata[0]['rv_seq'];
+	    			$_row_id = $this->rev->update_revision($set_data);				// 一番古いデータを上書き
+
+	    		} else {
+
+	    			// そのままinsert
+	    			$this->rev->insert_revision($set_data);
+
+	    		}
+
+	    		// 再表示用にデータの取得
+	    		$entry_data = $this->ent->get_entry_siteid($_SESSION['a_cl_siteid']);
+	    		$rev_data = $this->rev->get_revision_siteid($_SESSION['a_cl_siteid']);
+
+				$this->smarty->assign('cl_status', $_SESSION['a_cl_status']);
+	    		$this->smarty->assign('list',      $entry_data[0]);
+	    		$this->smarty->assign('revlist',   $rev_data);
 
 	    	}
 
@@ -270,10 +367,10 @@ class Entrytenpo extends MY_Controller
 	    	// バリデーション・チェック
 	    	$this->_set_validation02();
 	    	if ($this->form_validation->run() == FALSE) {
-	    		$this->smarty->assign('list', $post_data);
+	    		$this->smarty->assign('list', $input_post);
 	    	} else {
+
 		    	// クライアントデータのステータス変更「営業確認」
-		    	$this->load->model('Client', 'cl', TRUE);
 		    	$set_data['cl_seq']     = $_SESSION['a_cl_seq'];
 		    	$set_data['cl_status']  = 5;
 		    	$set_data['cl_comment'] = NULL;
@@ -313,11 +410,20 @@ class Entrytenpo extends MY_Controller
 		    	}
 
 		    	// 再表示用にデータの取得
-		    	$this->load->model('Entry', 'ent', TRUE);
 		    	$entry_data = $this->ent->get_entry_siteid($clac_data[0]['cl_siteid']);
-// 		    	$entry_data = $this->ent->get_entry_clid($clac_data[0]['cl_id']);
 
+    			$this->smarty->assign('cl_status', $set_data['cl_status']);
 		    	$this->smarty->assign('list', $entry_data[0]);
+
+		    	// レビジョンデータの一覧取得
+		    	$rev_data = $this->rev->get_revision_clseq($_SESSION['a_cl_seq']);
+		    	if ($rev_data == FALSE)
+		    	{
+		    		// 空データ
+		    		$this->smarty->assign('revlist', NULL);
+		    	} else {
+		    		$this->smarty->assign('revlist', $rev_data);
+		    	}
 	    	}
     	}
 
@@ -329,29 +435,24 @@ class Entrytenpo extends MY_Controller
     public function request()
     {
 
-    	$post_data = $_POST;
+    	$input_post = $this->input->post();
 
-    	    	print_r($post_data);
-    	//     	exit;
-
-    	switch ($post_data['submit'])
+    	switch ($input_post['submit'])
     	{
             case 'salse_ok':
-
-    			print("<br>salse_ok<br>");
 
     			// クライアントステータス変更：「6:クライアント確認」
     			$this->load->model('Client', 'cl', TRUE);
 
-    			$set_data['cl_seq']     = $post_data['cl_seq'];
-    			$set_data['cl_id']      = $post_data['cl_id'];
+    			$set_data['cl_seq']     = $input_post['cl_seq'];
+    			$set_data['cl_id']      = $input_post['cl_id'];
     			$set_data['cl_status']  = 6;
-    			$set_data['cl_comment'] = $post_data['cl_comment'];
+    			$set_data['cl_comment'] = $input_post['cl_comment'];
 
     			$this->cl->update_client($set_data);
 
     			// クライアントデータから担当営業を取得
-    			$clac_data = $this->cl->get_clac_seq($post_data['cl_seq'], NULL);
+    			$clac_data = $this->cl->get_clac_seq($input_post['cl_seq'], NULL);
 
     			// クライアントへ承認メール送信。
     			// メール送信先設定
@@ -388,20 +489,18 @@ class Entrytenpo extends MY_Controller
                 break;
             case 'salse_ng':
 
-    			print("<br>salse_ng<br>");
-
     			// クライアントステータス変更：「9:再編集」
     			$this->load->model('Client', 'cl', TRUE);
 
-    			$set_data['cl_seq']     = $post_data['cl_seq'];
-    			$set_data['cl_id']      = $post_data['cl_id'];
+    			$set_data['cl_seq']     = $input_post['cl_seq'];
+    			$set_data['cl_id']      = $input_post['cl_id'];
     			$set_data['cl_status']  = 9;
-    			$set_data['cl_comment'] = $post_data['cl_comment'];
+    			$set_data['cl_comment'] = $input_post['cl_comment'];
 
     			$this->cl->update_client($set_data);
 
     			// クライアントデータから担当者を取得
-    			$clac_data = $this->cl->get_clac_seq($post_data['cl_seq'], NULL);
+    			$clac_data = $this->cl->get_clac_seq($input_post['cl_seq'], NULL);
 
     			// クライアントへ承認メール送信。
     			// メール送信先設定
@@ -417,11 +516,9 @@ class Entrytenpo extends MY_Controller
     					'ac_editorname01' => $clac_data[0]['editorname01'],
     					'ac_editorname02' => $clac_data[0]['editorname02'],
     					'cl_company'      => $clac_data[0]['cl_company'],
-//     					'cl_president01'  => $clac_data[0]['cl_president01'],
-//     					'cl_president02'  => $clac_data[0]['cl_president02'],
     					'ac_salsename01'  => $clac_data[0]['salsename01'],
     					'ac_salsename02'  => $clac_data[0]['salsename02'],
-    					'cl_comment'      => $post_data['cl_comment'],
+    					'cl_comment'      => $input_post['cl_comment'],
     					'member'          => "営業",
     			);
 
@@ -442,28 +539,63 @@ class Entrytenpo extends MY_Controller
                 break;
             case 'final':
 
-    			print("<br>final<br>");
+            	// 掲載開始
+            	// クライアントステータス変更：「8:掲載」
+            	$this->load->model('Client', 'cl', TRUE);
 
+            	$set_data['cl_seq']     = $input_post['cl_seq'];
+            	$set_data['cl_id']      = $input_post['cl_id'];
+            	$set_data['cl_status']  = 8;
+//             	$set_data['cl_comment'] = $input_post['cl_comment'];
 
+            	$this->cl->update_client($set_data);
 
+            	// クライアントデータから担当営業を取得
+            	$clac_data = $this->cl->get_clac_seq($input_post['cl_seq'], NULL);
 
+            	// クライアントへ承認メール送信。
+            	// メール送信先設定
+            	$mail['from']      = "";
+            	$mail['from_name'] = "";
+            	$mail['subject']   = "";
+            	$mail['to']        = $clac_data[0]['cl_mail'];
+            	$mail['cc']        = $clac_data[0]['salseacmail'] . ";" . $clac_data[0]['editoracmail'] . ";" . $clac_data[0]['adminacmail'];
+            	$mail['bcc']       = "";
 
+            	// メール本文置き換え文字設定
+            	$arrRepList = array(
+            			'cl_company'      => $clac_data[0]['cl_company'],
+            			'cl_president01'  => $clac_data[0]['cl_president01'],
+            			'cl_president02'  => $clac_data[0]['cl_president02'],
+            			'site'            => 'https://' . $this->input->server("SERVER_NAME") . '/site/pf/' . $clac_data[0]['cl_siteid'],
+            			'ac_salsename01'  => $clac_data[0]['salsename01'],
+            			'ac_salsename02'  => $clac_data[0]['salsename02'],
+            	);
 
+            	// メールテンプレートの読み込み
+            	$this->config->load('config_mailtpl');									// メールテンプレート情報読み込み
+            	$mail_tpl = $this->config->item('MAILTPL_FINAL_OK_ID');
 
-    			redirect('/clientlist/');
+            	// メール送信
+            	$this->load->model('Mailtpl', 'mailtpl', TRUE);
+            	if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl)) {
+            	} else {
+            		echo "メール送信エラー";
+            		log_message('error', 'Entrytenpo::[request()]掲載開始処理 メール送信エラー');
+            	}
+
+            	// 再表示用にデータの取得
+            	$this->load->model('Entry', 'ent', TRUE);
+            	$entry_data = $this->ent->get_entry_siteid($clac_data[0]['cl_siteid']);
+
+            	$this->smarty->assign('cl_status', $set_data['cl_status']);
+            	$this->smarty->assign('list', $entry_data[0]);
+
+				$this->view('entrytenpo/tenpo_pre.tpl');
 
                 break;
             default:
         }
-
-//         // 再表示用にデータの取得
-//         $this->load->model('Entry', 'ent', TRUE);
-//         $entry_data = $this->ent->get_entry_clid($clac_data[0]['cl_id']);
-
-//         $entry_data[0]['cl_status'] = 99;
-
-//         $this->smarty->assign('list', $entry_data[0]);
-//     	$this->view('entrytenpo/tenpo_pre.tpl');
 
     }
 
@@ -757,6 +889,11 @@ class Entrytenpo extends MY_Controller
     					'field'   => 'en_entry_tags',
     					'label'   => 'タグ',
     					'rules'   => 'trim|max_length[255]'
+    			),
+    			array(
+    					'field'   => 'rv_description',
+    					'label'   => '保存タイトル',
+    					'rules'   => 'trim|max_length[50]'
     			),
     	);
 

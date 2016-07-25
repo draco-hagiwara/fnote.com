@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>CS &#xB7; Crowd Sourcing</title>
+<title>プラットフォーム &#xB7; FNOTE</title>
 
 {* Versionと並び順に注意 *}
 <link href="../../css/bootstrap.min.css" rel="stylesheet">
@@ -30,7 +30,6 @@
     <div class="page-header">
       <ul class="list-inline text-right">
         <li><a href="#">新規会員登録</a></li>
-        <li><a href="#">ログイン</a></li>
       </ul>
 
       <nav class="navbar navbar-inverse">

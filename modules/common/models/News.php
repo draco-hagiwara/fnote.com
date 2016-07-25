@@ -46,11 +46,6 @@ class News extends CI_Model
 
     }
 
-
-
-
-
-
     /**
      * データ全件の取得
      *
@@ -107,7 +102,6 @@ class News extends CI_Model
 
     	return array($news_list, $news_countall);
     }
-
 
     /**
      * 新着・お知らせ : 新規会員登録
