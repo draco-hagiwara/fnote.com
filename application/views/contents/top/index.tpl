@@ -9,7 +9,7 @@
 <!--Body content-->
 
   <div id="typo">
-    <div class="inner">fnote.com</div>
+    {if $PcorMob==FALSE}<div class="inner">fnote.com</div>{else}<div><img src="/images/fnote/s/s_20160721_776805790a0fe8945a.gif" alt=""></div>{/if}
   </div>
 
 

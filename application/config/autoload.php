@@ -59,7 +59,7 @@ $autoload['packages'] = array(APPPATH . '../vendor/smarty/smarty');
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('database', 'session', 'smarty');
+$autoload['libraries'] = array('database', 'session', 'smarty', 'user_agent');
 //$autoload['libraries'] = array();
 
 /*

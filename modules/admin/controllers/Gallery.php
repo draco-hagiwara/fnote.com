@@ -316,7 +316,67 @@ EOS;
     	$this->_set_validation();
     	if ($this->form_validation->run() == FALSE)
     	{
-    		$this->view('gallery/create.tpl');
+    		$gd_mode = 'new';
+    		$list_mode = 'edit';
+
+    		// 編集モード
+    		// 画像リスト読み込み
+    		$this->load->model('Image', 'img', TRUE);
+    		$img_data = $this->img->get_image_clseq($_SESSION['a_img_clseq']);
+
+    		if ($img_data == FALSE)
+    		{
+    			$this->smarty->assign('str_html', NULL);
+    		} else {
+    			$str_html = array();
+    			foreach ($img_data as $key => $value)
+    			{
+
+    				$sort_id = $value["im_seq"];
+    				$create_date = date('Y/m/d', strtotime($value["im_create_date"]));
+
+    				if ($value["im_status"] == 1)
+    				{
+
+    					// 表示ステータス : lightbox付き
+    					$image_url = '<a class="photo"  href="/images/' . $value["im_cl_siteid"] . '/s/' . $value["im_filename"] . '">'
+    							. '<img border="1" src="https://'
+    							. $this->input->server("SERVER_NAME") . '/images/' . $value["im_cl_siteid"] . '/s/t_' . $value["im_filename"] . '" height="75"></a>'
+    							. '<a class="button" href="https://' . $this->input->server("SERVER_NAME") . '/admin/gallery/gd_list/nodisp/' . $value["im_seq"] . '">非表示にする</a>'
+    							. '<a class="button" href="https://' . $this->input->server("SERVER_NAME") . '/admin/gallery/gd_list/edit/' . $value["im_seq"] . '">[編集・削除]</a> />'
+    							;
+
+
+    					// ヒアドキュメント作成
+    					$str_html[$key] = <<<EOS
+		         				<li id="$sort_id">{$create_date}{$image_url}</li>
+EOS;
+
+    				} else {
+
+    					// 非表示ステータス
+    					$image_url = '<a class="photo"><img border="1" src="https://'
+    							. $this->input->server("SERVER_NAME") . '/images/' . $value["im_cl_siteid"] . '/s/t_' . $value["im_filename"] . '" height="75"></a>'
+    							. '<a class="button" href="https://' . $this->input->server("SERVER_NAME") . '/admin/gallery/gd_list/disp/' . $value["im_seq"] . '">表示する</a>'
+    							. '<a class="button" href="https://' . $this->input->server("SERVER_NAME") . '/admin/gallery/gd_list/edit/' . $value["im_seq"] . '">[編集・削除]</a>'
+    							. '<div class="hidden_text">非表示中</div> />'
+    							;
+
+    					$str_html[$key] = <<<EOS
+		         				<li class="no_disp" id="$sort_id">{$create_date}{$image_url}</li>
+EOS;
+
+    				}
+    			}
+
+    			$this->smarty->assign('str_html', $str_html);
+    		}
+
+    		$this->smarty->assign('gd_mode', $gd_mode);
+    		$this->smarty->assign('list_mode', $list_mode);
+    		$this->smarty->assign('img_cnt', count($img_data));
+
+    		$this->view('gallery/gd_list.tpl');
     		return ;
     	} else {
 

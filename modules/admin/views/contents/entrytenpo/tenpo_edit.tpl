@@ -4,9 +4,47 @@
 <body>
 {* ヘッダー部分　END *}
 
+
+
+<script type="text/javascript">
+/*
+ * select オブジェクトの選択されている値と
+ * 表示テキストを取得する
+ */
+function getSelectedValAndText(obj)
+{
+    var val = obj.options[obj.selectedIndex].value;         // 値
+    var txt = obj.options[obj.selectedIndex].text;          // 表示テキスト
+
+    // 値とテキストを連結してリターン
+    console.log(val);
+    console.log(txt);
+
+
+    // サブミットするフォームを取得
+    var fm = document.forms["EntryForm"];
+    fm.method = "POST";                                       // method(GET or POST)を設定する
+    fm.setAttribute("value", val);                           // 選択ジャンルコード
+    fm.action = "/admin/entrytenpo/tenpo_cate/";                       // action(遷移先URL)を設定する
+    fm.submit();                                             // submit する
+    return true;
+}
+</script>
+
+
+
+
+
 <H3><p class="bg-info">店舗（クライアント）情報設定</p></H3>
 
 
+{if $list.en_seq==1}
+  <div class="form-group">
+    <div class="col-sm-offset-10 col-sm-2">
+      <button type='button' class="btn btn-sm btn-default">プレビュー</button>
+    </div>
+  </div>
+{else}
 {*form_open('entrytenpo/tenpo_pre/' , 'name="EntrytenpoForm" class="form-horizontal"  target="_blank"')*}
 <form method="post" target="_blank" action="../../../preview/pf/">
 
@@ -21,29 +59,61 @@
 
 </form>
 {*form_close()*}
+{/if}
 
-{form_open('entrytenpo/tenpo_conf/' , 'name="EntrytenpoForm" class="form-horizontal"')}
+{form_open('entrytenpo/tenpo_conf/' , 'name="EntryForm" class="form-horizontal"')}
+
+
+
+
   <div class="form-group">
-    <label for="en_cate01" class="col-sm-3 control-label">カテゴリ１選択</label>
+    <label for="en_cate01" class="col-sm-3 control-label">カテゴリ１選択xx</label>
     <div class="col-sm-2 btn-lg">
-      {form_dropdown('en_cate01', $opt_en_cate01, set_value('en_cate01', $list.en_cate01))}
-      {if form_error('en_cate01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_cate01')}</font></label>{/if}
+    <select name="en_cate01" onchange="getSelectedValAndText(this);">
+      {foreach name=en_cate01 from=$opt_en_cate01 key=num item=item01}
+        {if $num == $list.en_cate01}
+          <option value="{$num}" selected>{$item01}</option>
+        {else}
+          <option value="{$num}">{$item01}</option>
+        {/if}
+     {/foreach}
+    </select>
     </div>
   </div>
   <div class="form-group">
-    <label for="en_cate02" class="col-sm-3 control-label">カテゴリ２選択</label>
+    <label for="en_cate02" class="col-sm-3 control-label">カテゴリ２選択xx</label>
     <div class="col-sm-2 btn-lg">
-      {form_dropdown('en_cate02', $opt_en_cate02, set_value('en_cate02', $list.en_cate02))}
-      {if form_error('en_cate02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_cate02')}</font></label>{/if}
+    <select name="en_cate02" onchange="getSelectedValAndText(this);">
+      {foreach name=en_cate02 from=$opt_en_cate02 key=num item=item01}
+        {if $num == $list.en_cate02}
+          <option value="{$num}" selected>{$item01}</option>
+        {else}
+          <option value="{$num}">{$item01}</option>
+        {/if}
+     {/foreach}
+    </select>
     </div>
   </div>
   <div class="form-group">
-    <label for="en_cate03" class="col-sm-3 control-label">カテゴリ３選択</label>
+    <label for="en_cate03" class="col-sm-3 control-label">カテゴリ３選択xx</label>
     <div class="col-sm-2 btn-lg">
-      {form_dropdown('en_cate03', $opt_en_cate03, set_value('en_cate03', $list.en_cate03))}
-      {if form_error('en_cate03')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_cate03')}</font></label>{/if}
+    <select name="en_cate03">
+      {foreach name=en_cate03 from=$opt_en_cate03 key=num item=item01}
+        {if $num == $list.en_cate03}
+          <option value="{$num}" selected>{$item01}</option>
+        {else}
+          <option value="{$num}">{$item01}</option>
+        {/if}
+     {/foreach}
+    </select>
     </div>
   </div>
+
+
+
+
+
+
   <div class="form-group">
     <label for="en_shopname" class="col-sm-3 control-label">店舗名称<font color=red>【必須】</font></label>
     <div class="col-sm-9">
@@ -280,6 +350,7 @@
       {if form_error('en_free05')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_free05')}</font></label>{/if}
     </div>
   </div>
+  <input type="hidden" name="en_seq" value={$list.en_seq}>
 
   <!-- Button trigger modal -->
   <div class="row">
@@ -299,7 +370,7 @@
           <p>登録しますか。&hellip;</p>
         </div>
         <div class="modal-footer">
-          <button type='submit' name='submit' value='submit' class="btn btn-sm btn-primary">O  K</button>
+          <button type='submit' name='add' value='submit' class="btn btn-sm btn-primary">O  K</button>
           <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
         </div>
       </div><!-- /.modal-content -->

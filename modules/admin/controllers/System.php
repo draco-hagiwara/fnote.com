@@ -19,7 +19,6 @@ class System extends MY_Controller
 
             redirect('/login/');
         }
-
     }
 
     // 初期表示
@@ -27,26 +26,6 @@ class System extends MY_Controller
     {
 
         $this->view('system/index.tpl');
-
-    }
-
-    // 初期表示
-    public function backup()
-    {
-
-    	// sh に記述
-
-    	// DBのバックアップ
-    	$app_path = "/home/fnote/www/fnote.com.dev/dbbackup/";
-    	$strCommand = $app_path . 'backup4mysql.sh';
-    	exec( $strCommand );
-
-    	// システムのバックアップ
-    	$app_path = "/home/fnote/www/fnote.com.dev/dbbackup/";
-    	$strCommand = $app_path . 'backup4pg.sh';
-    	exec( $strCommand );
-
-    	$this->view('system/index.tpl');
 
     }
 
@@ -123,6 +102,470 @@ class System extends MY_Controller
 
     }
 
+    // 初期表示
+    public function backup()
+    {
+
+    	// sh に記述
+
+    	// DBのバックアップ
+    	$app_path = "/home/fnote/www/fnote.com.dev/dbbackup/";
+    	$strCommand = $app_path . 'backup4mysql.sh';
+    	exec( $strCommand );
+
+    	// システムのバックアップ
+    	$app_path = "/home/fnote/www/fnote.com.dev/dbbackup/";
+    	$strCommand = $app_path . 'backup4pg.sh';
+    	exec( $strCommand );
+
+    	$this->view('system/index.tpl');
+
+    }
+
+    // カテゴリ 順位設定＆登録
+    public function category_new()
+    {
+
+    	$input_post = $this->input->post();
+
+    	$err_mess01 = NULL;
+    	$err_mess02 = NULL;
+    	$err_mess03 = NULL;
+
+    	// バリデーション・チェック
+    	$this->_set_validation02();
+
+    	$arroptions_ca_cate01 = array();
+    	$arroptions_ca_cate02 = array();
+    	$arroptions_ca_cate03 = array();
+
+    	$this->load->model('Category', 'cate', TRUE);
+
+    	// カテゴリ登録
+    	if (isset($input_post['new']))
+    	{
+
+    		// 第一カテゴリ追加
+    		if ($input_post['new'] == "cate01")
+    		{
+    			if ($input_post['ca_name01'] != "")
+    			{
+	    			$set_data['ca_name']   = $input_post['ca_name01'];
+	    			$set_data['ca_level']  = 1;									// １カテ
+	    			$set_data['ca_dispno'] = 0;
+
+	    			$_row_id = $this->cate->insert_category($set_data);
+	    			if (!is_numeric($_row_id))
+	    			{
+	    				$err_mess01 = 'カテゴリの登録に失敗しました。';
+	    			}
+	    		} else {
+	    			$err_mess01 = 'カテゴリ欄に文字を入力してください。';
+	    		}
+    		}
+
+    		// 第二カテゴリ追加
+    	    if ($input_post['new'] == "cate02")
+    		{
+    			if ($input_post['ca_name02'] != "")
+    			{
+	    			$set_data['ca_name']   = $input_post['ca_name02'];
+	    			$set_data['ca_parent'] = $input_post['ca_cate01'];
+	    			$set_data['ca_level']  = 2;									// ２カテ
+	    			$set_data['ca_dispno'] = 0;
+
+	    			$_row_id = $this->cate->insert_category($set_data);
+	    			if (!is_numeric($_row_id))
+	    			{
+	    				$err_mess02 = 'カテゴリの登録に失敗しました。';
+	    			}
+	    		} else {
+	    			$err_mess02 = 'カテゴリ欄に文字を入力してください。';
+	    		}
+    		}
+
+    		// 第三カテゴリ追加
+    		if ($input_post['new'] == "cate03")
+    		{
+    			if ($input_post['ca_name03'] != "")
+    			{
+    				$set_data['ca_name']   = $input_post['ca_name03'];
+    				$set_data['ca_parent'] = $input_post['ca_cate02'];
+    				$set_data['ca_level']  = 3;									// ３カテ
+    				$set_data['ca_dispno'] = 0;
+
+    				$_row_id = $this->cate->insert_category($set_data);
+    				if (!is_numeric($_row_id))
+    				{
+    					$err_mess03 = 'カテゴリの登録に失敗しました。';
+    				}
+    			} else {
+    				$err_mess03 = 'カテゴリ欄に文字を入力してください。';
+    			}
+    		}
+
+		// カテゴリ並び替え
+    	} else {
+
+	    	// 第一カテゴリ並び替え
+	    	if ((isset($input_post['result01'])) && ($input_post['result01'] != ""))
+	    	{
+	    		$result01 = $input_post['result01'];
+	    		$result_array = explode(',', $result01);
+
+	    		$this->_update_category($result_array);
+	    	}
+
+	    	// 第二カテゴリ並び替え
+	    	if ((isset($input_post['result02'])) && ($input_post['result02'] != ""))
+	    	{
+	    		$result02 = $input_post['result02'];
+	    		$result_array = explode(',', $result02);
+
+	    		$this->_update_category($result_array);
+	    	}
+
+	    	// 第三カテゴリ並び替え
+	    	if ((isset($input_post['result03'])) && ($input_post['result03'] != ""))
+	    	{
+	    		$result03 = $input_post['result03'];
+	    		$result_array = explode(',', $result03);
+
+	    		$this->_update_category($result_array);
+	    	}
+    	}
+
+    	// カテゴリ情報取得
+    	if (count($input_post) == 0)
+    	{
+
+    		// 第一階層カテゴリデータ取得
+    		$cate01_data = $this->cate->get_category_parent1();
+    		foreach ($cate01_data as $key => $value)
+    		{
+    			$arroptions_ca_cate01[$value['ca_seq']] = $value['ca_name'];
+    		}
+
+    	} else {
+
+	    	// 第一階層カテゴリデータ取得
+	    	$cate01_data = $this->cate->get_category_parent1();
+	    	foreach ($cate01_data as $key => $value)
+	    	{
+	    		$arroptions_ca_cate01[$value['ca_seq']] = $value['ca_name'];
+	    	}
+
+	    	// 第二階層カテゴリデータ取得
+	    	$cate02_data = $this->cate->get_category_parent2($input_post['ca_cate01']);
+	    	foreach ($cate02_data as $key => $value)
+	    	{
+	    		$arroptions_ca_cate02[$value['ca_seq']] = $value['ca_name'];
+	    	}
+
+	    	// 第三階層カテゴリデータ取得
+			if ($_SESSION['a_cate01'] == $input_post["ca_cate01"])
+			{
+		    	if (isset($input_post['ca_cate02']))
+				{
+					$cate03_data = $this->cate->get_category_parent3($input_post['ca_cate02']);
+					foreach ($cate03_data as $key => $value)
+					{
+						$arroptions_ca_cate03[$value['ca_seq']] = $value['ca_name'];
+					}
+				}
+			}
+
+			$_SESSION['a_cate01'] = $input_post["ca_cate01"];
+
+    	}
+
+
+    	$this->smarty->assign('opt_ca_cate01',  $arroptions_ca_cate01);
+    	$this->smarty->assign('opt_ca_cate02',  $arroptions_ca_cate02);
+    	$this->smarty->assign('opt_ca_cate03',  $arroptions_ca_cate03);
+    	$this->smarty->assign('err_mess01',     $err_mess01);
+    	$this->smarty->assign('err_mess02',     $err_mess02);
+    	$this->smarty->assign('err_mess03',     $err_mess03);
+
+    	$this->smarty->assign('list',  $input_post);
+
+    	$this->view('system/category_new.tpl');
+
+    }
+
+    // カテゴリ 一覧表示
+    public function cate_search()
+    {
+
+    	$input_post = $this->input->post();
+
+
+    	print_r($input_post);
+    	print("<br>");
+
+    	$arroptions_ca_cate01 = array();
+    	$arroptions_ca_cate02 = array();
+    	$arroptions_ca_cate03 = array();
+
+    	$this->load->model('Category', 'cate', TRUE);
+
+    	// 検索項目の保存が上手くいかない。応急的に対応！
+    	$tmp_inputpost['ca_seq']    = NULL;
+    	$tmp_inputpost['ca_parent'] = NULL;
+    	if ((isset($input_post['submit'])) && ($input_post['submit'] == '_submit'))
+    	{
+
+    		// 第一or第二 のどちらを変えたかのチェック
+			if ($_SESSION['a_cate01'] == $input_post["ca_cate01"])
+			{
+				if (isset($input_post['ca_cate02']) && $input_post['ca_cate02'] != "") {
+	    			$tmp_inputpost['ca_parent'] = $input_post['ca_cate02'];
+	    			$_SESSION['a_cate02']       = $input_post["ca_cate02"];
+	    		} elseif (isset($input_post['ca_cate01'])) {
+	    			$tmp_inputpost['ca_parent'] = $input_post['ca_cate01'];
+	    		}
+			} else {
+				if (isset($input_post['ca_cate01']) && $input_post['ca_cate01'] == "") {
+					$_SESSION['a_cate01']       = "";
+					$_SESSION['a_cate02']       = "";
+				} elseif (isset($input_post['ca_cate02']) && $input_post['ca_cate02'] != "") {
+					$tmp_inputpost['ca_parent'] = $input_post['ca_cate01'];
+	    			$_SESSION['a_cate02']       = $input_post["ca_cate02"];
+				} elseif (isset($input_post['ca_cate01']) && $input_post['ca_cate01'] != '') {
+	    			$tmp_inputpost['ca_parent'] = $input_post['ca_cate01'];
+	    		}
+			}
+
+    		$tmp_inputpost['orderid'] = "ASC";
+
+    	} else {
+    		$tmp_inputpost['orderid'] = "ASC";
+    	}
+
+    	// バリデーション・チェック
+    	$this->_set_validation03();												// バリデーション設定
+
+    	// Pagination 現在ページ数の取得：：URIセグメントの取得
+    	$segments = $this->uri->segment_array();
+    	if (isset($segments[3]))
+    	{
+    		$tmp_offset = $segments[3];
+    	} else {
+    		$tmp_offset = 0;
+    	}
+
+    	// 1ページ当たりの表示件数 :: 固定とする
+    	$tmp_per_page = 10;
+
+    	// カテゴリの取得
+    	list($cate_list, $cate_countall) = $this->cate->get_categorylist($tmp_inputpost, $tmp_per_page, $tmp_offset);
+
+    	$this->smarty->assign('list', $cate_list);
+
+    	// Pagination 設定
+    	$set_pagination = $this->_get_Pagination($cate_countall, $tmp_per_page);
+
+    	$this->smarty->assign('set_pagination', $set_pagination['page_link']);
+    	$this->smarty->assign('countall', $cate_countall);
+
+
+    	// カテゴリ情報取得
+    	if (count($input_post) == 0)
+    	{
+
+    		// 第一階層カテゴリデータ取得
+    		$cate01_data = $this->cate->get_category_parent1();
+
+    		$arroptions_ca_cate01[''] = "選択してください。";
+    		foreach ($cate01_data as $key => $value)
+    		{
+    			$arroptions_ca_cate01[$value['ca_seq']] = $value['ca_name'];
+    		}
+
+    	} else {
+
+    		// 第一階層カテゴリデータ取得
+    		$cate01_data = $this->cate->get_category_parent1();
+
+    		$arroptions_ca_cate01[''] = "選択してください。";
+    		foreach ($cate01_data as $key => $value)
+    		{
+    			$arroptions_ca_cate01[$value['ca_seq']] = $value['ca_name'];
+    		}
+
+    		// 第二階層カテゴリデータ取得
+    		$cate02_data = $this->cate->get_category_parent2($input_post['ca_cate01']);
+
+    		$arroptions_ca_cate02[''] = "選択してください。";
+    		foreach ($cate02_data as $key => $value)
+    		{
+    			$arroptions_ca_cate02[$value['ca_seq']] = $value['ca_name'];
+    		}
+
+     		// 第三階層カテゴリデータ取得はチェックしない
+
+    		$_SESSION['a_cate01'] = $input_post["ca_cate01"];
+
+    	}
+
+    	$this->smarty->assign('opt_ca_cate01', $arroptions_ca_cate01);
+    	$this->smarty->assign('opt_ca_cate02', $arroptions_ca_cate02);
+    	$this->smarty->assign('opt_ca_cate03', $arroptions_ca_cate03);
+
+    	$this->smarty->assign('serch_item', $input_post);
+    	$this->smarty->assign('ca_name',    NULL);
+
+    	$this->view('system/category_chg.tpl');
+
+    }
+
+    // カテゴリ 更新
+    public function category_chg()
+    {
+
+    	$input_post = $this->input->post();
+
+    	print_r($input_post);
+    	print("<br>");
+
+
+
+    	$arroptions_ca_cate01 = array();
+    	$arroptions_ca_cate02 = array();
+    	$arroptions_ca_cate03 = array();
+
+    	$this->load->model('Category', 'cate', TRUE);
+
+
+
+
+
+
+
+
+		// 対象データ
+    	if (isset($input_post['chg_uniq']))
+    	{
+
+    		$_SESSION['a_chgcate'] = $input_post['chg_uniq'];
+    		$cate_seq_data = $this->cate->get_category_seq($input_post['chg_uniq']);
+    		$this->smarty->assign('ca_name',  $cate_seq_data[0]['ca_name']);
+
+    	}
+
+    	// カテゴリ名変更
+    	if ((isset($input_post['submit'])) && ($input_post['submit'] == 'catechg'))
+    	{
+
+
+    		$set_data['ca_seq']  = $_SESSION['a_chgcate'];
+    		$set_data['ca_name'] = $input_post['ca_name'];
+
+
+
+    		print_r($set_data);
+    		print("<br>");
+
+
+    		// 更新
+    		$this->cate->update_category($set_data);
+
+    		$this->smarty->assign('ca_name',  "");
+
+    	}
+
+
+
+
+
+
+
+    	$tmp_inputpost['ca_seq']    = NULL;
+    	$tmp_inputpost['ca_parent'] = NULL;
+    	if ($_SESSION['a_cate02'] != "")
+    	{
+    		$tmp_inputpost['ca_parent'] = $_SESSION['a_cate02'];
+    	} elseif ($_SESSION['a_cate01'] != "") {
+    		$tmp_inputpost['ca_parent'] = $_SESSION['a_cate01'];
+    	} else {
+    	}
+    	$tmp_inputpost['orderid'] = "ASC";
+
+    	// バリデーション・チェック
+    	$this->_set_validation03();												// バリデーション設定
+
+    	// Pagination 現在ページ数の取得：：URIセグメントの取得
+    	$segments = $this->uri->segment_array();
+    	if (isset($segments[3]))
+    	{
+    		$tmp_offset = $segments[3];
+    	} else {
+    		$tmp_offset = 0;
+    	}
+
+    	// 1ページ当たりの表示件数 :: 固定とする
+    	$tmp_per_page = 10;
+
+    	// カテゴリの取得
+    	list($cate_list, $cate_countall) = $this->cate->get_categorylist($tmp_inputpost, $tmp_per_page, $tmp_offset);
+
+    	$this->smarty->assign('list', $cate_list);
+
+    	// Pagination 設定
+    	$set_pagination = $this->_get_Pagination($cate_countall, $tmp_per_page);
+
+    	$this->smarty->assign('set_pagination', $set_pagination['page_link']);
+    	$this->smarty->assign('countall', $cate_countall);
+
+
+    	// カテゴリ情報取得
+    	if ($_SESSION['a_cate01'] == "")
+    	{
+
+    		// 第一階層カテゴリデータ取得
+    		$cate01_data = $this->cate->get_category_parent1();
+
+    		$arroptions_ca_cate01[''] = "選択してください。";
+    		foreach ($cate01_data as $key => $value)
+    		{
+    			$arroptions_ca_cate01[$value['ca_seq']] = $value['ca_name'];
+    		}
+
+    	} else {
+
+    		// 第一階層カテゴリデータ取得
+    		$cate01_data = $this->cate->get_category_parent1();
+
+    		$arroptions_ca_cate01[''] = "選択してください。";
+    		foreach ($cate01_data as $key => $value)
+    		{
+    			$arroptions_ca_cate01[$value['ca_seq']] = $value['ca_name'];
+    		}
+
+    		// 第二階層カテゴリデータ取得
+    		$cate02_data = $this->cate->get_category_parent2($_SESSION['a_cate02']);
+
+    		$arroptions_ca_cate02[''] = "選択してください。";
+    		foreach ($cate02_data as $key => $value)
+    		{
+    			$arroptions_ca_cate02[$value['ca_seq']] = $value['ca_name'];
+    		}
+
+    	}
+
+    	$this->smarty->assign('opt_ca_cate01',  $arroptions_ca_cate01);
+    	$this->smarty->assign('opt_ca_cate02',  $arroptions_ca_cate02);
+    	$this->smarty->assign('opt_ca_cate03',  $arroptions_ca_cate03);
+
+    	$serch_item['ca_cate01'] = $_SESSION['a_cate01'];
+    	$serch_item['ca_cate02'] = $_SESSION['a_cate02'];
+    	$this->smarty->assign('serch_item',  $input_post);
+
+    	$this->view('system/category_chg.tpl');
+
+
+    }
+
     // 全メールテンプレの取得
     private function _get_mailtpl_title()
     {
@@ -136,6 +579,47 @@ class System extends MY_Controller
     	}
 
     	$this->smarty->assign('options_tpltitle', $options_tpltitle);
+
+    }
+
+    // カテゴリの並び替え更新
+    private function _update_category($result_array)
+    {
+
+
+    	$cnt = 1;
+    	foreach ($result_array as $key => $val)
+    	{
+    		$set_data['ca_seq']    = $val;
+    		$set_data['ca_dispno'] = $cnt;
+
+    		// 更新
+    		$this->cate->update_category($set_data);
+    		$cnt++;
+    	}
+
+    }
+
+    // Pagination 設定
+    private function _get_Pagination($cate_countall, $tmp_per_page)
+    {
+
+    	$config['base_url']       = base_url() . '/system/cate_search/';		// ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
+    	$config['per_page']       = $tmp_per_page;								// 1ページ当たりの表示件数。
+    	$config['total_rows']     = $cate_countall;							// 総件数。where指定するか？
+    	//$config['uri_segment']    = 4;										// オフセット値がURIパスの何セグメント目とするか設定
+    	$config['num_links']      = 5;											//現在のページ番号の左右にいくつのページ番号リンクを生成するか設定
+    	$config['full_tag_open']  = '<p class="pagination">';					// ページネーションリンク全体を階層化するHTMLタグの先頭タグ文字列を指定
+    	$config['full_tag_close'] = '</p>';										// ページネーションリンク全体を階層化するHTMLタグの閉じタグ文字列を指定
+    	$config['first_link']     = '最初へ';									// 最初のページを表すテキスト。
+    	$config['last_link']      = '最後へ';									// 最後のページを表すテキスト。
+    	$config['prev_link']      = '前へ';										// 前のページへのリンクを表わす文字列を指定
+    	$config['next_link']      = '次へ';										// 次のページへのリンクを表わす文字列を指定
+
+    	$this->load->library('pagination', $config);							// Paginationクラス読み込み
+    	$set_page['page_link'] = $this->pagination->create_links();
+
+    	return $set_page;
 
     }
 
@@ -202,6 +686,28 @@ class System extends MY_Controller
     					'label'   => 'メールbcc',
     					'rules'   => 'trim|max_length[100]'
     			),
+    	);
+
+    	$this->load->library('form_validation', $rule_set);                     // バリデーションクラス読み込み
+
+    }
+
+    // フォーム・バリデーションチェック
+    private function _set_validation02()
+    {
+
+    	$rule_set = array(
+    	);
+
+    	$this->load->library('form_validation', $rule_set);                     // バリデーションクラス読み込み
+
+    }
+
+    // フォーム・バリデーションチェック
+    private function _set_validation03()
+    {
+
+    	$rule_set = array(
     	);
 
     	$this->load->library('form_validation', $rule_set);                     // バリデーションクラス読み込み

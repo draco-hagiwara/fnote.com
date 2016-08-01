@@ -81,19 +81,42 @@ body#admin .submit_btn {
 <br>
 {if $gd_mode=='chg'}
 
-  {form_open('/gallery/gd_edit/' , 'name="galleryForm" enctype="multipart/form-data" class="form-horizontal"')}
+  <form method="post" action="/admin/gallery/gd_list/" enctype="multipart/form-data" name="form">
 
-  <p class="text-center">
-  <img border="1" src="/images/{$list_image.im_cl_siteid}/s/{$list_image.im_filename}" height="250">
+  <p class="text-right">
+    <button type='submit' name='submit' value='_sort'>新規登録モードへ</button>
+    <input type="hidden" name="chg_uniq" value={$list_image.im_cl_seq} />
   </p>
 
-  <br>
+  </form>
+
+  {form_open('/gallery/gd_edit/' , 'name="galleryForm" enctype="multipart/form-data" class="form-horizontal"')}
+
+  <div class="form-group">
+    <label for="size" class="col-sm-2 control-label">画像</label>
+    <div class="col-sm-10">
+      <img border="1" src="/images/{$list_image.im_cl_siteid}/s/{$list_image.im_filename}" height="250">
+    </div>
+  </div>
   <div class="form-group">
     <label for="size" class="col-sm-2 control-label">IMGタグ</label>
-    <div class="col-sm-10">
-      <p>標準画像：　　＜img src="/images/{$list_image.im_cl_siteid}/s/{$list_image.im_filename}" width={$list_image.im_width} height={$list_image.im_height} alt={$list_image.im_title} /＞</p>
-      <p>スマホ画像：　　＜img src="/images/{$list_image.im_cl_siteid}/s/s_{$list_image.im_filename}" width={$list_image.im_width} height={$list_image.im_height} alt={$list_image.im_title} /＞</p>
-      <p>サムネイル：　　＜img src="/images/{$list_image.im_cl_siteid}/s/t_{$list_image.im_filename}" width={$list_image.im_width} height={$list_image.im_height} alt={$list_image.im_title} /＞</p>
+    <div class="col-sm-1">
+      <p>標準画像</p>
+    </div>
+    <div class="col-sm-9">
+      <p>img src="/images/{$list_image.im_cl_siteid}/s/{$list_image.im_filename}" width={$list_image.im_width} height={$list_image.im_height} alt=""</p>
+    </div><br>
+    <div class="col-sm-1 col-sm-offset-2">
+      <p>スマホ画像</p>
+    </div>
+    <div class="col-sm-9">
+      <p>img src="/images/{$list_image.im_cl_siteid}/s/s_{$list_image.im_filename}" alt=""</p>
+    </div><br>
+    <div class="col-sm-1 col-sm-offset-2">
+      <p>サムネイル</p>
+    </div>
+    <div class="col-sm-9">
+      <p>img src="/images/{$list_image.im_cl_siteid}/s/t_{$list_image.im_filename}" alt=""</p>
     </div>
   </div>
   <div class="form-group">
@@ -154,10 +177,14 @@ body#admin .submit_btn {
   <div class="form-group">
     <label for="size" class="col-sm-2 control-label">画像縮小サイズ<font color=red>【必須】</font></label>
     <div class="col-sm-1">
-      横px{form_input('im_width' , set_value('im_width', '600') , 'class="form-control" placeholder="px(4)"')}
+      縦px{form_input('im_height' , set_value('im_height', '600') , 'class="form-control" placeholder="px(4)"')}
     </div>
     <div class="col-sm-1">
-      縦px{form_input('im_height' , set_value('im_height', '600') , 'class="form-control" placeholder="px(4)"')}
+      横px{form_input('im_width' , set_value('im_width', '600') , 'class="form-control" placeholder="px(4)"')}
+    </div>
+    <div class="col-sm-8">
+      ※縦横比率を保持します。<br>
+      ※画像が縦長の場合は縦サイズを、横長の場合は横サイズを基準としてリサイズします。
     </div>
     <div class="col-sm-4">
       {if form_error('im_width')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('im_width')}</font></label>{/if}

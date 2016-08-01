@@ -124,11 +124,14 @@ function fmSubmit(formName, url, method, num) {
                     {if $smarty.session.a_memType!=0}
                     <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/clientlist/detail/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">編 集</button>
                     {/if}
-                    {if $smarty.session.a_memType!=1}
+                    {if $smarty.session.a_memType!=1}{if $cl.cl_status >= "3" && $cl.cl_status <= "9"}
                     <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/entrytenpo/tenpo_edit/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">店舗情報</button>
                     <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/entrytenpo/report_edit/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">記事本文</button>
-                    {/if}
-                    {if $cl.cl_status >= "4" && $cl.cl_status <= "9"}
+                    {else}
+                    <button type="button" class="btn btn-default btn-xs");">店舗情報</button>
+                    <button type="button" class="btn btn-default btn-xs");">記事本文</button>
+                    {/if}{/if}
+                    {if $cl.cl_status >= "3" && $cl.cl_status <= "9"}
                     <button type="button" class="btn btn-warning btn-xs" onclick="fmSubmit('detailForm', '/admin/gallery/gd_list/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">画像管理</button>
                     {*<button type="button" class="btn btn-warning btn-xs" onclick="fmSubmit('detailForm', '/admin/gallery/gd_add/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">画像登録</button>*}
                     {else}

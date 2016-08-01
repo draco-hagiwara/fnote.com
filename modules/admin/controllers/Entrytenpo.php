@@ -52,10 +52,15 @@ class Entrytenpo extends MY_Controller
     	$this->_set_validation();												// バリデーション設定
 
     	// 初期値セット
-    	$this->_item_set01();
+//     	$this->_item_set01();
 
     	// クライアント情報取得
     	$input_post = $this->input->post();
+
+
+    	print_r($input_post);
+
+
 
     	$this->load->model('Client', 'cl', TRUE);
     	$cl_data = $this->cl->get_cl_seq($input_post['chg_uniq'], TRUE);
@@ -71,11 +76,20 @@ class Entrytenpo extends MY_Controller
     	if ($entry_data == FALSE)
 		{
 			// 空データを取得
-			$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid'], TRUE);
+// 			$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid'], TRUE);
+// 			$this->smarty->assign('list', $entry_data[0]);
 
-			$this->smarty->assign('list', $entry_data[0]);
+			$this->smarty->assign('list', NULL);
 		} else {
 			$this->smarty->assign('list', $entry_data[0]);
+
+			// カテゴリセット
+			$_SESSION['a_cate01'] = $entry_data[0]['en_cate01'];
+			$_SESSION['a_cate02'] = $entry_data[0]['en_cate02'];
+			$_SESSION['a_cate03'] = $entry_data[0]['en_cate03'];
+
+			$this->_item_cate_set($entry_data[0]['en_cate01']);
+
 		}
 
 		// プレビュー用にチェック用ticketを発行
@@ -93,7 +107,7 @@ class Entrytenpo extends MY_Controller
 
     	$input_post = $this->input->post();
 
-		if ($input_post['submit'] == 'preview')
+		if (isset($input_post['submit']) && ($input_post['submit'] == 'preview'))
 		{
 			$this->smarty->assign('list', $input_post);
 
@@ -102,7 +116,11 @@ class Entrytenpo extends MY_Controller
 		}
 
     	// 初期値セット
-    	$this->_item_set01();
+//     	$this->_item_set01();
+		if ($input_post["en_cate01"])
+		{
+			$this->_item_cate_set($input_post["en_cate01"]);
+		}
 
         // 都道府県チェック
         $this->smarty->assign('pref_name', $this->_pref_name);
@@ -118,12 +136,18 @@ class Entrytenpo extends MY_Controller
     		$input_post["en_cl_siteid"] = $_SESSION['a_cl_siteid'];
 
     		// 不要パラメータ削除
-    		unset($input_post["submit"]) ;
+//     		unset($input_post["submit"]) ;
+    		unset($input_post["add"]) ;
 
     		// DB書き込み
     		$this->load->model('Entry', 'ent', TRUE);
     		$_row_id = $this->ent->inup_tenpo($input_post);
     	}
+
+    	// プレビュー用にチェック用ticketを発行
+    	$_ticket = md5(uniqid(mt_rand(), true));
+    	$_SESSION['a_ticket'] = $_ticket;
+    	$this->smarty->assign('ticket', $_ticket);
 
 		$this->smarty->assign('list', $input_post);
     	$this->view('entrytenpo/tenpo_edit.tpl');
@@ -160,6 +184,40 @@ class Entrytenpo extends MY_Controller
 
     }
 
+    // カテゴリ選択
+    public function tenpo_cate()
+    {
+
+    	// バリデーション・チェック
+    	$this->_set_validation();												// バリデーション設定
+
+    	$input_post = $this->input->post();
+
+    	if ($_SESSION['a_cate01'] != $input_post['en_cate01'])
+    	{
+    		$_SESSION['a_cate01'] = $input_post["en_cate01"];
+    		$_SESSION['a_cate02'] = $input_post["en_cate02"];
+    		$_SESSION['a_cate03'] = $input_post["en_cate03"];
+
+    		$this->_item_cate_set($input_post['en_cate01'], TRUE);
+    		$input_post["en_cate02"] = 0;
+    		$input_post["en_cate03"] = 0;
+
+    	} elseif ($_SESSION['a_cate02'] != $input_post['en_cate02']) {
+    		$_SESSION['a_cate01'] = $input_post["en_cate01"];
+    		$_SESSION['a_cate02'] = $input_post["en_cate02"];
+    		$_SESSION['a_cate03'] = $input_post["en_cate03"];
+
+    		$this->_item_cate_set($input_post['en_cate01'], FALSE, TRUE);
+    		$input_post["en_cate03"] = 0;
+    	}
+
+		$this->smarty->assign('list', $input_post);
+
+    	$this->view('entrytenpo/tenpo_edit.tpl');
+
+    }
+
     // 店舗記事情報TOP
     public function report_edit()
     {
@@ -185,9 +243,10 @@ class Entrytenpo extends MY_Controller
     	if ($entry_data == FALSE)
     	{
     		// 空データを取得
-    		$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid'], TRUE);
+//     		$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid'], TRUE);
+//     		$this->smarty->assign('list', $entry_data[0]);
 
-    		$this->smarty->assign('list', $entry_data[0]);
+    		$this->smarty->assign('list', NULL);
     	} else {
     		$this->smarty->assign('list', $entry_data[0]);
     	}
@@ -272,6 +331,8 @@ class Entrytenpo extends MY_Controller
 	    	$this->_set_validation02();
 	    	if ($this->form_validation->run() == FALSE) {
 	    		$this->smarty->assign('list', $input_post);
+	    		$this->smarty->assign('cl_status', $input_post['cl_status']);
+	    		$this->smarty->assign('revlist', NULL);
 	    	} else {
 
 	    		// データ設定
@@ -279,23 +340,34 @@ class Entrytenpo extends MY_Controller
 	    		$input_post["en_cl_id"]     = $_SESSION['a_cl_id'];
 	    		$input_post["en_cl_siteid"] = $_SESSION['a_cl_siteid'];
 
+	    		$set_data['cl_seq']    = $_SESSION['a_cl_seq'];
+	    		if ($input_post["cl_status"] == 8)
+	    		{
+	    			$set_data['cl_status'] = 8;									// ステータス「掲載」
+	    		} else {
+	    			$set_data['cl_status'] = 4;									// ステータス変更「編集」
+	    		}
+
 	    		// 不要パラメータ削除
 	    		unset($input_post["rv_description"]) ;
+	    		unset($input_post["cl_status"]) ;
 	    		unset($input_post["submit"]) ;
 
 	    		// DB書き込み
 	    		$_row_id = $this->ent->inup_tenpo($input_post);
 
-	    		// クライアントデータのステータス変更「編集」
-	    		$set_data['cl_seq']    = $_SESSION['a_cl_seq'];
-	    		$set_data['cl_status'] = 4;
 	    		$this->cl->update_client($set_data);
 
 		    	// 再表示用にデータの取得
 		    	$entry_data = $this->ent->get_entry_siteid($input_post["en_cl_siteid"]);
-
-		    	$this->smarty->assign('cl_status', $set_data['cl_status']);
-		    	$this->smarty->assign('list', $entry_data[0]);
+		    	if ($entry_data == FALSE)
+		    	{
+		    		// 空データ
+		    		$this->smarty->assign('list', NULL);
+		    	} else {
+			    	$this->smarty->assign('cl_status', $set_data['cl_status']);
+			    	$this->smarty->assign('list', $entry_data[0]);
+		    	}
 
 		    	// レビジョンデータの一覧取得
 		    	$rev_data = $this->rev->get_revision_clseq($input_post["en_cl_seq"]);
@@ -314,6 +386,8 @@ class Entrytenpo extends MY_Controller
 	    	$this->_set_validation02();
 	    	if ($this->form_validation->run() == FALSE) {
 	    		$this->smarty->assign('list', $input_post);
+	    		$this->smarty->assign('cl_status', $input_post['cl_status']);
+	    		$this->smarty->assign('revlist', NULL);
 	    	} else {
 
 	    		// データ設定
@@ -426,6 +500,11 @@ class Entrytenpo extends MY_Controller
 		    	}
 	    	}
     	}
+
+    	// プレビュー用にチェック用ticketを発行
+    	$_ticket = md5(uniqid(mt_rand(), true));
+    	$_SESSION['a_ticket'] = $_ticket;
+    	$this->smarty->assign('ticket', $_ticket);
 
 	    $this->view('entrytenpo/report_edit.tpl');
 
@@ -641,6 +720,53 @@ class Entrytenpo extends MY_Controller
     	$this->smarty->assign('options_ac_status',  $arroptions_ac_status);
     	$this->smarty->assign('options_ac_type',  $arroptions_ac_type);
     	$this->smarty->assign('account_type', $arroptions_ac_type[$this->input->post('ac_type')]);
+
+    }
+
+    // カテゴリセット
+    private function _item_cate_set($cate01, $cate02=FALSE, $cate03=FALSE)
+    {
+
+
+    	$this->load->model('Category', 'cate', TRUE);
+
+    	$arroptions_en_cate01 = array();
+    	$arroptions_en_cate02 = array();
+    	$arroptions_en_cate03 = array();
+
+    	// 第一階層カテゴリデータ取得
+    	$cate01_data = $this->cate->get_category_parent1();
+    	foreach ($cate01_data as $key => $value)
+    	{
+    		$arroptions_en_cate01[$value['ca_seq']] = $value['ca_name'];
+    	}
+
+    	// 第二階層カテゴリデータ取得
+    	$cate02_data = $this->cate->get_category_parent2($cate01);
+    	foreach ($cate02_data as $key => $value)
+    	{
+    		$arroptions_en_cate02[$value['ca_seq']] = $value['ca_name'];
+    	}
+
+    	// 第三階層カテゴリデータ取得
+		if ($cate02 == TRUE)
+		{
+			$cate03_data = $this->cate->get_category_parent3($cate02_data[0]['ca_seq']);
+			foreach ($cate03_data as $key => $value)
+			{
+				$arroptions_en_cate03[$value['ca_seq']] = $value['ca_name'];
+			}
+		} else {
+	    	$cate03_data = $this->cate->get_category_parent3($_SESSION['a_cate02']);
+	    	foreach ($cate03_data as $key => $value)
+	    	{
+	    		$arroptions_en_cate03[$value['ca_seq']] = $value['ca_name'];
+	    	}
+		}
+
+    	$this->smarty->assign('opt_en_cate01',  $arroptions_en_cate01);
+    	$this->smarty->assign('opt_en_cate02',  $arroptions_en_cate02);
+    	$this->smarty->assign('opt_en_cate03',  $arroptions_en_cate03);
 
     }
 

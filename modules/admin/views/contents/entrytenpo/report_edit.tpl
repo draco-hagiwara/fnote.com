@@ -29,7 +29,13 @@ function fmSubmit(formName, url, method, num) {
 
 <H3><p class="bg-info">店舗記事（クライアント）情報設定</p></H3>
 
-
+{if $list.en_seq==1}
+  <div class="form-group">
+    <div class="col-sm-offset-10 col-sm-2">
+      <button type='button' class="btn btn-sm btn-default">プレビュー</button>
+    </div>
+  </div>
+{else}
 {*form_open('entrytenpo/tenpo_pre/' , 'name="EntrytenpoForm" class="form-horizontal"  target="_blank"')*}
 <form method="post" target="_blank" action="../../../preview/pf/">
 
@@ -44,7 +50,7 @@ function fmSubmit(formName, url, method, num) {
 
 </form>
 {*form_close()*}
-
+{/if}
 
 <br><br>
 {form_open('entrytenpo/report_conf/' , 'name="EntrytenpoForm" class="form-horizontal"')}
@@ -85,6 +91,8 @@ function fmSubmit(formName, url, method, num) {
     </div>
   </div>
   *}
+  <input type="hidden" name="en_seq" value={$list.en_seq}>
+  <input type="hidden" name="cl_status" value={$cl_status}>
 
 
   <!-- Button trigger modal -->

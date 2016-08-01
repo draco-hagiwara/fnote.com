@@ -18,10 +18,18 @@ filename3=modules_backup_`date +%y%m%d`
 tar cfz $dirpath/$filename3.tar.gz /home/fnote/www/fnote.com.dev/modules/
 
 
+
+# システム全体
+#filename3=system_backup_`date +%y%m%d`
+#tar cfz $dirpath/$filename4.tar.gz /home/fnote/www/fnote.com.dev/
+
+
+
 # パーミッション変更
 chmod 750 $dirpath/$filename1.tar.gz
 chmod 750 $dirpath/$filename2.tar.gz
 chmod 750 $dirpath/$filename3.tar.gz
+#chmod 750 $dirpath/$filename4.tar.gz
 
 # 古いバックアップファイルを削除
 oldfile=`date --date "$period days ago" +%y%m%d`
