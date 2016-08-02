@@ -7,6 +7,15 @@ class Site extends MY_Controller
     function __construct()
     {
         parent::__construct();
+
+        if ( $this->agent->is_mobile() ) {
+        	// モバイル端末アクセスです。
+        	$this->smarty->assign('PcorMob', TRUE);
+        } else {
+        	// モバイル端末アクセスではありません。
+        	$this->smarty->assign('PcorMob', FALSE);
+        }
+
     }
 
     public function index()
@@ -122,7 +131,7 @@ class Site extends MY_Controller
 
     	// メール送信
     	$this->load->model('Mailtpl', 'mailtpl', TRUE);
-    	if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl)) {
+    	if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl, 5)) {
     	} else {
     		echo "メール送信エラー";
     		log_message('error', 'site::[inquiry_comp()]客先問合せ処理 メール送信エラー');

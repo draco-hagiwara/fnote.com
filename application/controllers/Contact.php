@@ -71,7 +71,7 @@ class Contact extends MY_Controller
 
         // メール送信
         $this->load->model('Mailtpl', 'mailtpl', TRUE);
-        if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl)) {
+        if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl, 5)) {
             $this->view('contact/end.tpl');
         } else {
             echo "メール送信エラー";

@@ -482,12 +482,15 @@ class System extends MY_Controller
 
     	$tmp_inputpost['ca_seq']    = NULL;
     	$tmp_inputpost['ca_parent'] = NULL;
-    	if ($_SESSION['a_cate02'] != "")
+    	if (isset($_SESSION['a_cate02']) && ($_SESSION['a_cate02'] != ""))
     	{
     		$tmp_inputpost['ca_parent'] = $_SESSION['a_cate02'];
-    	} elseif ($_SESSION['a_cate01'] != "") {
+    	} elseif (isset($_SESSION['a_cate01']) && ($_SESSION['a_cate01'] != "")) {
     		$tmp_inputpost['ca_parent'] = $_SESSION['a_cate01'];
+    		$_SESSION['a_cate02'] = "";
     	} else {
+    		$_SESSION['a_cate01'] = "";
+    		$_SESSION['a_cate02'] = "";
     	}
     	$tmp_inputpost['orderid'] = "ASC";
 
@@ -519,7 +522,7 @@ class System extends MY_Controller
 
 
     	// カテゴリ情報取得
-    	if ($_SESSION['a_cate01'] == "")
+    	if (isset($_SESSION['a_cate01']) && ($_SESSION['a_cate01'] == ""))
     	{
 
     		// 第一階層カテゴリデータ取得

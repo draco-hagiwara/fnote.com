@@ -43,11 +43,19 @@ class Mailtpl extends CI_Model
     	);
 
     	$result = $this->db->update('tb_mail_tpl', $set_data, $where);
+
+    	// ログ書き込み
+    	$set_data['lg_user_type'] = 2;
+    	$set_data['lg_type']      = 'mailtpl_update';
+    	$set_data['lg_func']      = 'update_mailtpl_id';
+    	$set_data['lg_detail']    = 'mt_id = ' . $set_data['mt_id'];
+    	$this->insert_log($set_data);
+
     	return $result;
     }
 
     // メールテンプレートの取得からメール送信
-    public function get_mail_tpl($mail, $arrRepList = NULL, $mail_tpl)
+    public function get_mail_tpl($mail, $arrRepList = NULL, $mail_tpl, $user_type=2)
     {
 
         $where = array('mt_id' => $mail_tpl);
@@ -97,6 +105,14 @@ class Mailtpl extends CI_Model
 
         // メール送信
         $result = $this->_sendmail($mail);
+
+        // ログ書き込み
+        $set_data['lg_user_type'] = $user_type;
+        $set_data['lg_type']      = 'mailtpl_sendmil';
+        $set_data['lg_func']      = 'get_mail_tpl';
+        $set_data['lg_detail']    = 'res = ' . $result . ' / mail_to = ' . $mail['to'];
+        $this->insert_log($set_data);
+
         return $result;
 
     }
@@ -146,5 +162,33 @@ class Mailtpl extends CI_Model
 
         return $strResult;
     }
+
+    /**
+     * ログ書き込み
+     *
+     * @param    array()
+     * @return   int
+     */
+    public function insert_log($setData)
+    {
+
+    	if ($setData['lg_user_type'] == 2) {
+    		$setData['lg_user_id']   = $_SESSION['a_memSeq'];
+    	} elseif ($setData['lg_user_type'] == 3) {
+    		$setData['lg_user_id']   = $_SESSION['c_memSeq'];
+    	} else {
+    		$setData['lg_user_id']   = "";
+    	}
+
+    	$setData['lg_ip'] = $this->input->ip_address();
+
+    	// データ追加
+    	$query = $this->db->insert('tb_log', $setData);
+
+    	//     	// 挿入した ID 番号を取得
+    	//     	$row_id = $this->db->insert_id();
+    	//     	return $row_id;
+    }
+
 }
 

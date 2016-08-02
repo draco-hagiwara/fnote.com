@@ -50,8 +50,8 @@
     {else}
     <div class="page-header">
       <ul class="list-inline text-right">
-        <li><a href="/entrywriter/">新規会員登録</a></li>
-        <li><a href="/writer/login/">ログイン</a></li>
+        <li><a href="/">TOP</a></li>
+        <li><a href="/admin/login/">ADMIINログイン</a></li>
       </ul>
 
       <nav class="navbar navbar-inverse">
@@ -63,10 +63,6 @@
         </div>
       </nav>
 
-      <ul class="list-inline text-right">
-        <li><a href="/pf/client/login/">Clientログイン</a></li>
-        <li><a href="/pf/admin/login/">ADMIINログイン</a></li>
-      </ul>
     </div>
     {/if}
 

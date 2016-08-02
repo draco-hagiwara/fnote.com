@@ -29,8 +29,19 @@ $config['ADMIN_ADD_LIMITTIME'] = '60';									// 「分」指定 (60)
 // $config['ADMIN_ADD_LIMITTIME'] = '6024';								// 「分」指定 (24h)
 
 // クライアント：仮登録制限時間デフォルト値
-// $config['CLIENT_ADD_LIMITTIME'] = '60';									// 「分」指定 (60)
-$config['ADMIN_ADD_LIMITTIME'] = '6024';								// 「分」指定 (24h)
+$config['CLIENT_ADD_LIMITTIME'] = '60';									// 「分」指定 (60)
+// $config['CLIENT_ADD_LIMITTIME'] = '6024';								// 「分」指定 (24h)
+
+
+// ログ：ユーザ種類
+$config['LOG_USER_TYPE'] =
+array(
+		"1" => "System管理者",
+		"2" => "Adminユーザ",
+		"3" => "Clientユーザ",
+		"4" => "会員",
+		"5" => "ビジター",
+);
 
 
 

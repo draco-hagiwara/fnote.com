@@ -29,7 +29,8 @@
 
     <div class="page-header">
       <ul class="list-inline text-right">
-        <li><a href="#">新規会員登録</a></li>
+        <li><a href="/client/login/">Clientログイン</a></li>
+        <li><a href="/admin/login/">ADMIINログイン</a></li>
       </ul>
 
       <nav class="navbar navbar-inverse">
@@ -45,10 +46,6 @@
       </div>
       </nav>
 
-      <ul class="list-inline text-right">
-        <li><a href="/pf/client/login/">Clientログイン</a></li>
-        <li><a href="/pf/admin/login/">ADMIINログイン</a></li>
-      </ul>
     </div>
   </div>
 

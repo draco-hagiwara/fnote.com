@@ -130,6 +130,14 @@ class Revision extends CI_Model
 
     	// 挿入した ID 番号を取得
     	$row_id = $this->db->insert_id();
+
+    	// ログ書き込み
+    	$set_data['lg_user_type'] = 2;
+    	$set_data['lg_type']      = 'revision_insert';
+    	$set_data['lg_func']      = 'insert_revision';
+    	$set_data['lg_detail']    = 'rv_seq = ' . $row_id;
+    	$this->insert_log($set_data);
+
     	return $row_id;
     }
 
@@ -147,44 +155,42 @@ class Revision extends CI_Model
     	);
 
     	$result = $this->db->update('tb_revision', $setData, $where);
+
+    	// ログ書き込み
+    	$set_data['lg_user_type'] = 2;
+    	$set_data['lg_type']      = 'revision_update';
+    	$set_data['lg_func']      = 'update_revision';
+    	$set_data['lg_detail']    = 'rv_seq = ' . $setData['rv_seq'];
+    	$this->insert_log($set_data);
+
     	return $result;
     }
 
     /**
-     * リビジョンデータの登録＆更新
+     * ログ書き込み
      *
      * @param    array()
      * @return   int
      */
-    public function inup_revision($setData)
+    public function insert_log($setData)
     {
 
-    	// INSERT or UPDATE
-    	$sql = 'SELECT * FROM `tb_revision` '
-    			. 'WHERE `en_cl_id` = ? ';
-
-    	$values = array(
-    			$setData['en_cl_id'],
-    	);
-
-    	$query = $this->db->query($sql, $values);
-    	if ($query->num_rows() > 0) {
-
-    		// データ更新
-    		$where = array(
-    				'en_cl_id' => $setData['en_cl_id']
-    		);
-
-    		$result = $this->db->update('tb_entry', $setData, $where);
-    		return $result;
-
+    	if ($setData['lg_user_type'] == 2) {
+    		$setData['lg_user_id']   = $_SESSION['a_memSeq'];
+    	} elseif ($setData['lg_user_type'] == 3) {
+    		$setData['lg_user_id']   = $_SESSION['c_memSeq'];
     	} else {
-
-    		// データ追加
-    		$result = $this->db->insert('tb_entry', $setData);
-    		return $result;
-
+    		$setData['lg_user_id']   = "";
     	}
 
+    	$setData['lg_ip'] = $this->input->ip_address();
+
+    	// データ追加
+    	$query = $this->db->insert('tb_log', $setData);
+
+    	//     	// 挿入した ID 番号を取得
+    	//     	$row_id = $this->db->insert_id();
+    	//     	return $row_id;
     }
+
 }

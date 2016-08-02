@@ -76,7 +76,7 @@ class Mypage extends MY_Controller
 
         // メール送信
         $this->load->model('Mailtpl', 'mailtpl', TRUE);
-        if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl)) {
+        if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl, 3)) {
             $this->view('mypage/end.tpl');
         } else {
             echo "メール送信エラー";
@@ -138,7 +138,7 @@ class Mypage extends MY_Controller
     		$set_data["cl_id"]  = $input_post['cl_id'];
     		$set_data["cl_pw"]  = $input_post['cl_pw'];
 
-    		$res = $this->cl->update_client($set_data, TRUE);
+    		$res = $this->cl->update_client($set_data, TRUE, 3);
     		if (!$res)
     		{
     			log_message('error', 'Mypage::[chgidpw()]クライアントIDPW変更処理 update_clientエラー');

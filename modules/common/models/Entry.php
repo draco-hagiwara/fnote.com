@@ -88,15 +88,15 @@ class Entry extends CI_Model
      * @param    array()
      * @return   int
      */
-    public function inup_tenpo($setData)
+    public function inup_tenpo($setData, $user_type=2)
     {
 
     	// INSERT or UPDATE
     	$sql = 'SELECT * FROM `tb_entry` '
-    			. 'WHERE `en_cl_id` = ? ';
+    			. 'WHERE `en_cl_siteid` = ? ';
 
     	$values = array(
-    			$setData['en_cl_id'],
+    			$setData['en_cl_siteid'],
     	);
 
     	$query = $this->db->query($sql, $values);
@@ -104,20 +104,62 @@ class Entry extends CI_Model
 
     		// データ更新
 	    	$where = array(
-	    			'en_cl_id' => $setData['en_cl_id']
+	    			'en_cl_siteid' => $setData['en_cl_siteid']
 	    	);
 
 	    	$result = $this->db->update('tb_entry', $setData, $where);
-	    	return $result;
+
+	    	// ログ書き込み
+	    	$set_data['lg_user_type'] = $user_type;
+	    	$set_data['lg_type']      = 'entry_update';
+	    	$set_data['lg_func']      = 'inup_tenpo';
+	    	$set_data['lg_detail']    = 'en_cl_siteid = ' . $setData['en_cl_siteid'];
+	    	$this->insert_log($set_data);
+
 
     	} else {
 
     		// データ追加
     		$result = $this->db->insert('tb_entry', $setData);
-    		return $result;
+
+    		// ログ書き込み
+    		$set_data['lg_user_type'] = $user_type;
+    		$set_data['lg_type']      = 'entry_insert';
+	    	$set_data['lg_func']      = 'inup_tenpo';
+    		$set_data['lg_detail']    = 'en_cl_siteid = ' . $setData['en_cl_siteid'];
+    		$this->insert_log($set_data);
 
     	}
 
+    	return $result;
+
+    }
+
+    /**
+     * ログ書き込み
+     *
+     * @param    array()
+     * @return   int
+     */
+    public function insert_log($setData)
+    {
+
+    	if ($setData['lg_user_type'] == 2) {
+    		$setData['lg_user_id']   = $_SESSION['a_memSeq'];
+    	} elseif ($setData['lg_user_type'] == 3) {
+    		$setData['lg_user_id']   = $_SESSION['c_memSeq'];
+    	} else {
+    		$setData['lg_user_id']   = "";
+    	}
+
+    	$setData['lg_ip'] = $this->input->ip_address();
+
+    	// データ追加
+    	$query = $this->db->insert('tb_log', $setData);
+
+    	//     	// 挿入した ID 番号を取得
+    	//     	$row_id = $this->db->insert_id();
+    	//     	return $row_id;
     }
 
 }

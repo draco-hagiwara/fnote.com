@@ -290,6 +290,7 @@ class Entrytenpo extends MY_Controller
     	$set_data["en_body01"]  = $rev_data[0]['rv_entry_body01'];
     	$set_data["en_title02"] = $rev_data[0]['rv_entry_title02'];
     	$set_data["en_body02"]  = $rev_data[0]['rv_entry_body02'];
+    	$set_data["en_seq"]     = $rev_data[0]['rv_en_seq'];
 
     	// レビジョンデータの一覧取得
     	$rev_data = $this->rev->get_revision_clseq($rev_data[0]['rv_cl_seq']);
@@ -400,6 +401,7 @@ class Entrytenpo extends MY_Controller
 	    		$set_data["rv_length02"]      = 0;
 	    		$set_data["rv_cl_seq"]        = $_SESSION['a_cl_seq'];
 	    		$set_data["rv_cl_siteid"]     = $_SESSION['a_cl_siteid'];
+	    		$set_data["rv_en_seq"]        = $input_post['en_seq'];
 
 	    		// リビジョンデータの取得
 	    		$rev_data = $this->rev->get_revision_clseq($_SESSION['a_cl_seq']);

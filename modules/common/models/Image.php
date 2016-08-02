@@ -99,7 +99,7 @@ class Image extends CI_Model
      * @param    array()
      * @return   int
      */
-    public function insert_image($setData)
+    public function insert_image($setData, $user_type=2)
     {
 
     	// データ追加
@@ -107,6 +107,14 @@ class Image extends CI_Model
 
     	// 挿入した ID 番号を取得
     	$row_id = $this->db->insert_id();
+
+    	// ログ書き込み
+    	$set_data['lg_user_type'] = $user_type;
+    	$set_data['lg_type']      = 'image_insert';
+    	$set_data['lg_func']      = 'insert_image';
+    	$set_data['lg_detail']    = 'im_filename = ' . $setData['im_filename'];
+    	$this->insert_log($set_data);
+
     	return $row_id;
     }
 
@@ -116,7 +124,7 @@ class Image extends CI_Model
      * @param    array()
      * @return   bool
      */
-    public function update_image_imseq($setData)
+    public function update_image_imseq($setData, $user_type=2)
     {
 
     	$where = array(
@@ -124,6 +132,14 @@ class Image extends CI_Model
     	);
 
     	$result = $this->db->update('tb_image', $setData, $where);
+
+    	// ログ書き込み
+    	$set_data['lg_user_type'] = $user_type;
+    	$set_data['lg_type']      = 'image_update';
+    	$set_data['lg_func']      = 'update_image_imseq';
+    	$set_data['lg_detail']    = 'im_seq = ' . $setData['im_seq'];
+    	$this->insert_log($set_data);
+
     	return $result;
     }
 
@@ -133,7 +149,7 @@ class Image extends CI_Model
      * @param    array()
      * @return   bool
      */
-    public function update_image_siteid($setData)
+    public function update_image_siteid($setData, $user_type=2)
     {
 
     	$where = array(
@@ -141,6 +157,14 @@ class Image extends CI_Model
     	);
 
     	$result = $this->db->update('tb_image', $setData, $where);
+
+    	// ログ書き込み
+    	$set_data['lg_user_type'] = $user_type;
+    	$set_data['lg_type']      = 'image_update';
+    	$set_data['lg_func']      = 'update_image_siteid';
+    	$set_data['lg_detail']    = 'im_cl_siteid = ' . $setData['im_cl_siteid'];
+    	$this->insert_log($set_data);
+
     	return $result;
     }
 
@@ -150,7 +174,7 @@ class Image extends CI_Model
      * @param    array()
      * @return   bool
      */
-    public function delete_image_seq($setData)
+    public function delete_image_seq($setData, $user_type=2)
     {
 
     	$where = array(
@@ -158,7 +182,42 @@ class Image extends CI_Model
     	);
 
     	$result = $this->db->delete('tb_image', $where);
+
+    	// ログ書き込み
+    	$set_data['lg_user_type'] = $user_type;
+    	$set_data['lg_type']      = 'image_delete';
+    	$set_data['lg_func']      = 'delete_image_seq';
+    	$set_data['lg_detail']    = 'im_seq = ' . $setData['im_seq'];
+    	$this->insert_log($set_data);
+
     	return $result;
+    }
+
+    /**
+     * ログ書き込み
+     *
+     * @param    array()
+     * @return   int
+     */
+    public function insert_log($setData)
+    {
+
+    	if ($setData['lg_user_type'] == 2) {
+    		$setData['lg_user_id']   = $_SESSION['a_memSeq'];
+    	} elseif ($setData['lg_user_type'] == 3) {
+    		$setData['lg_user_id']   = $_SESSION['c_memSeq'];
+    	} else {
+    		$setData['lg_user_id']   = "";
+    	}
+
+    	$setData['lg_ip'] = $this->input->ip_address();
+
+    	// データ追加
+    	$query = $this->db->insert('tb_log', $setData);
+
+    	//     	// 挿入した ID 番号を取得
+    	//     	$row_id = $this->db->insert_id();
+    	//     	return $row_id;
     }
 
 }

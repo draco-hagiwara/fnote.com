@@ -169,6 +169,14 @@ switch (ENVIRONMENT)
 	// $routing['function']	= '';
 
 
+	// メンテナンス画面表示
+	if (($_SERVER['REMOTE_ADDR'] != '192.168.100.10') &&
+			($_SERVER['REMOTE_ADDR'] != '180.12.102.237'))
+	{
+		$routing['controller'] = 'maintenance';
+		$routing['function']   = 'index';
+	}
+
 /*
  * -------------------------------------------------------------------
  *  CUSTOM CONFIG VALUES

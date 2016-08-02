@@ -58,7 +58,7 @@ class Top extends MY_Controller
     			$set_data['cl_status']  = 7;
     			$set_data['cl_comment'] = $post_data['cl_comment'];
 
-    			$this->cl->update_client($set_data);
+    			$this->cl->update_client($set_data, 3);
 
     			// クライアントデータから全担当者を取得
     			$clac_data = $this->cl->get_clac_seq($post_data['cl_seq'], NULL);
@@ -90,7 +90,7 @@ class Top extends MY_Controller
 
     			// メール送信
     			$this->load->model('Mailtpl', 'mailtpl', TRUE);
-    			if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl)) {
+    			if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl, 3)) {
     			} else {
     				echo "メール送信エラー";
     				log_message('error', 'CLIENT_top::[preview()]サイト記事承認処理 メール送信エラー');
@@ -111,7 +111,7 @@ class Top extends MY_Controller
     			$set_data['cl_status']  = 9;
     			$set_data['cl_comment'] = $post_data['cl_comment'];
 
-    			$this->cl->update_client($set_data);
+    			$this->cl->update_client($set_data, 3);
 
     			// クライアントデータから担当者を取得
     			$clac_data = $this->cl->get_clac_seq($post_data['cl_seq'], NULL);
@@ -144,7 +144,7 @@ class Top extends MY_Controller
 
     			// メール送信
     			$this->load->model('Mailtpl', 'mailtpl', TRUE);
-    			if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl)) {
+    			if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl, 3)) {
     			} else {
     				echo "メール送信エラー";
     				log_message('error', 'CLIENT_top::[preview()]サイト記事非承認処理 メール送信エラー');

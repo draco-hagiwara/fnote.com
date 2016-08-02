@@ -41,6 +41,13 @@ class Comm_auth extends CI_Model
                 // レコードチェック
                 if ($query->num_rows() == 0)
                 {
+                	// ログ書き込み
+                	$set_data['lg_user_type'] = 3;
+                	$set_data['lg_type']      = 'auth_check';
+                	$set_data['lg_func']      = 'check_Login';
+                	$set_data['lg_detail']    = 'ログインIDエラー：cl_id = ' . $loginid;
+                	$this->insert_log($set_data);
+
                     $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                     return $err_mess;
                 }
@@ -48,6 +55,14 @@ class Comm_auth extends CI_Model
                 // 重複チェック
                    if ($query->num_rows() >= 2)
                    {
+
+                   		// ログ書き込み
+                   		$set_data['lg_user_type'] = 3;
+                   		$set_data['lg_type']      = 'auth_check';
+                   		$set_data['lg_func']      = 'check_Login';
+                		$set_data['lg_detail']    = 'ログインID重複エラー：cl_id = ' . $loginid;
+                   		$this->insert_log($set_data);
+
                        $err_mess = '入力されたログインIDが重複しています。システム管理者に連絡してください。';
                        return $err_mess;
                    }
@@ -55,23 +70,31 @@ class Comm_auth extends CI_Model
                    // ログインID＆パスワード読み込み
                    $arrData = $query->result('array');
                    if (is_array($arrData))
-                {
-                    // パスワードのチェック
-                    $this->_hash_passwd = $arrData[0]['cl_pw'];
-                    $res = $this->_check_password($password);
-                    if ($res == TRUE)
-                    {
-                        $err_mess = '入力されたログインIDまたはパスワードが間違っています。';
-                        return $err_mess;
-                    } else {
-                        $this->_hash_passwd = $arrData[0]['cl_pw'];
-                    	$this->_memSeq      = $arrData[0]['cl_seq'];
-                    	$this->_memSiteid   = $arrData[0]['cl_siteid'];
-                    	$this->_memName     = $arrData[0]['cl_company'];
+                   {
+                   		// パスワードのチェック
+                    	$this->_hash_passwd = $arrData[0]['cl_pw'];
+                    	$res = $this->_check_password($password);
+                    	if ($res == TRUE)
+                    	{
 
-                        $this->_update_Session($login_member);
-                    }
-                }
+                    		// ログ書き込み
+                    		$set_data['lg_user_type'] = 3;
+                    		$set_data['lg_type']      = 'auth_check';
+                    		$set_data['lg_func']      = 'check_Login';
+                    		$set_data['lg_detail']    = 'パスワードエラー：cl_id = ' . $loginid;
+                    		$this->insert_log($set_data);
+
+                        	$err_mess = '入力されたログインIDまたはパスワードが間違っています。';
+                        	return $err_mess;
+                    	} else {
+                        	$this->_hash_passwd = $arrData[0]['cl_pw'];
+                    		$this->_memSeq      = $arrData[0]['cl_seq'];
+                    		$this->_memSiteid   = $arrData[0]['cl_siteid'];
+                    		$this->_memName     = $arrData[0]['cl_company'];
+
+                        	$this->_update_Session($login_member);
+                    	}
+                	}
 
                 break;
             case 'admin':
@@ -89,6 +112,14 @@ class Comm_auth extends CI_Model
                 // レコードチェック
                 if ($query->num_rows() == 0)
                 {
+
+                	// ログ書き込み
+                	$set_data['lg_user_type'] = 2;
+                	$set_data['lg_type']      = 'auth_check';
+                	$set_data['lg_func']      = 'check_Login';
+                	$set_data['lg_detail']    = 'ログインIDエラー：ac_id = ' . $loginid;
+                	$this->insert_log($set_data);
+
                     $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                     return $err_mess;
                 }
@@ -96,6 +127,14 @@ class Comm_auth extends CI_Model
                 // 重複チェック
                 if ($query->num_rows() >= 2)
                 {
+
+                	// ログ書き込み
+                	$set_data['lg_user_type'] = 3;
+                	$set_data['lg_type']      = 'auth_check';
+                	$set_data['lg_func']      = 'check_Login';
+                	$set_data['lg_detail']    = 'ログインID重複エラー：ac_id = ' . $loginid;
+                	$this->insert_log($set_data);
+
                 	$err_mess = '入力されたログインIDが重複しています。システム管理者に連絡してください。';
                     return $err_mess;
                 }
@@ -109,6 +148,14 @@ class Comm_auth extends CI_Model
                     $res = $this->_check_password($password);
                     if ($res == TRUE)
                     {
+
+                    	// ログ書き込み
+                    	$set_data['lg_user_type'] = 3;
+                    	$set_data['lg_type']      = 'auth_check';
+                    	$set_data['lg_func']      = 'check_Login';
+                    	$set_data['lg_detail']    = 'パスワードエラー：ac_id = ' . $loginid;
+                    	$this->insert_log($set_data);
+
                     	$err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                     	//$err_mess = '入力されたパスワードが誤っています。';
                         return $err_mess;
@@ -120,6 +167,14 @@ class Comm_auth extends CI_Model
                         $this->_update_Session($login_member);
                     }
                 } else {
+
+                	// ログ書き込み
+                	$set_data['lg_user_type'] = 3;
+                	$set_data['lg_type']      = 'auth_check';
+                	$set_data['lg_func']      = 'check_Login';
+                	$set_data['lg_detail']    = 'ID & パスワードエラー：ac_id = ' . $loginid;
+                	$this->insert_log($set_data);
+
                     $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                     return $err_mess;
                 }
@@ -284,6 +339,26 @@ class Comm_auth extends CI_Model
         }
 
         return $result;
+    }
+
+    /**
+     * ログ書き込み
+     *
+     * @param    array()
+     * @return   int
+     */
+    public function insert_log($setData)
+    {
+
+   		$setData['lg_user_id']   = "";
+    	$setData['lg_ip'] = $this->input->ip_address();
+
+    	// データ追加
+    	$query = $this->db->insert('tb_log', $setData);
+
+    	//     	// 挿入した ID 番号を取得
+    	//     	$row_id = $this->db->insert_id();
+    	//     	return $row_id;
     }
 
 }

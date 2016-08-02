@@ -272,12 +272,6 @@ class Client extends CI_Model
 
     	$query = $this->db->query($sql, $values);
 
-
-    	print($cl_id);
-    	print("count :: ");
-    	print($query->num_rows());
-
-
     	if ($query->num_rows() > 0) {
     		return TRUE;
     	} else {
@@ -319,7 +313,7 @@ class Client extends CI_Model
      * @param    bool : パスワード設定有無(空PWは危険なので一応初期登録でも入れておく)
      * @return   int
      */
-    public function insert_client($setData, $pw = FALSE)
+    public function insert_client($setData, $pw = FALSE, $user_type=2)
     {
 
     	// パスワード入力有無
@@ -336,6 +330,14 @@ class Client extends CI_Model
 
     	// 挿入した ID 番号を取得
     	$row_id = $this->db->insert_id();
+
+    	// ログ書き込み
+    	$set_data['lg_user_type'] = $user_type;
+    	$set_data['lg_type']      = 'client_insert';
+    	$set_data['lg_func']      = 'insert_client';
+    	$set_data['lg_detail']    = 'cl_siteid = ' . $setData['cl_siteid'];
+    	$this->insert_log($set_data);
+
     	return $row_id;
     }
 
@@ -345,7 +347,7 @@ class Client extends CI_Model
      * @param    array()
      * @return   bool
      */
-    public function update_client($setData, $pw = FALSE)
+    public function update_client($setData, $pw = FALSE, $user_type=2)
     {
 
     	// パスワード更新有無
@@ -362,6 +364,14 @@ class Client extends CI_Model
     	);
 
     	$result = $this->db->update('mb_client', $setData, $where);
+
+    	// ログ書き込み
+    	$set_data['lg_user_type'] = $user_type;
+    	$set_data['lg_type']      = 'client_update';
+    	$set_data['lg_func']      = 'update_client';
+    	$set_data['lg_detail']    = 'cl_seq = ' . $setData['cl_seq'];
+    	$this->insert_log($set_data);
+
     	return $result;
     }
 
@@ -371,7 +381,7 @@ class Client extends CI_Model
      * @param    int
      * @return   bool
      */
-    public function update_Logindate($cl_seq)
+    public function update_Logindate($cl_seq, $user_type=2)
     {
 
     	$time = time();
@@ -382,7 +392,42 @@ class Client extends CI_Model
     			'cl_seq' => $cl_seq
     	);
     	$result = $this->db->update('mb_client', $setData, $where);
+
+    	// ログ書き込み
+    	$set_data['lg_user_type'] = $user_type;
+    	$set_data['lg_type']      = 'client_update';
+    	$set_data['lg_func']      = 'update_Logindate';
+    	$set_data['lg_detail']    = 'cl_seq = ' . $cl_seq;
+    	$this->insert_log($set_data);
+
     	return $result;
+    }
+
+    /**
+     * ログ書き込み
+     *
+     * @param    array()
+     * @return   int
+     */
+    public function insert_log($setData)
+    {
+
+    	if ($setData['lg_user_type'] == 2) {
+    		$setData['lg_user_id']   = $_SESSION['a_memSeq'];
+    	} elseif ($setData['lg_user_type'] == 3) {
+    		$setData['lg_user_id']   = $_SESSION['c_memSeq'];
+    	} else {
+    		$setData['lg_user_id']   = "";
+    	}
+
+    	$setData['lg_ip'] = $this->input->ip_address();
+
+    	// データ追加
+    	$query = $this->db->insert('tb_log', $setData);
+
+    	//     	// 挿入した ID 番号を取得
+    	//     	$row_id = $this->db->insert_id();
+    	//     	return $row_id;
     }
 
 }

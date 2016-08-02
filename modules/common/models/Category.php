@@ -201,7 +201,7 @@ class Category extends CI_Model
      * @param    array()
      * @return   int
      */
-    public function insert_category($setData)
+    public function insert_category($setData, $user_type=2)
     {
 
     	// データ追加
@@ -209,6 +209,14 @@ class Category extends CI_Model
 
     	// 挿入した ID 番号を取得
     	$row_id = $this->db->insert_id();
+
+    	// ログ書き込み
+    	$set_data['lg_user_type'] = $user_type;
+    	$set_data['lg_type']      = 'category_insert';
+    	$set_data['lg_func']      = 'insert_category';
+    	$set_data['lg_detail']    = 'ca_name = ' . $setData['ca_name'];
+    	$this->insert_log($set_data);
+
     	return $row_id;
     }
 
@@ -218,7 +226,7 @@ class Category extends CI_Model
      * @param    array()
      * @return   bool
      */
-    public function update_category($setData)
+    public function update_category($setData, $user_type=2)
     {
 
     	$where = array(
@@ -226,15 +234,42 @@ class Category extends CI_Model
     	);
 
     	$result = $this->db->update('mb_category', $setData, $where);
+
+    	// ログ書き込み
+    	$set_data['lg_user_type'] = $user_type;
+    	$set_data['lg_type']      = 'category_update';
+    	$set_data['lg_func']      = 'update_category';
+    	$set_data['lg_detail']    = 'ca_name = ' . $setData['ca_name'];
+    	$this->insert_log($set_data);
+
     	return $result;
     }
 
+    /**
+     * ログ書き込み
+     *
+     * @param    array()
+     * @return   int
+     */
+    public function insert_log($setData)
+    {
 
+    	if ($setData['lg_user_type'] == 2) {
+    		$setData['lg_user_id']   = $_SESSION['a_memSeq'];
+    	} elseif ($setData['lg_user_type'] == 3) {
+    		$setData['lg_user_id']   = $_SESSION['c_memSeq'];
+    	} else {
+    		$setData['lg_user_id']   = "";
+    	}
 
+    	$setData['lg_ip'] = $this->input->ip_address();
 
+    	// データ追加
+    	$query = $this->db->insert('tb_log', $setData);
 
-
-
-
+    	//     	// 挿入した ID 番号を取得
+    	//     	$row_id = $this->db->insert_id();
+    	//     	return $row_id;
+    }
 
 }
