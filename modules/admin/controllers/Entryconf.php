@@ -472,7 +472,7 @@ class Entryconf extends MY_Controller
     	}
 
     	// DB書き込み
-    	$input_post["cl_status"] = 2;
+    	$input_post["cl_status"] = 1;											// 「審査(仮登録)」ステータス
     	$input_post["cl_plan"]   = "basic";
     	$input_post["cl_auth"]   = NULL;
 
@@ -488,25 +488,32 @@ class Entryconf extends MY_Controller
     		log_message('error', 'Entryconf::[complete()]クライアント承認処理 update_clientエラー');
     	}
 
+    	// 担当管理者のメール取得
+    	$clac_data = $this->cl->get_clac_seq($input_post['cl_seq'], '');
+
+    	// 当社管理のメール取得
+    	$this->load->model('Account', 'ac', TRUE);
+    	$ac_data = $this->ac->get_ac_seq(1, TRUE);
+
     	// メール送信先設定
     	$mail['from']      = "";
     	$mail['from_name'] = "";
     	$mail['subject']   = "";
     	$mail['to']        = $input_post['cl_mail'];
     	$mail['cc']        = "";
-    	$mail['bcc']       = "";
+    	$mail['bcc']       = $clac_data[0]['adminacmail'] . ',' . $ac_data[0]['ac_mail'];
 
     	// メール本文置き換え文字設定
     	$arrRepList = array(
     			'cl_company'     => $input_post['cl_company'],
     			'cl_president01' => $input_post['cl_president01'],
     			'cl_president02' => $input_post['cl_president02'],
-    			'cl_id'          => $input_post['cl_id'],
+//     			'cl_id'          => $input_post['cl_id'],
     	);
 
     	// メールテンプレートの読み込み
     	$this->config->load('config_mailtpl');									// メールテンプレート情報読み込み
-    	$mail_tpl = $this->config->item('MAILTPL_ENT_CLIENTPW_ID');
+    	$mail_tpl = $this->config->item('MAILTPL_ENT_CLIENT_JUDGE');
 
     	// メール送信
     	$this->load->model('Mailtpl', 'mailtpl', TRUE);

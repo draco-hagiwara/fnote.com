@@ -97,7 +97,7 @@ class News extends CI_Model
     	$sql .= ' LIMIT ' . $tmp_per_page . ' OFFSET ' . $tmp_offset;
 
     	// クエリー実行
-//     	$query = $this->db->query($sql);
+    	$query = $this->db->query($sql);
     	$news_list = $query->result('array');
 
     	return array($news_list, $news_countall);
@@ -107,7 +107,6 @@ class News extends CI_Model
      * 新着・お知らせ : 新規会員登録
      *
      * @param    array()
-     * @param    bool : パスワード設定有無(空PWは危険なので一応初期登録でも入れておく)
      * @return   int
      */
     public function insert_news($setData)
@@ -173,7 +172,7 @@ class News extends CI_Model
     	$set_data['lg_user_type'] = 3;
     	$set_data['lg_type']      = 'news_delete';
     	$set_data['lg_func']      = 'delete_news';
-    	$set_data['lg_detail']    = 'nw_seq = ' . $setData['nw_seq'];
+    	$set_data['lg_detail']    = 'nw_seq = ' . $nw_seq;
     	$this->insert_log($set_data);
 
     	return $result;

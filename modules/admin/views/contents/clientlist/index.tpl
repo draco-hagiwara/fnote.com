@@ -88,15 +88,15 @@ function fmSubmit(formName, url, method, num) {
                 </td>
                 <td>
                     {if $cl.cl_status == "0"}<font color="#ffffff" style="background-color:royalblue">[ 登録中 ]</font>
-                    {elseif $cl.cl_status == "1"}<font color="#ffffff" style="background-color:royalblue">[ 審　査 ]</font>
+                    {elseif $cl.cl_status == "1"}<font color="#ffffff" style="background-color:deeppink">[ 審　査 ]</font>
                     {elseif $cl.cl_status == "2"}<font color="#ffffff" style="background-color:royalblue">[ 受　注 ]</font>
-                    {elseif $cl.cl_status == "3"}<font color="#ffffff" style="background-color:darkorange">[ 取　材 ]</font>
-                    {elseif $cl.cl_status == "4"}<font color="#ffffff" style="background-color:darkorange">[ 編　集 ]</font>
-                    {elseif $cl.cl_status == "5"}<font color="#ffffff" style="background-color:darkorange">[ 営業確認 ]</font>
-                    {elseif $cl.cl_status == "6"}<font color="#ffffff" style="background-color:darkorange">[ クライアント確認 ]</font>
-                    {elseif $cl.cl_status == "7"}<font color="#ffffff" style="background-color:red">[ 編集最終確認 ]</font>
-                    {elseif $cl.cl_status == "8"}<font color="#ffffff" style="background-color:deeppink">[ 掲　載 ]</font>
-                    {elseif $cl.cl_status == "9"}<font color="#ffffff" style="background-color:darkorange">[ 再編集 ]</font>
+                    {elseif $cl.cl_status == "3"}<font color="#ffffff" style="background-color:royalblue">[ 取　材 ]</font>
+                    {elseif $cl.cl_status == "4"}<font color="#ffffff" style="background-color:royalblue">[ 編　集 ]</font>
+                    {elseif $cl.cl_status == "5"}<font color="#ffffff" style="background-color:deeppink">[ 営業確認 ]</font>
+                    {elseif $cl.cl_status == "6"}<font color="#ffffff" style="background-color:royalblue">[ クライアント確認 ]</font>
+                    {elseif $cl.cl_status == "7"}<font color="#ffffff" style="background-color:deeppink">[ 編集最終確認 ]</font>
+                    {elseif $cl.cl_status == "8"}<font color="#ffffff" style="background-color:green">[ 掲　載 ]</font>
+                    {elseif $cl.cl_status == "9"}<font color="#ffffff" style="background-color:deeppink">[ 再編集 ]</font>
                     {elseif $cl.cl_status == "19"}<font color="#ffffff" style="background-color:gray">[ 一時停止 ]</font>
                     {elseif $cl.cl_status == "20"}<font color="#ffffff" style="background-color:gray">[ 解　約 ]</font>
                     {else}}エラー

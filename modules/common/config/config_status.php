@@ -35,6 +35,21 @@ array(
 );
 
 
+// ブログ：ステータス
+$config['CLIENT_BLOG_STATUS'] =
+array(
+		"0" => "公開",
+		"1" => "非公開",
+);
+
+// ブログ：コメント
+$config['CLIENT_BLOG_COMMENT'] =
+array(
+		"0" => "コメント受付あり",
+		"1" => "コメント受付なし",
+);
+
+
 
 
 /* End of file config_comm.php */

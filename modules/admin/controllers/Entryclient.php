@@ -136,13 +136,19 @@ class Entryclient extends MY_Controller
     		log_message('error', 'entryclient::[complete()]クライアント登録処理 insert_clientエラー');
     	}
 
+    	// 担当管理者のメール取得
+    	$clac_data = $this->cl->get_clac_seq($_row_id, '');
+
+    	// 当社管理のメール取得
+    	$ac_data = $this->ac->get_ac_seq(1, TRUE);
+
     	// メール送信先設定
     	$mail['from']      = "";
     	$mail['from_name'] = "";
     	$mail['subject']   = "";
     	$mail['to']        = $input_post["cl_mail"];
     	$mail['cc']        = "";
-    	$mail['bcc']       = "";
+	    $mail['bcc']       = $clac_data[0]['adminacmail'] . ',' . $ac_data[0]['ac_mail'];
 
     	// メール本文置き換え文字設定
         $this->config->load('config_comm');
@@ -281,12 +287,12 @@ class Entryclient extends MY_Controller
     			array(
     					'field'   => 'cl_siteid',
     					'label'   => 'サイトID(URL名)',
-    					'rules'   => 'trim|alpha_numeric|max_length[20]'				// 英数字のみ
+    					'rules'   => 'trim|required|alpha_numeric|max_length[20]'		// 英数字のみ
     			),
     			array(
     					'field'   => 'cl_id',
     					'label'   => 'ログインID',
-    					'rules'   => 'trim|alpha_dash|max_length[20]'					// 英数字、アンダースコア("_")、ダッシュ("-") のみ
+    					'rules'   => 'trim|required|alpha_dash|max_length[20]'			// 英数字、アンダースコア("_")、ダッシュ("-") のみ
     			),
     			array(
     					'field'   => 'cl_pw',

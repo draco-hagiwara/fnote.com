@@ -217,10 +217,10 @@ class Clientlist extends MY_Controller
 
 	    	$this->smarty->assign('mess',  "更新が完了しました。");
 
-	    	// 「受注」ステータスで画像用ディレクトリ作成
+	    	// 「受注」ステータスで審査完了メール送信＆画像用ディレクトリ作成
 	    	if ($input_post['cl_status'] == 2)
 	    	{
-	    		// 存在チェック
+	    		// ディレクトリ存在チェック
 	    		$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'] . "/s";
 	    		if (!file_exists($dir_path))
 	    		{
@@ -233,6 +233,44 @@ class Clientlist extends MY_Controller
 	    			$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'] . "/b/";	// ブログ用画像ディレクトリ
 	    			mkdir($dir_path, 0775);
 	    			chmod($dir_path, 0775);
+	    		}
+
+	    		// 審査完了メール送信
+	    		// 担当管理者のメール取得
+	    		$clac_data = $this->cl->get_clac_seq($input_post['cl_seq'], '');
+
+	    		// 当社管理のメール取得
+	    		$this->load->model('Account', 'ac', TRUE);
+	    		$ac_data = $this->ac->get_ac_seq(1, TRUE);
+
+	    		// メール送信先設定
+	    		$mail['from']      = "";
+	    		$mail['from_name'] = "";
+	    		$mail['subject']   = "";
+	    		$mail['to']        = $input_post['cl_mail'];
+	    		$mail['cc']        = "";
+	    		$mail['bcc']       = $clac_data[0]['adminacmail'] . ',' . $ac_data[0]['ac_mail'];
+
+	    		// メール本文置き換え文字設定
+	    		$arrRepList = array(
+	    				'cl_company'     => $input_post['cl_company'],
+	    				'cl_president01' => $input_post['cl_president01'],
+	    				'cl_president02' => $input_post['cl_president02'],
+	    				'cl_id'          => $input_post['cl_id'],
+	    		);
+
+	    		// メールテンプレートの読み込み
+	    		$this->config->load('config_mailtpl');									// メールテンプレート情報読み込み
+	    		$mail_tpl = $this->config->item('MAILTPL_ENT_CLIENT_IDPW');
+
+	    		// メール送信
+	    		$this->load->model('Mailtpl', 'mailtpl', TRUE);
+	    		if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl)) {
+	    			$this->view('entryconf/end_ok.tpl');
+	    		} else {
+	    			echo "メール送信エラー";
+	    			log_message('error', 'Clientlist::[detailchk()]クライアント審査完了処理 メール送信エラー');
+	    			$this->view('entryconf/end_ng.tpl');
 	    		}
 	    	}
     	}
