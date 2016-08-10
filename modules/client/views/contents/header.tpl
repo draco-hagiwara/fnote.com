@@ -35,12 +35,18 @@
           <li class="active"><a href="/client/newslist/">新着情報管理</a></li>
           <li class="active"><a href="/client/reply/">問合せ管理</a></li>
           <li class="active"><a href="/client/clientinfo/">会社情報</a></li>
+          <li class="active"><a href="#" class="dropdown-toggle" data-toggle="dropdown">ブログ<b class="caret"></b></a>
+            <ul class="dropdown-menu right">
+              <li><a href="/client/blog/">投稿</a></li>
+              <li><a href="/client/blog/comment/">コメント管理</a></li>
+            </ul>
+          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="active"><a href="#" class="dropdown-toggle" data-toggle="dropdown">その他<b class="caret"></b></a>
             <ul class="dropdown-menu right">
               <li><a href="/client/mypage/contact/">サポート問合せ</a></li>
-              <li><a href="/client/mypage/chgidpw/">パスワード変更</a></li>
+              <li><a href="/client/mypage/info/">基本設定情報</a></li>
             </ul>
           </li>
           <li class="active"><a href="/client/login/logout/">ログアウト</a></li>
@@ -59,11 +65,11 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
-          <a href="/client/login/" class="navbar-brand">クライアント管理</a>
+          <a href="/client/login/" class="navbar-brand">お客様管理画面</a>
         </div>
       </nav>
 
     </div>
     {/if}
 
-</div>
+  </div>

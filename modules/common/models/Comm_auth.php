@@ -28,9 +28,10 @@ class Comm_auth extends CI_Model
         switch ($login_member)
         {
             case 'client':
-                $sql = 'SELECT cl_seq, cl_status, cl_siteid, cl_pw, cl_company FROM mb_client '
+                $sql = 'SELECT cl_seq, cl_status, cl_siteid, cl_pw, cl_company, cl_login_cnt, cl_login_lock, cl_login_time '
+                		. 'FROM mb_client '
                         . 'WHERE cl_id      = ? '
-                        . 'AND ( cl_status  != 0 OR cl_status  != 9 )';
+                        . 'AND ( cl_status  >= 2 AND cl_status  <= 9 )';
 
                 $values = array(
                         $loginid
@@ -53,53 +54,102 @@ class Comm_auth extends CI_Model
                 }
 
                 // 重複チェック
-                   if ($query->num_rows() >= 2)
-                   {
+                if ($query->num_rows() >= 2)
+                {
 
-                   		// ログ書き込み
-                   		$set_data['lg_user_type'] = 3;
-                   		$set_data['lg_type']      = 'auth_check';
-                   		$set_data['lg_func']      = 'check_Login';
-                		$set_data['lg_detail']    = 'ログインID重複エラー：cl_id = ' . $loginid;
-                   		$this->insert_log($set_data);
+                	// ログ書き込み
+                	$set_data['lg_user_type'] = 3;
+                	$set_data['lg_type']      = 'auth_check';
+                	$set_data['lg_func']      = 'check_Login';
+                	$set_data['lg_detail']    = 'ログインID重複エラー：cl_id = ' . $loginid;
+                	$this->insert_log($set_data);
 
-                       $err_mess = '入力されたログインIDが重複しています。システム管理者に連絡してください。';
-                       return $err_mess;
-                   }
+                	$err_mess = '入力されたログインIDが重複しています。システム管理者にご連絡ください。';
+                    return $err_mess;
+                }
 
-                   // ログインID＆パスワード読み込み
-                   $arrData = $query->result('array');
-                   if (is_array($arrData))
-                   {
-                   		// パスワードのチェック
-                    	$this->_hash_passwd = $arrData[0]['cl_pw'];
-                    	$res = $this->_check_password($password);
-                    	if ($res == TRUE)
-                    	{
+                // ログインID＆パスワード読み込み
+                $arrData = $query->result('array');
+                if (is_array($arrData))
+                {
 
-                    		// ログ書き込み
-                    		$set_data['lg_user_type'] = 3;
-                    		$set_data['lg_type']      = 'auth_check';
-                    		$set_data['lg_func']      = 'check_Login';
-                    		$set_data['lg_detail']    = 'パスワードエラー：cl_id = ' . $loginid;
-                    		$this->insert_log($set_data);
+                	$this->config->load('config_comm');
 
-                        	$err_mess = '入力されたログインIDまたはパスワードが間違っています。';
-                        	return $err_mess;
-                    	} else {
-                        	$this->_hash_passwd = $arrData[0]['cl_pw'];
-                    		$this->_memSeq      = $arrData[0]['cl_seq'];
-                    		$this->_memSiteid   = $arrData[0]['cl_siteid'];
-                    		$this->_memName     = $arrData[0]['cl_company'];
+                	// ログイン解除時間＆ロック有無のチェック
+                	$tmp_lock_limit    = $this->config->item('LOGIN_LOCK_LIMITTIME');		// 制限時間(分)
+                	$tmp_release_limit = $this->config->item('LOGIN_LOCK_RELEASETIME');		// 解除時間(分)
+                	if (isset($arrData[0]['cl_login_time']))
+                	{
 
-                        	$this->_update_Session($login_member);
-                    	}
+                		$_lock_time    = new DateTime($arrData[0]['cl_login_time']);
+                		$_release_time = new DateTime($arrData[0]['cl_login_time']);
+                		$_now_time     = new DateTime();
+
+                		$_mod_lock_limit = '+' . $tmp_lock_limit . 'minute';				// xx分後：$date->modify('+1 minute');
+                		$_lock_time->modify($_mod_lock_limit);
+
+                		$_mod_release_limit = '+' . $tmp_release_limit . 'minute';
+                		$_release_time->modify($_mod_release_limit);
+
+                		if ($_lock_time > $_now_time)
+                		{
+
+		                	if ($arrData[0]['cl_login_lock'] == 1)
+		                	{
+		                		if ($_release_time > $_now_time)
+		                		{
+			                		$err_mess = 'このログインIDは現在ロックされています。しばらくしてからログインしていただくかシステム管理者にご連絡ください。';
+			                		return $err_mess;
+		                		} else {
+		                			// ログインロック情報をクリア
+		                			$this->_login_lock_clear($login_member, $loginid);
+		                			$arrData[0]['cl_login_cnt'] = 0;
+		                		}
+		                	}
+		                } else {
+		                	// ログインロック情報をクリア
+		                	$this->_login_lock_clear($login_member, $loginid);
+		                	$arrData[0]['cl_login_cnt'] = 0;
+                		}
                 	}
+
+                    // パスワードのチェック
+                    $this->_hash_passwd = $arrData[0]['cl_pw'];
+                    $res = $this->_check_password($password);
+                    if ($res == TRUE)
+                    {
+
+                    	// ログインエラーのカウント
+                    	$this->_login_error_cnt($login_member, $loginid, $arrData[0]['cl_login_cnt'], $arrData[0]['cl_login_time']);
+
+                    	// ログ書き込み
+                    	$set_data['lg_user_type'] = 3;
+                    	$set_data['lg_type']      = 'auth_check';
+                    	$set_data['lg_func']      = 'check_Login';
+                    	$set_data['lg_detail']    = 'パスワードエラー：cl_id = ' . $loginid;
+                    	$this->insert_log($set_data);
+
+                        $err_mess = '入力されたログインIDまたはパスワードが間違っています。';
+                        return $err_mess;
+                    } else {
+                        $this->_hash_passwd = $arrData[0]['cl_pw'];
+                    	$this->_memSeq      = $arrData[0]['cl_seq'];
+                    	$this->_memSiteid   = $arrData[0]['cl_siteid'];
+                    	$this->_memName     = $arrData[0]['cl_company'];
+
+                        $this->_update_Session($login_member);
+
+                        // ログインロック情報をクリア
+                        $this->_login_lock_clear($login_member, $loginid);
+
+                    }
+                }
 
                 break;
             case 'admin':
 
-                $sql = 'SELECT ac_seq, ac_status, ac_type, ac_id, ac_pw FROM mb_account '
+                $sql = 'SELECT ac_seq, ac_status, ac_type, ac_id, ac_pw, ac_login_cnt, ac_login_lock, ac_login_time '
+                		. 'FROM mb_account '
                         . 'WHERE ac_id      = ? '
                         . 'AND   ac_status  = 1 ';
 
@@ -143,11 +193,55 @@ class Comm_auth extends CI_Model
                 $arrData = $query->result('array');
                 if (is_array($arrData))
                 {
+
+                	$this->config->load('config_comm');
+
+                	// ログイン解除時間＆ロック有無のチェック
+                	$tmp_lock_limit    = $this->config->item('LOGIN_LOCK_LIMITTIME');		// 制限時間(分)
+                	$tmp_release_limit = $this->config->item('LOGIN_LOCK_RELEASETIME');		// 解除時間(分)
+                	if (isset($arrData[0]['ac_login_time']))
+                	{
+
+                		$_lock_time    = new DateTime($arrData[0]['ac_login_time']);
+                		$_release_time = new DateTime($arrData[0]['ac_login_time']);
+                		$_now_time     = new DateTime();
+
+                		$_mod_lock_limit = '+' . $tmp_lock_limit . 'minute';				// xx分後：$date->modify('+1 minute');
+                		$_lock_time->modify($_mod_lock_limit);
+
+                		$_mod_release_limit = '+' . $tmp_release_limit . 'minute';
+                		$_release_time->modify($_mod_release_limit);
+
+                		if ($_lock_time > $_now_time)
+                		{
+
+                			if ($arrData[0]['ac_login_lock'] == 1)
+                			{
+                				if ($_release_time > $_now_time)
+                				{
+                					$err_mess = 'このログインIDは現在ロックされています。しばらくしてからログインしていただくかシステム管理者にご連絡ください。';
+                					return $err_mess;
+                				} else {
+                					// ログインロック情報をクリア
+                					$this->_login_lock_clear($login_member, $loginid);
+                					$arrData[0]['ac_login_cnt'] = 0;
+                				}
+                			}
+                		} else {
+                			// ログインロック情報をクリア
+                			$this->_login_lock_clear($login_member, $loginid);
+                			$arrData[0]['ac_login_cnt'] = 0;
+                		}
+                	}
+
                 	// パスワードのチェック
                     $this->_hash_passwd = $arrData[0]['ac_pw'];
                     $res = $this->_check_password($password);
                     if ($res == TRUE)
                     {
+
+                    	// ログインエラーのカウント
+                    	$this->_login_error_cnt($login_member, $loginid, $arrData[0]['ac_login_cnt'], $arrData[0]['ac_login_time']);
 
                     	// ログ書き込み
                     	$set_data['lg_user_type'] = 3;
@@ -165,6 +259,10 @@ class Comm_auth extends CI_Model
                         $this->_memSeq      = $arrData[0]['ac_seq'];
 
                         $this->_update_Session($login_member);
+
+                        // ログインロック情報をクリア
+                        $this->_login_lock_clear($login_member, $loginid);
+
                     }
                 } else {
 
@@ -186,6 +284,117 @@ class Comm_auth extends CI_Model
         return $err_mess;
 
     }
+
+    /**
+     * ログイン・ロックエラーのカウント
+     *
+     * @param    varchar
+     * @param    varchar
+     * @param    int
+     * @param    timestamp
+     */
+    private function _login_error_cnt($login_member, $loginid, $login_cnt, $login_time)
+    {
+
+    	// 各メンバー毎にDB更新
+    	if ($login_member == 'client')
+    	{
+
+    		if ($login_cnt == 0)
+    		{
+    			// ロック回数カウント(1)＆ロック制限時間セット
+    			$set_data['cl_login_cnt']  = 1;
+    			$set_data['cl_login_lock'] = 0;
+    			$set_data['cl_login_time'] = date('Y-m-d H:i:s');
+
+    		} elseif ($login_cnt == 9) {
+
+    			// ロック回数カウント(10)＆ロックオン(1)＆ロック制限時間セット
+    			$set_data['cl_login_cnt']  = 10;
+    			$set_data['cl_login_lock'] = 1;
+    			$set_data['cl_login_time'] = date('Y-m-d H:i:s');
+
+    		} else {
+
+    			// ロック回数カウントセット
+    			$set_data['cl_login_cnt']  = $login_cnt + 1;
+    			$set_data['cl_login_lock'] = 0;
+
+    		}
+
+    		$set_data['cl_id'] = $loginid;
+
+    		$this->load->model('Client', 'cl', TRUE);
+    		$this->cl->update_client_id($set_data, 3);
+
+    	} elseif ($login_member == 'admin') {
+
+    		if ($login_cnt == 0)
+    		{
+    			// ロック回数カウント(1)＆ロック制限時間セット
+    			$set_data['ac_login_cnt']  = 1;
+    			$set_data['ac_login_lock'] = 0;
+    			$set_data['ac_login_time'] = date('Y-m-d H:i:s');
+
+    		} elseif ($login_cnt == 9) {
+
+    			// ロック回数カウント(10)＆ロックオン(1)＆ロック制限時間セット
+    			$set_data['ac_login_cnt']  = 10;
+    			$set_data['ac_login_lock'] = 1;
+    			$set_data['ac_login_time'] = date('Y-m-d H:i:s');
+
+    		} else {
+
+    			// ロック回数カウントセット
+    			$set_data['ac_login_cnt']  = $login_cnt + 1;
+    			$set_data['ac_login_lock'] = 0;
+
+    		}
+
+    		$set_data['ac_id'] = $loginid;
+
+    		$this->load->model('Account', 'ac', TRUE);
+    		$this->ac->update_account_id($set_data, 2);
+
+    	}
+
+    }
+
+    /**
+     * ログイン・ロックの解除
+     *
+     * @param    varchar
+     * @param    varchar
+     */
+    private function _login_lock_clear($login_member, $loginid)
+    {
+
+    	// 各メンバー毎にDB更新
+    	if ($login_member == 'client')
+    	{
+
+    		$set_data['cl_id']         = $loginid;
+    		$set_data['cl_login_cnt']  = 0;
+    		$set_data['cl_login_lock'] = 0;
+    		$set_data['cl_login_time'] = NULL;
+
+    		$this->load->model('Client', 'cl', TRUE);
+    		$this->cl->update_client_id($set_data, 3);
+
+    	} elseif ($login_member == 'admin') {
+
+    		$set_data['ac_id']         = $loginid;
+    		$set_data['ac_login_cnt']  = 0;
+    		$set_data['ac_login_lock'] = 0;
+    		$set_data['ac_login_time'] = NULL;
+
+    		$this->load->model('Account', 'ac', TRUE);
+    		$this->ac->update_account_id($set_data, 2);
+
+    	}
+
+    }
+
 
     /**
      * LOGOUT ＆ SESSIONクリア

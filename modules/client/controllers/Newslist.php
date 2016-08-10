@@ -133,10 +133,15 @@ class Newslist extends MY_Controller
 				$set_pagination = $this->_get_Pagination($news_countall, $tmp_per_page);
 
 				$this->smarty->assign('set_pagination', $set_pagination['page_link']);
-				$this->smarty->assign('nw_seq', NULL);
-				$this->smarty->assign('list', $news_list);
+				$this->smarty->assign('nw_seq',   NULL);
+				$this->smarty->assign('list',     $news_list);
 				$this->smarty->assign('countall', $news_countall);
-				$this->smarty->assign('low', $news_data[0]);
+				if (isset($news_data[0]))
+				{
+					$this->smarty->assign('low',      $news_data[0]);
+				} else {
+					$this->smarty->assign('low',      NULL);
+				}
 
 				$this->view('newslist/index.tpl');
 
@@ -146,12 +151,12 @@ class Newslist extends MY_Controller
 	    	$set_data['nw_status']     = $input_post['optionsRadios02'];
 	    	$set_data['nw_type']       = $input_post['optionsRadios01'];
 	    	$set_data['nw_title']      = $input_post['nw_title'];
-	    	$set_data['nw_body']       = $input_post['input'];
+	    	$set_data['nw_body']       = $input_post['area'];
 	    	$set_data['nw_start_date'] = $input_post['nw_start_date'];
 	    	$set_data['nw_end_date']   = $input_post['nw_end_date'];
 
 	    	// 新規か更新かを判定
-	    	if ($input_post['submit'] == 'submit')
+	    	if ($input_post['_submit'] == 'addorchg')
 	    	{
 	    		if ($input_post['nw_seq'] != '')
 	    		{

@@ -81,48 +81,50 @@ function fmSubmit(formName, url, method, num) {
 </ul>
 
 {form_open('/system/category_chg/' , 'name="detailForm" class="form-horizontal"')}
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>カテゴリ名</th>
-                <th>親ID</th>
-                <th>表示階層</th>
-                <th>表示順</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
 
-        {foreach from=$list item=cate}
-        <tbody>
-            <tr>
-                <td>
-                    {$cate.ca_seq}
-                </td>
-                <td>
-                    {$cate.ca_name}
-                </td>
-                <td>
-                    {$cate.ca_parent}
-                </td>
-                <td>
-                    {$cate.ca_level}
-                </td>
-                <td>
-                    {$cate.ca_dispno}
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-success btn-xs" name="chg_uniq" value="{$cate.ca_seq}">編集</button>
-                    <button type="button" class="btn btn-default btn-xs" name="del_uniq" value="{$cate.ca_seq}">削除</button>
-                </td>
-            </tr>
-        </tbody>
-        {foreachelse}
-            検索結果はありませんでした。
-        {/foreach}
+  <div class="form-horizontal col-sm-10 col-sm-offset-1">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>カテゴリ名</th>
+          <th>親ID</th>
+          <th>表示階層</th>
+          <th>表示順</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      {foreach from=$list item=cate}
+      <tbody>
+        <tr>
+          <td>
+            {$cate.ca_seq}
+          </td>
+          <td>
+            {$cate.ca_name}
+          </td>
+          <td>
+            {$cate.ca_parent}
+          </td>
+          <td>
+            {$cate.ca_level}
+          </td>
+          <td>
+            {$cate.ca_dispno}
+          </td>
+          <td>
+            <button type="submit" class="btn btn-success btn-xs" name="chg_uniq" value="{$cate.ca_seq}">編集</button>
+            <button type="button" class="btn btn-default btn-xs" name="del_uniq" value="{$cate.ca_seq}">削除</button>
+          </td>
+        </tr>
+      </tbody>
+      {foreachelse}
+        検索結果はありませんでした。
+      {/foreach}
 
     </table>
+  </div>
 
 {form_close()}
 

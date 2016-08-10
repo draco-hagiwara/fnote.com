@@ -33,6 +33,21 @@ $config['CLIENT_ADD_LIMITTIME'] = '60';									// 「分」指定 (60)
 // $config['CLIENT_ADD_LIMITTIME'] = '6024';								// 「分」指定 (24h)
 
 
+
+
+// ログインロック：失敗回数
+$config['LOGIN_LOCK_CNT']         = '5';								// 回数)
+// ログインロック：制限時間
+$config['LOGIN_LOCK_LIMITTIME']   = '120';								// 「分」指定
+// ログインロック：解除時間
+$config['LOGIN_LOCK_RELEASETIME'] = '120';								// 「分」指定
+
+
+
+
+
+
+
 // ログ：ユーザ種類
 $config['LOG_USER_TYPE'] =
 array(

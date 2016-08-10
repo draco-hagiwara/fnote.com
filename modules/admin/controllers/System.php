@@ -102,7 +102,7 @@ class System extends MY_Controller
 
     }
 
-    // 初期表示
+    // DB & System バックアップ
     public function backup()
     {
 
@@ -117,6 +117,22 @@ class System extends MY_Controller
     	$app_path = "/home/fnote/www/fnote.com.dev/dbbackup/";
     	$strCommand = $app_path . 'backup4pg.sh';
     	exec( $strCommand );
+
+    	$this->view('system/index.tpl');
+
+    }
+
+    // セッション情報削除 (一か月前)
+    public function sess_destroy()
+    {
+
+    	// 一か月前のセッションを削除
+    	$now_time = time();
+    	$del_time = strtotime('-1 month' , $now_time);
+//     	$del_time = strtotime('-1 hour' , $now_time);
+
+    	$this->load->model('Ci_sessions', 'sess', TRUE);
+    	$this->sess->destroy_session($del_time);
 
     	$this->view('system/index.tpl');
 
@@ -279,7 +295,6 @@ class System extends MY_Controller
 
     	}
 
-
     	$this->smarty->assign('opt_ca_cate01',  $arroptions_ca_cate01);
     	$this->smarty->assign('opt_ca_cate02',  $arroptions_ca_cate02);
     	$this->smarty->assign('opt_ca_cate03',  $arroptions_ca_cate03);
@@ -298,10 +313,6 @@ class System extends MY_Controller
     {
 
     	$input_post = $this->input->post();
-
-
-    	print_r($input_post);
-    	print("<br>");
 
     	$arroptions_ca_cate01 = array();
     	$arroptions_ca_cate02 = array();
@@ -425,23 +436,11 @@ class System extends MY_Controller
 
     	$input_post = $this->input->post();
 
-    	print_r($input_post);
-    	print("<br>");
-
-
-
     	$arroptions_ca_cate01 = array();
     	$arroptions_ca_cate02 = array();
     	$arroptions_ca_cate03 = array();
 
     	$this->load->model('Category', 'cate', TRUE);
-
-
-
-
-
-
-
 
 		// 対象データ
     	if (isset($input_post['chg_uniq']))
@@ -457,15 +456,8 @@ class System extends MY_Controller
     	if ((isset($input_post['submit'])) && ($input_post['submit'] == 'catechg'))
     	{
 
-
     		$set_data['ca_seq']  = $_SESSION['a_chgcate'];
     		$set_data['ca_name'] = $input_post['ca_name'];
-
-
-
-    		print_r($set_data);
-    		print("<br>");
-
 
     		// 更新
     		$this->cate->update_category($set_data);
@@ -473,12 +465,6 @@ class System extends MY_Controller
     		$this->smarty->assign('ca_name',  "");
 
     	}
-
-
-
-
-
-
 
     	$tmp_inputpost['ca_seq']    = NULL;
     	$tmp_inputpost['ca_parent'] = NULL;
@@ -588,7 +574,6 @@ class System extends MY_Controller
     // カテゴリの並び替え更新
     private function _update_category($result_array)
     {
-
 
     	$cnt = 1;
     	foreach ($result_array as $key => $val)

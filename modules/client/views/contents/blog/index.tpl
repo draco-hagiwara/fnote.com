@@ -23,42 +23,42 @@
 
   <div class="form-horizontal col-sm-11 col-sm-offset-1">
     <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>status</th>
-                <th class="col-sm-2">日　時</th>
-                <th>題　　　名</th>
-                <th></th>
-            </tr>
-        </thead>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>status</th>
+          <th class="col-sm-2">日　時</th>
+          <th>題　　　名</th>
+          <th></th>
+        </tr>
+      </thead>
 
-        {foreach from=$list item=bl  name="seq"}
+      {foreach from=$list item=bl  name="seq"}
         <tbody>
-            <tr>
-                <td>
-                    {$smarty.foreach.seq.iteration}
-                </td>
-                <td>
-                    {if $bl.bar_status == "0"}<font color="#ffffff" style="background-color:blue">公　開</font>
-                    {elseif $bl.bar_status == "1"}<font color="#ffffff" style="background-color:gray">非公開</font>
-                    {else}エラー
-                    {/if}
-                </td>
-                <td>
-                    {$bl.bar_date}
-                </td>
-                <td>
-                    {$bl.bar_subject}
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-success btn-xs" name="chg_uniq" value="{$bl.bar_seq}">編集</button>
-                </td>
-            </tr>
+          <tr>
+            <td>
+              {$smarty.foreach.seq.iteration}
+            </td>
+            <td>
+              {if $bl.bar_status == "0"}<font color="#ffffff" style="background-color:blue">公　開</font>
+              {elseif $bl.bar_status == "1"}<font color="#ffffff" style="background-color:gray">非公開</font>
+              {else}エラー
+              {/if}
+            </td>
+            <td>
+              {$bl.bar_date}
+            </td>
+            <td>
+              {$bl.bar_subject}
+            </td>
+            <td>
+              <button type="submit" class="btn btn-success btn-xs" name="chg_uniq" value="{$bl.bar_seq}">編集</button>
+            </td>
+          </tr>
         </tbody>
-        {foreachelse}
-            検索結果はありませんでした。
-        {/foreach}
+      {foreachelse}
+        検索結果はありませんでした。
+      {/foreach}
 
     </table>
   </div>

@@ -216,7 +216,7 @@ class Account extends CI_Model
         $set_data['lg_user_type'] = $user_type;
         $set_data['lg_type']      = 'account_insert';
         $set_data['lg_func']      = 'insert_account';
-        $set_data['lg_detail']    = 'ac_seq = ' . $setData['ac_seq'];
+        $set_data['lg_detail']    = 'ac_seq = ' . $row_id;
         $this->insert_log($set_data);
 
         return $row_id;
@@ -280,6 +280,31 @@ class Account extends CI_Model
         $set_data['lg_func']      = 'update_Logindate';
         $set_data['lg_detail']    = 'ac_seq = ' . $ac_seq;
         $this->insert_log($set_data);
+
+    	return $result;
+    }
+
+    /**
+     * ログインIDによる更新
+     *
+     * @param    array()
+     * @return   bool
+     */
+    public function update_account_id($setData, $user_type=2)
+    {
+
+    	$where = array(
+    			'ac_id' => $setData['ac_id']
+    	);
+
+    	$result = $this->db->update('mb_account', $setData, $where);
+
+//     	// ログ書き込み
+//     	$set_data['lg_user_type'] = $user_type;
+//     	$set_data['lg_type']      = 'account_update';
+//     	$set_data['lg_func']      = 'update_account';
+//     	$set_data['lg_detail']    = 'ac_seq = ' . $setData['ac_seq'];
+//     	$this->insert_log($set_data);
 
     	return $result;
     }

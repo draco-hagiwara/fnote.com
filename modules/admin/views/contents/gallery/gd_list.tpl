@@ -3,7 +3,6 @@
     {*include file="../header_gl.tpl" head_index="1"*}
 
 
-
 <style type="text/css">
 <!--
 /*---------------------------------
@@ -73,6 +72,31 @@ body#admin .submit_btn {
 
 </head>
 
+
+<script type="text/javascript">
+<!--
+function fmSubmit(formName, url, method, num) {
+  var f1 = document.forms[formName];
+
+  console.log(num);
+
+  /* エレメント作成&データ設定&要素追加 */
+  var e1 = document.createElement('input');
+  e1.setAttribute('type', 'hidden');
+  e1.setAttribute('name', 'chg_uniq');
+  e1.setAttribute('value', num);
+  f1.appendChild(e1);
+
+  /* サブミットするフォームを取得 */
+  f1.method = method;                                   // method(GET or POST)を設定する
+  f1.action = url;                                      // action(遷移先URL)を設定する
+  f1.submit();                                          // submit する
+  return true;
+}
+// -->
+</script>
+
+
 <body id="admin">
 <div id="wrapper">
 
@@ -84,7 +108,7 @@ body#admin .submit_btn {
   <form method="post" action="/admin/gallery/gd_list/" enctype="multipart/form-data" name="form">
 
   <p class="text-right">
-    <button type='submit' name='submit' value='_sort'>新規登録モードへ</button>
+    <button type='submit' name='_submit' value='_sort'>新規登録モードへ</button>
     <input type="hidden" name="chg_uniq" value={$list_image.im_cl_seq} />
   </p>
 
@@ -155,7 +179,7 @@ body#admin .submit_btn {
   <input type="hidden" name="im_cl_siteid" value={$list_image.im_cl_siteid} />
 
   <br>
-  <p align="center"><button type='submit' name='submit' value='_chgordel' class="btn btn-sm btn-primary">更新 または 削除</button></p>
+  <p align="center"><button type='submit' name='_submit' value='_chgordel' class="btn btn-sm btn-primary">更新 または 削除</button></p>
 
   </form>
 
@@ -201,7 +225,15 @@ body#admin .submit_btn {
   </div>
 
   <br>
-  <p align="center"><button type='submit' name='submit' value='_new' class="btn btn-sm btn-primary">　新規登録　</button></p>
+    <div class="row">
+    <div class="col-sm-4 col-sm-offset-2">
+      <button type='submit' name='_submit' value='_new' class="btn btn-sm btn-primary">　新規登録　</button>
+    </div>
+    <div class="col-sm-2 col-sm-offset-4">
+      <button type="button" class="btn btn-primary btn-sm" onclick="fmSubmit('galleryForm', '/admin/entrytenpo/tenpo_edit/', 'POST', '{$smarty.session.a_img_clseq}', 'chg_uniq');">店舗情報</button>
+      <button type="button" class="btn btn-primary btn-sm" onclick="fmSubmit('galleryForm', '/admin/entrytenpo/report_edit/', 'POST', '{$smarty.session.a_img_clseq}', 'chg_uniq');">記事本文</button>
+    </div>
+  </div>
 
   </form>
 
@@ -214,10 +246,10 @@ body#admin .submit_btn {
 
   <p class="text-right">
   {if $list_mode=='edit'}
-    <button type='submit' name='submit' value='_sort'>並び替えモードへ</button>
+    <button type='submit' name='_submit' value='_sort'>並び替えモードへ</button>
     <input type="hidden" name="list_mode" value='sort' />
   {else}
-    <button type='submit' name='submit' value='_edit'>編集モードへ</button>
+    <button type='submit' name='_submit' value='_edit'>編集モードへ</button>
     <input type="hidden" name="list_mode" value='edit' />
   {/if}
   </p>
@@ -249,12 +281,14 @@ body#admin .submit_btn {
 
   {form_open('/gallery/gd_list/' , 'name="listForm" class="form-horizontal"')}
 
+  {if $str_html|@count != 0}
   <input type="submit" id="submit" value="並び順を保存する" />
+  {/if}
 
   <div id="gallery_wrap">
     <ul id="gallery_list" class="sortable">
         {foreach from=$str_html item=list}
-                    {$list}
+          {$list}
         {foreachelse}
           画像はありませんでした。
         {/foreach}

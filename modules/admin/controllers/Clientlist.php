@@ -202,77 +202,133 @@ class Clientlist extends MY_Controller
     			return;
     		}
 
-	    	// 担当編集者＆営業のＩＤを取り出す
-	    	$_tmp_editor_id = explode(' : ', $this->_arreditorlist[$input_post['cl_editor_id']], 3);
-	    	$input_post['cl_editor_id'] = $_tmp_editor_id[0];
-	    	$_tmp_salse_id = explode(' : ', $this->_arrsaleslist[$input_post['cl_sales_id']], 3);
-	    	$input_post['cl_sales_id'] = $_tmp_salse_id[0];
+    		// メール再発行 or データ更新
+    		if ($input_post['submit'] == 're_mail')
+    		{
 
-	    	// DB書き込み
-	    	// 不要パラメータ削除
-	    	unset($input_post["submit"]) ;
-	    	unset($input_post["retype_password"]) ;
+    			$cl_data = $this->cl->get_cl_seq($input_post["cl_seq"], FALSE);
 
-	    	$this->cl->update_client($input_post);
+    			// 担当管理者のメール取得
+    			$clac_data = $this->cl->get_clac_seq($cl_data[0]["cl_seq"], '');
 
-	    	$this->smarty->assign('mess',  "更新が完了しました。");
+    			// 当社管理のメール取得
+    			$ac_data = $this->ac->get_ac_seq(1, TRUE);
 
-	    	// 「受注」ステータスで審査完了メール送信＆画像用ディレクトリ作成
-	    	if ($input_post['cl_status'] == 2)
-	    	{
-	    		// ディレクトリ存在チェック
-	    		$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'] . "/s";
-	    		if (!file_exists($dir_path))
-	    		{
-	    			$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'];
-	    			mkdir($dir_path, 0777);
-	    			chmod($dir_path, 0777);
-	    			$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'] . "/s/";	// サイト用画像ディレクトリ
-	    			mkdir($dir_path, 0775);
-	    			chmod($dir_path, 0775);
-	    			$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'] . "/b/";	// ブログ用画像ディレクトリ
-	    			mkdir($dir_path, 0775);
-	    			chmod($dir_path, 0775);
-	    		}
+    			// メール送信先設定
+    			$mail['from']      = "";
+    			$mail['from_name'] = "";
+    			$mail['subject']   = "【FNOTE】 新規会員登録申請について (再送)";
+    			$mail['to']        = $cl_data[0]["cl_mail"];
+    			$mail['cc']        = "";
+    			$mail['bcc']       = $clac_data[0]['adminacmail'] . ',' . $ac_data[0]['ac_mail'];
 
-	    		// 審査完了メール送信
-	    		// 担当管理者のメール取得
-	    		$clac_data = $this->cl->get_clac_seq($input_post['cl_seq'], '');
+    			// メール本文置き換え文字設定
+    			$this->config->load('config_comm');
+    			$tmp_limittime = $this->config->item('CLIENT_ADD_LIMITTIME');						// 仮登録制限時間設定
 
-	    		// 当社管理のメール取得
-	    		$this->load->model('Account', 'ac', TRUE);
-	    		$ac_data = $this->ac->get_ac_seq(1, TRUE);
+    			$tmp_uri = site_url() . 'entryconf/cl_edit/' . $cl_data[0]["cl_seq"] . '/' . $cl_data[0]["cl_auth"] ;		// 本登録URI設定
 
-	    		// メール送信先設定
-	    		$mail['from']      = "";
-	    		$mail['from_name'] = "";
-	    		$mail['subject']   = "";
-	    		$mail['to']        = $input_post['cl_mail'];
-	    		$mail['cc']        = "";
-	    		$mail['bcc']       = $clac_data[0]['adminacmail'] . ',' . $ac_data[0]['ac_mail'];
+    			$arrRepList = array(
+    					'cl_company'     => $cl_data[0]['cl_company'],
+    					'cl_president01' => $cl_data[0]['cl_president01'],
+    					'cl_president02' => $cl_data[0]['cl_president02'],
+    					'tmp_uri'        => $tmp_uri,
+    					'tmp_limittime'  => $tmp_limittime,
+    			);
 
-	    		// メール本文置き換え文字設定
-	    		$arrRepList = array(
-	    				'cl_company'     => $input_post['cl_company'],
-	    				'cl_president01' => $input_post['cl_president01'],
-	    				'cl_president02' => $input_post['cl_president02'],
-	    				'cl_id'          => $input_post['cl_id'],
-	    		);
+    			// メールテンプレートの読み込み
+    			$this->config->load('config_mailtpl');									// メールテンプレート情報読み込み
+    			$mail_tpl = $this->config->item('MAILTPL_ENT_CLIENT_ID');
 
-	    		// メールテンプレートの読み込み
-	    		$this->config->load('config_mailtpl');									// メールテンプレート情報読み込み
-	    		$mail_tpl = $this->config->item('MAILTPL_ENT_CLIENT_IDPW');
+    			// メール送信
+    			$this->load->model('Mailtpl', 'mailtpl', TRUE);
+    			if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl)) {
 
-	    		// メール送信
-	    		$this->load->model('Mailtpl', 'mailtpl', TRUE);
-	    		if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl)) {
-	    			$this->view('entryconf/end_ok.tpl');
-	    		} else {
-	    			echo "メール送信エラー";
-	    			log_message('error', 'Clientlist::[detailchk()]クライアント審査完了処理 メール送信エラー');
-	    			$this->view('entryconf/end_ng.tpl');
-	    		}
-	    	}
+    				// 「cl_update_date」を更新 <= アクセス時間
+    				$cl_data[0]['cl_update_date'] = date('Y-m-d H:i:s');
+    				$this->cl->update_client($cl_data[0]);
+
+    				$this->smarty->assign('mess',  "メールが送信されました。");
+
+    			} else {
+    				$this->smarty->assign('mess',  "メール送信に失敗しました。");
+    				log_message('error', 'Clientlist::[detailchk()]クライアント登録メール再発行処理 メール送信エラー');
+    			}
+
+    		} else {
+
+		    	// 担当編集者＆営業のＩＤを取り出す
+		    	$_tmp_editor_id = explode(' : ', $this->_arreditorlist[$input_post['cl_editor_id']], 3);
+		    	$input_post['cl_editor_id'] = $_tmp_editor_id[0];
+		    	$_tmp_salse_id = explode(' : ', $this->_arrsaleslist[$input_post['cl_sales_id']], 3);
+		    	$input_post['cl_sales_id'] = $_tmp_salse_id[0];
+
+		    	// DB書き込み
+		    	// 不要パラメータ削除
+		    	unset($input_post["submit"]) ;
+		    	unset($input_post["retype_password"]) ;
+
+		    	$this->cl->update_client($input_post);
+
+		    	$this->smarty->assign('mess',  "更新が完了しました。");
+
+		    	// 「受注」ステータスで審査完了メール送信＆画像用ディレクトリ作成
+		    	if ($input_post['cl_status'] == 2)
+		    	{
+		    		// ディレクトリ存在チェック
+		    		$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'] . "/s";
+		    		if (!file_exists($dir_path))
+		    		{
+		    			$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'];
+		    			mkdir($dir_path, 0777);
+		    			chmod($dir_path, 0777);
+		    			$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'] . "/s/";	// サイト用画像ディレクトリ
+		    			mkdir($dir_path, 0775);
+		    			chmod($dir_path, 0775);
+		    			$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'] . "/b/";	// ブログ用画像ディレクトリ
+		    			mkdir($dir_path, 0775);
+		    			chmod($dir_path, 0775);
+		    		}
+
+		    		// 審査完了メール送信
+		    		// 担当管理者のメール取得
+		    		$clac_data = $this->cl->get_clac_seq($input_post['cl_seq'], '');
+
+		    		// 当社管理のメール取得
+		    		$this->load->model('Account', 'ac', TRUE);
+		    		$ac_data = $this->ac->get_ac_seq(1, TRUE);
+
+		    		// メール送信先設定
+		    		$mail['from']      = "";
+		    		$mail['from_name'] = "";
+		    		$mail['subject']   = "";
+		    		$mail['to']        = $input_post['cl_mail'];
+		    		$mail['cc']        = "";
+		    		$mail['bcc']       = $clac_data[0]['adminacmail'] . ',' . $ac_data[0]['ac_mail'];
+
+		    		// メール本文置き換え文字設定
+		    		$arrRepList = array(
+		    				'cl_company'     => $input_post['cl_company'],
+		    				'cl_president01' => $input_post['cl_president01'],
+		    				'cl_president02' => $input_post['cl_president02'],
+		    				'cl_id'          => $input_post['cl_id'],
+		    		);
+
+		    		// メールテンプレートの読み込み
+		    		$this->config->load('config_mailtpl');									// メールテンプレート情報読み込み
+		    		$mail_tpl = $this->config->item('MAILTPL_ENT_CLIENT_IDPW');
+
+		    		// メール送信
+		    		$this->load->model('Mailtpl', 'mailtpl', TRUE);
+		    		if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl)) {
+		    			$this->view('entryconf/end_ok.tpl');
+		    		} else {
+		    			echo "メール送信エラー";
+		    			log_message('error', 'Clientlist::[detailchk()]クライアント審査完了処理 メール送信エラー');
+		    			$this->view('entryconf/end_ng.tpl');
+		    		}
+		    	}
+    		}
     	}
 
     	$this->smarty->assign('info', $input_post);
@@ -423,7 +479,7 @@ class Clientlist extends MY_Controller
     			),
     			array(
     					'field'   => 'cl_company',
-    					'label'   => '会社名ス',
+    					'label'   => '会社名',
     					'rules'   => 'trim|max_length[50]'
     			),
     	);

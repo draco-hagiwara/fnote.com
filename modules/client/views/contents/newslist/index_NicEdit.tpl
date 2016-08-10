@@ -2,10 +2,18 @@
     {include file="../header.tpl" head_index="1"}
 
 
-<!-- summernote.jsのロード -->
-<link href="../../wysiwyg_summemote/summernote.css" rel="stylesheet" type="text/css">
-<script src="../../wysiwyg_summemote/summernote.min.js"></script>
-<script src="../../wysiwyg_summemote/lang/summernote-ja-JP.js"></script>
+
+<link rel="stylesheet" href="../../css/jquery.cleditor.css">
+<script src="../../js/jquery-3.0.0.min.js"></script>
+<script src="../../js/jquery.cleditor.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#input").cleditor()[0].focus();
+    });
+</script>
+
+
+
 
 
 <body>
@@ -119,12 +127,7 @@
   </div>
 
   <br><br>
-  <div class="form-group">
-    <label for="nw_body" class="col-sm-1 control-label">本　　文</label>
-    <div class="col-sm-8">
-      <div id="summernote" name="area"><p>{$low.nw_body}</p></div>
-    </div>
-  </div>
+  <textarea id="input" name="input">{$low.nw_body}</textarea>
 
   {form_hidden('nw_seq', $nw_seq)}
 
@@ -150,7 +153,7 @@
           <p>更新しますか。&hellip;</p>
         </div>
         <div class="modal-footer">
-          <button type='submit' name='_submit' value='addorchg' class="btn btn-sm btn-primary" onclick="fmSubmit('newsdetailForm', '/client/newslist/detail/', 'POST');">O  K</button>
+          <button type='submit' name='submit' value='submit' class="btn btn-sm btn-primary">O  K</button>
           <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
         </div>
       </div><!-- /.modal-content -->
@@ -175,41 +178,15 @@
   </div><!-- /.modal -->
 
 
-<script>
-    $('#summernote').summernote({
-      height: 200,
-      fontNames: ["YuGothic","Yu Gothic","Hiragino Kaku Gothic Pro","Meiryo","sans-serif", "Arial","Arial Black","Comic Sans MS","Courier New","Helvetica Neue","Helvetica","Impact","Lucida Grande","Tahoma","Times New Roman","Verdana"],
-      lang: "ja-JP",
-    });
-</script>
 
 
 {form_close()}
 
 
-<script type="text/javascript">
-<!--
-function fmSubmit(formName, url, method) {
-  var f1 = document.forms[formName];
 
-  /*console.log(num);
 
-  /* エレメント作成&データ設定&要素追加 */
-  var e1 = document.createElement('input');
 
-  e1.setAttribute('type', 'hidden');
-  e1.setAttribute('name', 'area');
-  e1.setAttribute('value', $('#summernote').summernote('code'));
-  f1.appendChild(e1);
 
-  /* サブミットするフォームを取得 */
-  f1.method = method;                                   // method(GET or POST)を設定する
-  f1.action = url;                                      // action(遷移先URL)を設定する
-  f1.submit();                                          // submit する
-  return true;
-}
-// -->
-</script>
 
 
 <!-- </form> -->

@@ -34,6 +34,20 @@ array(
 		"20" => "解約",
 );
 
+// 画像：ステータス
+$config['CLIENT_BLOG_STATUS'] =
+array(
+		"0" => "非表示",
+		"1" => "表示",
+);
+
+// 問合せ：ステータス
+$config['CLIENT_BLOG_STATUS'] =
+array(
+		"0" => "未開封",
+		"1" => "開封",
+		"2" => "対応済",
+);
 
 // ブログ：ステータス
 $config['CLIENT_BLOG_STATUS'] =
@@ -49,7 +63,19 @@ array(
 		"1" => "コメント受付なし",
 );
 
+// 新着お知らせ：ステータス
+$config['CLIENT_BLOG_STATUS'] =
+array(
+		"0" => "表示",
+		"1" => "非表示",
+);
 
+// ログインロック
+$config['LOGIN_LOCK_STATUS'] =
+array(
+		"0" => "ロックなし",
+		"1" => "ロック状態(ログイン無効)",
+);
 
 
 /* End of file config_comm.php */

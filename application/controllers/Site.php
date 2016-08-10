@@ -60,6 +60,7 @@ class Site extends MY_Controller
 	    	$this->smarty->assign('list', $entry_data[0]);
 
     		$this->view('site/pf.tpl');
+    		return;
 
     	} else {
 

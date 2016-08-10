@@ -229,17 +229,68 @@ class Accountlist extends MY_Controller
 		    	// DB書き込み
 		    	$this->ac->update_account($input_post, TRUE);
 
+		    	$this->smarty->assign('mess',  "更新が完了しました。");
+
 	    	} else {
 
-	    		// 不要パラメータ削除
-	    		unset($input_post["submit"]) ;
+	    		// メール再発行 or データ更新
+	    		if ($input_post['submit'] == 're_mail')
+	    		{
 
-	    		// DB書き込み (PW更新なし)
-	    		$this->ac->update_account($input_post);
+	    			$get_account = $this->ac->get_ac_seq($input_post["ac_seq"], TRUE);
+
+	    			// メール送信先設定
+	    			$mail['from']      = "";
+	    			$mail['from_name'] = "";
+	    			$mail['subject']   = "【FNOTE】 新規会員登録申請について (再送)";
+	    			$mail['to']        = $get_account[0]["ac_id"];
+	    			$mail['cc']        = "";
+	    			$mail['bcc']       = "";
+
+	    			// メール本文置き換え文字設定
+	    			$this->config->load('config_comm');
+	    			$tmp_limittime = $this->config->item('ADMIN_ADD_LIMITTIME');						// 仮登録制限時間設定
+
+	    			$tmp_uri = site_url() . 'entryconf/edit/' . $get_account[0]["ac_seq"] . '/' . $get_account[0]["ac_auth"] ;		// 本登録URI設定
+
+	    			$arrRepList = array(
+	    					'ac_name01'      => $get_account[0]['ac_name01'],
+	    					'ac_name02'      => $get_account[0]['ac_name02'],
+	    					'tmp_uri'        => $tmp_uri,
+	    					'tmp_limittime' => $tmp_limittime,
+	    			);
+
+	    			// メールテンプレートの読み込み
+	    			$this->config->load('config_mailtpl');									// メールテンプレート情報読み込み
+	    			$mail_tpl = $this->config->item('MAILTPL_ENT_ADMIN_ID');
+
+	    			// メール送信
+	    			$this->load->model('Mailtpl', 'mailtpl', TRUE);
+	    			if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl)) {
+	    				$this->smarty->assign('mess',  "メールが送信されました。");
+
+	    				// 「ac_update_date」を更新 <= アクセス時間
+	    				$get_account[0]['ac_update_date'] = date('Y-m-d H:i:s');
+	    				$this->ac->update_account($get_account[0]);
+
+	    			} else {
+	    				echo "メール送信エラー";
+	    				log_message('error', 'Entryadmin::[complete()]管理者登録処理 メール送信エラー');
+	    				$this->smarty->assign('mess',  "メール送信に失敗しました。");
+	    			}
+
+	    		} else {
+
+		    		// 不要パラメータ削除
+		    		unset($input_post["submit"]) ;
+
+		    		// DB書き込み (PW更新なし)
+		    		$this->ac->update_account($input_post);
+
+		    		$this->smarty->assign('mess',  "更新が完了しました。");
+	    		}
 
 	    	}
-
-	    	$this->smarty->assign('mess',  "更新が完了しました。");
     	}
 
     	$this->smarty->assign('info', $input_post);

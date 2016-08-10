@@ -48,19 +48,14 @@ class Entrytenpo extends MY_Controller
     public function tenpo_edit()
     {
 
-    	// バリデーション・チェック
-    	$this->_set_validation();												// バリデーション設定
-
-    	// 初期値セット
-//     	$this->_item_set01();
-
     	// クライアント情報取得
     	$input_post = $this->input->post();
 
+    	// 初期値セット
+    	$this->_item_set();
 
-    	print_r($input_post);
-
-
+    	// バリデーション・チェック
+    	$this->_set_validation();												// バリデーション設定
 
     	$this->load->model('Client', 'cl', TRUE);
     	$cl_data = $this->cl->get_cl_seq($input_post['chg_uniq'], TRUE);
@@ -70,14 +65,31 @@ class Entrytenpo extends MY_Controller
     	$_SESSION['a_cl_siteid'] = $cl_data[0]['cl_siteid'];
 		$_SESSION['a_cl_id']     = $cl_data[0]['cl_id'];
 
+		// 日付け初期化
+		for ($i = 0; $i < 3; $i++)
+		{
+			for ($j = 0; $j < 7; $j++)
+			{
+				$eigyo_chk[$i][$j] = FALSE;
+			}
+		}
+
+		// 定休日初期化
+		for ($i = 0; $i < 8; $i++)
+		{
+			$closed_chk[0][$i] = FALSE;
+		}
+
 		// 店舗データの取得
     	$this->load->model('Entry', 'ent', TRUE);
     	$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid']);
     	if ($entry_data == FALSE)
 		{
-			// 空データを取得
-// 			$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid'], TRUE);
-// 			$this->smarty->assign('list', $entry_data[0]);
+			// カテゴリセット
+			$this->_item_cate_set('1');										// 初期値で「グルメ」固定表示
+
+			$this->smarty->assign('eigyo_chk',  $eigyo_chk);
+			$this->smarty->assign('closed_chk', $closed_chk);
 
 			$this->smarty->assign('list', NULL);
 		} else {
@@ -88,6 +100,46 @@ class Entrytenpo extends MY_Controller
 			$_SESSION['a_cate02'] = $entry_data[0]['en_cate02'];
 			$_SESSION['a_cate03'] = $entry_data[0]['en_cate03'];
 
+
+			// 営業時間セット
+			$this->_item_eigyo_set();
+// 			if (isset($entry_data[0]['en_eigyo']))
+// 			{
+
+// 				$cnt = 0;
+// 				foreach(explode("/", $entry_data[0]['en_eigyo']) as $value){
+
+// 					$unit = explode(",", $value);
+
+// 					// 営業日セット
+// 					foreach(str_split($unit[0]) as  $val)
+// 					{
+// 						$eigyo_chk[$cnt][$val] = " checked";
+// 					}
+
+// 					// 営業時間セット
+// 					preg_match_all('/[0-9]+/i', $unit[1], $eigyo_time[$cnt]);
+
+// 					$cnt++;
+
+// 				}
+
+// 				// 定休日セット
+// 				if (isset($entry_data[0]['en_closed']))
+// 				{
+
+// 					$cnt = 0;
+// 					foreach(str_split($entry_data[0]['en_closed']) as  $val)
+// 					{
+// 						$closed_chk[$cnt][$val] = " checked";
+// 					}
+
+// 				}
+
+// 				$this->smarty->assign('eigyo_time', $eigyo_time);
+
+// 			}
+
 			$this->_item_cate_set($entry_data[0]['en_cate01']);
 
 		}
@@ -96,6 +148,9 @@ class Entrytenpo extends MY_Controller
 		$_ticket = md5(uniqid(mt_rand(), true));
 		$_SESSION['a_ticket'] = $_ticket;
 		$this->smarty->assign('ticket', $_ticket);
+
+// 		$this->smarty->assign('eigyo_chk',  $eigyo_chk);
+// 		$this->smarty->assign('closed_chk', $closed_chk);
 
     	$this->view('entrytenpo/tenpo_edit.tpl');
 
@@ -107,6 +162,13 @@ class Entrytenpo extends MY_Controller
 
     	$input_post = $this->input->post();
 
+
+//     	print_r($input_post);
+//     	exit;
+
+
+
+
 		if (isset($input_post['submit']) && ($input_post['submit'] == 'preview'))
 		{
 			$this->smarty->assign('list', $input_post);
@@ -116,7 +178,7 @@ class Entrytenpo extends MY_Controller
 		}
 
     	// 初期値セット
-//     	$this->_item_set01();
+    	$this->_item_set();
 		if ($input_post["en_cate01"])
 		{
 			$this->_item_cate_set($input_post["en_cate01"]);
@@ -124,6 +186,8 @@ class Entrytenpo extends MY_Controller
 
         // 都道府県チェック
         $this->smarty->assign('pref_name', $this->_pref_name);
+
+        $this->load->model('Entry', 'ent', TRUE);
 
     	// バリデーション・チェック
     	$this->_set_validation();
@@ -135,12 +199,152 @@ class Entrytenpo extends MY_Controller
     		$input_post["en_cl_id"]     = $_SESSION['a_cl_id'];
     		$input_post["en_cl_siteid"] = $_SESSION['a_cl_siteid'];
 
+
+
+//     		print_r($input_post);
+//     		exit;
+
+
+    		// 営業時間セット:1
+    		$_eigyobi1 = "";
+    		if (isset($input_post["eigyo1"]))
+    		{
+    			foreach ($input_post["eigyo1"] as $key => $val)
+    			{
+    				$_eigyobi1 .= $val;
+    			}
+
+    			unset($input_post["eigyo1"]) ;
+
+    		}
+
+    		$_eigyobi1  .= ","
+    					. str_pad($input_post["eigyo_time11"], 2, "0", STR_PAD_LEFT)
+    					. ":"
+    					. str_pad($input_post["eigyo_time12"], 2, "0", STR_PAD_LEFT)
+    					. "-"
+    					. str_pad($input_post["eigyo_time21"], 2, "0", STR_PAD_LEFT)
+    					. ":"
+    					. str_pad($input_post["eigyo_time22"], 2, "0", STR_PAD_LEFT)
+    					. "+"
+    					. str_pad($input_post["eigyo_time31"], 2, "0", STR_PAD_LEFT)
+    					. ":"
+    					. str_pad($input_post["eigyo_time32"], 2, "0", STR_PAD_LEFT)
+    					. "-"
+    					. str_pad($input_post["eigyo_time41"], 2, "0", STR_PAD_LEFT)
+    					. ":"
+    					. str_pad($input_post["eigyo_time42"], 2, "0", STR_PAD_LEFT)
+    					;
+
+
+    		// 営業時間セット:2
+    		$_eigyobi2 = "";
+    		if (isset($input_post["eigyo2"]))
+    		{
+    			foreach ($input_post["eigyo2"] as $key => $val)
+    			{
+    				$_eigyobi2 .= $val;
+    			}
+
+    			unset($input_post["eigyo2"]) ;
+
+    		}
+
+    		$_eigyobi2  .= ","
+    					. str_pad($input_post["eigyo_time51"], 2, "0", STR_PAD_LEFT)
+    					. ":"
+    					. str_pad($input_post["eigyo_time52"], 2, "0", STR_PAD_LEFT)
+    					. "-"
+    					. str_pad($input_post["eigyo_time61"], 2, "0", STR_PAD_LEFT)
+    					. ":"
+    					. str_pad($input_post["eigyo_time62"], 2, "0", STR_PAD_LEFT)
+    					. "+"
+    					. str_pad($input_post["eigyo_time71"], 2, "0", STR_PAD_LEFT)
+    					. ":"
+    					. str_pad($input_post["eigyo_time72"], 2, "0", STR_PAD_LEFT)
+    					. "-"
+    					. str_pad($input_post["eigyo_time81"], 2, "0", STR_PAD_LEFT)
+    					. ":"
+    					. str_pad($input_post["eigyo_time82"], 2, "0", STR_PAD_LEFT)
+    					;
+
+    		// 営業時間セット:3
+    		$_eigyobi3 = "";
+    		if (isset($input_post["eigyo3"]))
+    		{
+    			foreach ($input_post["eigyo3"] as $key => $val)
+    			{
+    				$_eigyobi3 .= $val;
+    			}
+
+    			unset($input_post["eigyo3"]) ;
+
+    		}
+
+    		$_eigyobi3  .= ","
+    					. str_pad($input_post["eigyo_time91"], 2, "0", STR_PAD_LEFT)
+    					. ":"
+    					. str_pad($input_post["eigyo_time92"], 2, "0", STR_PAD_LEFT)
+    					. "-"
+    					. str_pad($input_post["eigyo_time101"], 2, "0", STR_PAD_LEFT)
+    					. ":"
+    					. str_pad($input_post["eigyo_time102"], 2, "0", STR_PAD_LEFT)
+    					. "+"
+    					. str_pad($input_post["eigyo_time111"], 2, "0", STR_PAD_LEFT)
+    					. ":"
+    					. str_pad($input_post["eigyo_time112"], 2, "0", STR_PAD_LEFT)
+    					. "-"
+    					. str_pad($input_post["eigyo_time121"], 2, "0", STR_PAD_LEFT)
+    					. ":"
+    					. str_pad($input_post["eigyo_time122"], 2, "0", STR_PAD_LEFT)
+    					;
+
+    		$input_post["en_eigyo"] = $_eigyobi1 . "/" . $_eigyobi2 . "/" . $_eigyobi3;
+
+    		// 定休日セット
+    		if (isset($input_post["closed"]))
+    		{
+    			$_closed = "";
+    			foreach ($input_post["closed"] as $key => $val)
+    			{
+    				$_closed .= $val;
+    			}
+
+    			$input_post["en_closed"] = $_closed;
+
+    			unset($input_post["closed"]) ;
+    		}
+
+
     		// 不要パラメータ削除
 //     		unset($input_post["submit"]) ;
     		unset($input_post["add"]) ;
+    		unset($input_post["eigyo_time11"]) ;
+    		unset($input_post["eigyo_time12"]) ;
+    		unset($input_post["eigyo_time21"]) ;
+    		unset($input_post["eigyo_time22"]) ;
+    		unset($input_post["eigyo_time31"]) ;
+    		unset($input_post["eigyo_time32"]) ;
+    		unset($input_post["eigyo_time41"]) ;
+    		unset($input_post["eigyo_time42"]) ;
+    		unset($input_post["eigyo_time51"]) ;
+    		unset($input_post["eigyo_time52"]) ;
+    		unset($input_post["eigyo_time61"]) ;
+    		unset($input_post["eigyo_time62"]) ;
+    		unset($input_post["eigyo_time71"]) ;
+    		unset($input_post["eigyo_time72"]) ;
+    		unset($input_post["eigyo_time81"]) ;
+    		unset($input_post["eigyo_time82"]) ;
+    		unset($input_post["eigyo_time91"]) ;
+    		unset($input_post["eigyo_time92"]) ;
+    		unset($input_post["eigyo_time101"]) ;
+    		unset($input_post["eigyo_time102"]) ;
+    		unset($input_post["eigyo_time111"]) ;
+    		unset($input_post["eigyo_time112"]) ;
+    		unset($input_post["eigyo_time121"]) ;
+    		unset($input_post["eigyo_time122"]) ;
 
     		// DB書き込み
-    		$this->load->model('Entry', 'ent', TRUE);
     		$_row_id = $this->ent->inup_tenpo($input_post);
     	}
 
@@ -148,6 +352,58 @@ class Entrytenpo extends MY_Controller
     	$_ticket = md5(uniqid(mt_rand(), true));
     	$_SESSION['a_ticket'] = $_ticket;
     	$this->smarty->assign('ticket', $_ticket);
+
+
+    	// 再読み込み
+    	// 日付け初期化
+    	$this->_item_eigyo_set();
+//     	for ($i = 0; $i < 3; $i++)
+//     	{
+//     		for ($j = 0; $j < 7; $j++)
+//     		{
+//     			$eigyo_chk[$i][$j] = FALSE;
+//     		}
+//     	}
+
+//     	// 定休日初期化
+//     	for ($i = 0; $i < 8; $i++)
+//     	{
+//     		$closed_chk[0][$i] = FALSE;
+//     	}
+
+//     	$entry_data = $this->ent->get_entry_siteid($_SESSION['a_cl_siteid']);
+//     	if (isset($entry_data[0]['en_eigyo']))
+//     	{
+
+//     		$cnt = 0;
+//     		foreach(explode("/", $entry_data[0]['en_eigyo']) as $value){
+
+//     			$unit = explode(",", $value);
+
+//     			// 営業日セット
+//     			foreach(str_split($unit[0]) as  $val)
+//     			{
+//     				$eigyo_chk[$cnt][$val] = " checked";
+//     			}
+
+//     			// 営業時間セット
+//     			preg_match_all('/[0-9]+/i', $unit[1], $eigyo_time[$cnt]);
+
+//     			$cnt++;
+
+//     		}
+
+//     		// 定休日セット
+// 			foreach(str_split($entry_data[0]['en_closed']) as  $val)
+// 			{
+// 				$closed_chk[0][$val] = " checked";
+// 			}
+
+//     		$this->smarty->assign('eigyo_time', $eigyo_time);
+//     	}
+
+//     	$this->smarty->assign('eigyo_chk',  $eigyo_chk);
+//     	$this->smarty->assign('closed_chk', $closed_chk);
 
 		$this->smarty->assign('list', $input_post);
     	$this->view('entrytenpo/tenpo_edit.tpl');
@@ -211,6 +467,13 @@ class Entrytenpo extends MY_Controller
     		$this->_item_cate_set($input_post['en_cate01'], FALSE, TRUE);
     		$input_post["en_cate03"] = 0;
     	}
+
+    	// 初期値セット
+    	$this->_item_set();
+
+    	// 営業時間セット
+    	$this->load->model('Entry', 'ent', TRUE);
+    	$this->_item_eigyo_set();
 
 		$this->smarty->assign('list', $input_post);
 
@@ -319,14 +582,14 @@ class Entrytenpo extends MY_Controller
 	    $this->load->model('Entry', 'ent', TRUE);
 	    $this->load->model('Revision', 'rev', TRUE);
 
-	    if ($input_post['submit'] == 'preview')
+	    if ($input_post['_submit'] == 'preview')
     	{
     		$this->smarty->assign('list', $input_post);
 
     		$this->view('entrytenpo/report_pre.tpl');
     		return;
 
-    	} elseif ($input_post['submit'] == 'save') {
+    	} elseif ($input_post['_submit'] == 'save') {
 
 	    	// バリデーション・チェック
 	    	$this->_set_validation02();
@@ -345,6 +608,8 @@ class Entrytenpo extends MY_Controller
 	    		if ($input_post["cl_status"] == 8)
 	    		{
 	    			$set_data['cl_status'] = 8;									// ステータス「掲載」
+	    		} elseif ($input_post["cl_status"] == 9) {
+	    			$set_data['cl_status'] = 9;									// ステータス変更「再編集」
 	    		} else {
 	    			$set_data['cl_status'] = 4;									// ステータス変更「編集」
 	    		}
@@ -352,7 +617,7 @@ class Entrytenpo extends MY_Controller
 	    		// 不要パラメータ削除
 	    		unset($input_post["rv_description"]) ;
 	    		unset($input_post["cl_status"]) ;
-	    		unset($input_post["submit"]) ;
+	    		unset($input_post["_submit"]) ;
 
 	    		// DB書き込み
 	    		$_row_id = $this->ent->inup_tenpo($input_post);
@@ -381,7 +646,7 @@ class Entrytenpo extends MY_Controller
 		    	}
 	    	}
 
-	    } elseif ($input_post['submit'] == 'revision') {
+	    } elseif ($input_post['_submit'] == 'revision') {
 
 	    	// バリデーション・チェック
 	    	$this->_set_validation02();
@@ -681,49 +946,97 @@ class Entrytenpo extends MY_Controller
     }
 
     // 初期値セット
-    private function _item_set01()
+    private function _item_set()
     {
 
-    	// カテゴリセット
-    	$arroptions_en_cate01 = array (
-    									''  => '選択してください',
-    									'0' => '飲食',
-    									'1' => '弁護士',
-    							);
-    	$arroptions_en_cate02 = array (
-						    			''  => '選択してください',
-						    			'0' => '和食',
-						    			'1' => 'イタリア',
-						    	);
-    	$arroptions_en_cate03 = array (
-						    			''  => '選択してください',
-						    			'0' => '日本料理',
-						    			'1' => 'ラーメン',
-						    	);
+    	// 時刻セット
+    	for ($i=0; $i < 24; $i++)
+    	{
+    		$arr_time_h[$i] = str_pad($i, 2, "0", STR_PAD_LEFT);
+    	}
 
-    	$this->smarty->assign('opt_en_cate01',  $arroptions_en_cate01);
-    	$this->smarty->assign('opt_en_cate02',  $arroptions_en_cate02);
-    	$this->smarty->assign('opt_en_cate03',  $arroptions_en_cate03);
+    	// 分セット
+    	for ($i=0; $i < 60; $i+=5)
+    	{
+    		$arr_time_m[$i] = str_pad($i, 2, "0", STR_PAD_LEFT);
+    	}
+
+//     	// 選択日付の初期化
+//     	for ($i = 0; $i < 3; $i++)
+//     	{
+// 	    	for ($j = 0; $i < 7; $i++)
+// 	    	{
+//     			$eigyo_chk[$i][$j] = FALSE;
+// 	    	}
+//     	}
+
+//     	// 選択時刻の初期化
+//     	for ($i = 0; $i < 3; $i++)
+//     	{
+//     		for ($j = 0; $i < 7; $i++)
+//     		{
+//     			$eigyo_time[$i][0][$j] = FALSE;
+//     		}
+//     	}
+
+// 		$eigyo1 = array();
+// 		$eigyo2 = array();
+// 		$eigyo3 = array();
+
+    	$this->smarty->assign('opt_time_h', $arr_time_h);
+    	$this->smarty->assign('opt_time_m', $arr_time_m);
+//     	$this->smarty->assign('eigyo_chk',  $eigyo_chk);
+//     	$this->smarty->assign('eigyo1',     $eigyo1);
+//     	$this->smarty->assign('eigyo2',     $eigyo2);
+//     	$this->smarty->assign('eigyo3',     $eigyo3);
+    	//     	$this->smarty->assign('eigyo_time', $eigyo_time);
 
     }
 
-    // 初期値セット
-    private function _item_set02()
-    {
+//     // 初期値セット
+//     private function _item_set01()
+//     {
 
-    	// 管理者登録状態セット
-    	$this->config->load('config_status');
-    	$arroptions_ac_status = $this->config->item('ADMIN_ACCOUNT_STATUS');
+//     	// カテゴリセット
+//     	$arroptions_en_cate01 = array (
+//     									''  => '選択してください',
+//     									'0' => '飲食',
+//     									'1' => '弁護士',
+//     							);
+//     	$arroptions_en_cate02 = array (
+// 						    			''  => '選択してください',
+// 						    			'0' => '和食',
+// 						    			'1' => 'イタリア',
+// 						    	);
+//     	$arroptions_en_cate03 = array (
+// 						    			''  => '選択してください',
+// 						    			'0' => '日本料理',
+// 						    			'1' => 'ラーメン',
+// 						    	);
 
-    	// 管理者種類セット
-    	$this->config->load('config_comm');
-    	$arroptions_ac_type = $this->config->item('ADMIN_ACCOUNT_TYPE');
+//     	$this->smarty->assign('opt_en_cate01',  $arroptions_en_cate01);
+//     	$this->smarty->assign('opt_en_cate02',  $arroptions_en_cate02);
+//     	$this->smarty->assign('opt_en_cate03',  $arroptions_en_cate03);
 
-    	$this->smarty->assign('options_ac_status',  $arroptions_ac_status);
-    	$this->smarty->assign('options_ac_type',  $arroptions_ac_type);
-    	$this->smarty->assign('account_type', $arroptions_ac_type[$this->input->post('ac_type')]);
+//     }
 
-    }
+//     // 初期値セット
+//     private function _item_set02()
+//     {
+
+//     	// 管理者登録状態セット
+//     	$this->config->load('config_status');
+//     	$arroptions_ac_status = $this->config->item('ADMIN_ACCOUNT_STATUS');
+
+//     	// 管理者種類セット
+//     	$this->config->load('config_comm');
+//     	$arroptions_ac_type = $this->config->item('ADMIN_ACCOUNT_TYPE');
+
+//     	$this->smarty->assign('options_ac_status',  $arroptions_ac_status);
+//     	$this->smarty->assign('options_ac_type',  $arroptions_ac_type);
+//     	$this->smarty->assign('account_type', $arroptions_ac_type[$this->input->post('ac_type')]);
+
+//     }
 
     // カテゴリセット
     private function _item_cate_set($cate01, $cate02=FALSE, $cate03=FALSE)
@@ -769,6 +1082,62 @@ class Entrytenpo extends MY_Controller
     	$this->smarty->assign('opt_en_cate01',  $arroptions_en_cate01);
     	$this->smarty->assign('opt_en_cate02',  $arroptions_en_cate02);
     	$this->smarty->assign('opt_en_cate03',  $arroptions_en_cate03);
+
+    }
+
+    // 営業時間初期値セット
+    private function _item_eigyo_set()
+    {
+
+    	// 日付け初期化
+    	for ($i = 0; $i < 3; $i++)
+    	{
+    		for ($j = 0; $j < 7; $j++)
+    		{
+    			$eigyo_chk[$i][$j] = FALSE;
+    		}
+    	}
+
+    	// 定休日初期化
+    	for ($i = 0; $i < 8; $i++)
+    	{
+    		$closed_chk[0][$i] = FALSE;
+    	}
+
+    	$entry_data = $this->ent->get_entry_siteid($_SESSION['a_cl_siteid']);
+    	if (isset($entry_data[0]['en_eigyo']))
+    	{
+
+    		$cnt = 0;
+    		foreach(explode("/", $entry_data[0]['en_eigyo']) as $value){
+
+    			$unit = explode(",", $value);
+
+    			// 営業日セット
+    			foreach(str_split($unit[0]) as  $val)
+    			{
+    				$eigyo_chk[$cnt][$val] = " checked";
+    			}
+
+    			// 営業時間セット
+    			preg_match_all('/[0-9]+/i', $unit[1], $eigyo_time[$cnt]);
+
+    			$cnt++;
+
+    		}
+
+    		// 定休日セット
+    		foreach(str_split($entry_data[0]['en_closed']) as  $val)
+    		{
+    			$closed_chk[0][$val] = " checked";
+    		}
+
+    		$this->smarty->assign('eigyo_time', $eigyo_time);
+    	}
+
+    	$this->smarty->assign('eigyo_chk',  $eigyo_chk);
+    	$this->smarty->assign('closed_chk', $closed_chk);
+
 
     }
 
