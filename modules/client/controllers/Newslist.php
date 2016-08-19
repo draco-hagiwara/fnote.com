@@ -223,17 +223,17 @@ class Newslist extends MY_Controller
     	$rule_set = array(
 				array(
 						'field'   => 'nw_title',
-						'label'   => '名前',
+						'label'   => 'タイトル',
 						'rules'   => 'trim|required|max_length[50]'
 				),
         		array(
                         'field'   => 'nw_start_date',
-                        'label'   => '表示開始日付',
+                        'label'   => '開始日付(yyyy/dd/mm)',
                         'rules'   => 'trim|required|regex_match[/^\d{4}-\d{1,2}-\d{1,2}+$/]|max_length[10]'
                 ),
         		array(
                         'field'   => 'nw_end_date',
-                        'label'   => '表示終了日付',
+                        'label'   => '表示終了日付(yyyy/dd/mm)',
                         'rules'   => 'trim|required|regex_match[/^\d{4}-\d{1,2}-\d{1,2}+$/]|max_length[10]'
                 ),
     	);

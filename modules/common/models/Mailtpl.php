@@ -35,20 +35,20 @@ class Mailtpl extends CI_Model
      * @param    array()
      * @return   bool
      */
-    public function update_mailtpl_id($set_data)
+    public function update_mailtpl_id($setdata)
     {
 
     	$where = array(
-    			'mt_id' => $set_data['mt_id'],
+    			'mt_id' => $setdata['mt_id'],
     	);
 
-    	$result = $this->db->update('tb_mail_tpl', $set_data, $where);
+    	$result = $this->db->update('tb_mail_tpl', $setdata, $where);
 
     	// ログ書き込み
     	$set_data['lg_user_type'] = 2;
     	$set_data['lg_type']      = 'mailtpl_update';
     	$set_data['lg_func']      = 'update_mailtpl_id';
-    	$set_data['lg_detail']    = 'mt_id = ' . $set_data['mt_id'];
+    	$set_data['lg_detail']    = 'mt_id = ' . $setdata['mt_id'];
     	$this->insert_log($set_data);
 
     	return $result;

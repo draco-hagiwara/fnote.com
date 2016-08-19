@@ -119,21 +119,21 @@
   <div class="form-group">
     <label for="co_contact_name" class="col-sm-3 control-label">お名前<font color=red>【必須】</font></label>
     <div class="col-sm-8">
-      {form_input('co_contact_name' , set_value('co_contact_name', '') , 'class="form-control" placeholder="お名前を入力してください"')}
+      {form_input('co_contact_name' , set_value('co_contact_name', '') , 'class="form-control" placeholder="お名前を入力してください。max.50文字"')}
       {if form_error('co_contact_name')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('co_contact_name')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="co_contact_mail" class="col-sm-3 control-label">メールアドレス<font color=red>【必須】</font></label>
     <div class="col-sm-8">
-      {form_input('co_contact_mail' , set_value('co_contact_mail', '') , 'class="form-control" placeholder="ご利用プランを入力してください"')}
+      {form_input('co_contact_mail' , set_value('co_contact_mail', '') , 'class="form-control" placeholder="メールアドレスを入力してください"')}
       {if form_error('co_contact_mail')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('co_contact_mail')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="co_contact_tel" class="col-sm-3 control-label">電話番号</label>
     <div class="col-sm-8">
-      {form_input('co_contact_tel' , set_value('co_contact_tel', '') , 'class="form-control" placeholder="ご利用プランを入力してください"')}
+      {form_input('co_contact_tel' , set_value('co_contact_tel', '') , 'class="form-control" placeholder="電話番号を入力してください"')}
       {if form_error('co_contact_tel')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('co_contact_tel')}</font></label>{/if}
     </div>
   </div>

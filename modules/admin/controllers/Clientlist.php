@@ -57,6 +57,13 @@ class Clientlist extends MY_Controller
 								'cl_company' => '',
 								'orderid'    => '',
 								);
+
+			// セッションをフラッシュデータとして保存
+			$data = array(
+					'a_cl_siteid'  => "",
+					'a_cl_company' => "",
+			);
+			$this->session->set_userdata($data);
         }
 
         // Type別に表示を制限する(管理者以外)
@@ -269,8 +276,16 @@ class Clientlist extends MY_Controller
 		    	unset($input_post["retype_password"]) ;
 
 		    	$this->cl->update_client($input_post);
-
 		    	$this->smarty->assign('mess',  "更新が完了しました。");
+
+		    	// 掲載日アップ
+		    	if ($input_post['cl_status'] == 8)
+		    	{
+		    		$this->load->model('Entry', 'ent', TRUE);
+		    		$set_data['en_cl_siteid']    = $input_post['cl_siteid'];
+		    		$set_data['en_posting_date'] = date("Y-m-d H:i:s");
+		    		$this->ent->inup_tenpo($set_data);
+		    	}
 
 		    	// 「受注」ステータスで審査完了メール送信＆画像用ディレクトリ作成
 		    	if ($input_post['cl_status'] == 2)
@@ -328,6 +343,21 @@ class Clientlist extends MY_Controller
 		    			$this->view('entryconf/end_ng.tpl');
 		    		}
 		    	}
+
+		    	// ステータス変更は詳細をログに出力
+    	    	$log_data['lg_user_type'] = "2";
+    	    	$log_data['lg_type']      = 'client_status_chg';
+    	    	$log_data['lg_func']      = 'clientlist_detailchk';
+    	    	$log_data['lg_detail']    = 'cl_id = ' . $input_post['cl_id']
+    	    	                            . ' / status_chg = ' . $input_post['cl_status']
+    	    	                            ;
+    	    	$this->cl->insert_log($log_data);
+
+		    	// 初期値セット
+		    	$_SESSION['a_salse_seq']  = $input_post['cl_sales_id'];
+		    	$_SESSION['a_editor_seq'] = $input_post['cl_editor_id'];
+		    	$this->_item_set();
+
     		}
     	}
 
@@ -418,6 +448,8 @@ class Clientlist extends MY_Controller
     			$_select_salse_no = $key;
     		}
     	}
+
+    	$this->smarty->assign('salse_name',     $_salse_name);
     	$this->smarty->assign('select_salesno', $_select_salse_no);
 
     }
@@ -463,6 +495,7 @@ class Clientlist extends MY_Controller
     		}
     	}
 
+    	$this->smarty->assign('editor_name',     $_editor_name);
     	$this->smarty->assign('select_editorno', $_select_editor_no);
 
     }

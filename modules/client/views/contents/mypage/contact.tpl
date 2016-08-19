@@ -13,7 +13,7 @@
   <div class="form-group">
     <label for="inputName" class="col-sm-2 control-label">名　前<font color=red>【必須】</font></label>
     <div class="col-sm-10">
-      {form_input('inputName' , set_value('inputName', '') , 'class="form-control" placeholder="名前を入力してください"')}
+      {form_input('inputName' , set_value('inputName', '') , 'class="form-control" placeholder="名前を入力してください。max.50文字"')}
       <!-- <input type="text" class="form-control" id="inputName" placeholder="名前を入力してください"> -->
       {if form_error('inputName')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('inputName')}</font></label>{/if}
     </div>

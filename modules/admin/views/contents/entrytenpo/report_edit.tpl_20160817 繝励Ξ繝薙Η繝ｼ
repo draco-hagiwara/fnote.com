@@ -4,9 +4,21 @@
 <body>
 {* ヘッダー部分　END *}
 
+
+<script type="text/javascript">
+function open_preview() {
+    window.open("about:blank","preview","width=950,height=650,scrollbars=yes");
+    var form = document.EntrytenpoForm;
+    form.target = "preview";
+    form.method = "post";
+    form.action = "../../../preview/pf/";
+    form.submit();
+}
+</script>
+
 <script type="text/javascript">
 <!--
-function fmSubmit(formName, url, method, num, type) {
+function fmSubmit(formName, url, method, num) {
   var f1 = document.forms[formName];
 
   console.log(num);
@@ -14,7 +26,7 @@ function fmSubmit(formName, url, method, num, type) {
   /* エレメント作成&データ設定&要素追加 */
   var e1 = document.createElement('input');
   e1.setAttribute('type', 'hidden');
-  e1.setAttribute('name', type);
+  e1.setAttribute('name', 'chg_uniq');
   e1.setAttribute('value', num);
   f1.appendChild(e1);
 
@@ -29,24 +41,14 @@ function fmSubmit(formName, url, method, num, type) {
 
 <H3><p class="bg-info">店舗記事（クライアント）情報設定</p></H3>
 
-<form method="post" target="_blank" action="../../../preview/pf/">
+{form_open('entrytenpo/report_conf/' , 'name="EntrytenpoForm" class="form-horizontal"')}
 
   <div class="form-group">
     <div class="col-sm-offset-10 col-sm-2">
-      一時保存 ->
-      <button type='submit' name='_submit' value='preview' class="btn btn-sm btn-primary">プレビュー</button>
+      <button type='submit' name='_submit1' value='preview' class="btn btn-sm btn-primary" onclick="open_preview();">プレビュー</button>
     </div>
   </div>
 
-  <input type="hidden" name="en_seq" value={$list.en_seq}>
-  <input type="hidden" name="type"   value="body">
-  <input type="hidden" name="ticket" value={$ticket}>
-
-</form>
-
-
-<br><br>
-{form_open('entrytenpo/report_conf/' , 'name="EntrytenpoForm" class="form-horizontal"')}
   <div class="form-group">
     <label for="en_title01" class="col-sm-2 control-label">	タイトル<font color=red>【必須】</font></label>
     <div class="col-sm-10">
@@ -84,17 +86,18 @@ function fmSubmit(formName, url, method, num, type) {
     </div>
   </div>
   *}
-  <input type="hidden" name="en_seq" value={$list.en_seq}>
+  <input type="hidden" name="en_seq"    value={$list.en_seq}>
   <input type="hidden" name="cl_status" value={$cl_status}>
+  <input type="hidden" name="ticket"    value={$ticket}>
+  <input type="hidden" name="type"      value="body">
 
 
   <!-- Button trigger modal -->
   <div class="row">
     <div class="col-sm-4 col-sm-offset-2">
       <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal01">登録する</button>
-      <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal02">一時保存</button>
       {if $cl_status == "4" OR $cl_status == "9"}
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal03">営業 確認</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal02">営業 確認</button>
       {/if}
     </div>
     <div class="col-sm-2 col-sm-offset-4">
@@ -122,24 +125,6 @@ function fmSubmit(formName, url, method, num, type) {
   </div><!-- /.modal -->
 
   <div class="modal fade" id="myModal02" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">店舗記事情報　一時保存</h4>
-        </div>
-        <div class="modal-body">
-          <p>一時保存された内容がプレビュー表示されます。&hellip;</p>
-        </div>
-        <div class="modal-footer">
-          <button type='submit' name='_submit' value='preview' class="btn btn-sm btn-primary">O  K</button>
-          <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-
-  <div class="modal fade" id="myModal03" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -173,11 +158,11 @@ function fmSubmit(formName, url, method, num, type) {
   <!-- Button trigger modal -->
   <div class="row">
   <div class="col-sm-4 col-sm-offset-2">
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal04">現在の内容をバックアップ (max.5)</button>
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal03">現在の内容をバックアップ (max.5)</button>
   </div>
   </div>
 
-  <div class="modal fade" id="myModal04" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal fade" id="myModal03" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -227,7 +212,6 @@ function fmSubmit(formName, url, method, num, type) {
           </td>
           <td>
             <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/entrytenpo/report_rev/', 'POST', '{$rv.rv_seq}', 'chg_uniq');">復　元</button>
-            <button type="button" class="btn btn-success btn-xs" onclick="fmSubmit('detailForm', '/admin/entrytenpo/report_rev/', 'POST', '{$rv.rv_seq}', 'del_uniq');">削　除</button>
           </td>
         </tr>
       </tbody>

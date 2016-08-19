@@ -30,113 +30,113 @@
 <H3><p class="bg-info">事業者プラットフォーム</p></H3>
 
 	<div class="form-group">
-	  {$list.ep_title01}
+	  {$list.en_title01}
 	</div>
 	<div class="form-group">
-	  {$list.ep_body01}
+	  {$list.en_body01}
 	</div>
 	<div class="form-group">
-	  {$list.ep_title02}
+	  {$list.en_title02}
 	</div>
 	<div class="form-group">
-	  {$list.ep_body02}
+	  {$list.en_body02}
 	</div>
 	<div class="form-group">
-	  {$list.ep_cate01}
+	  {$list.en_cate01}
 	</div>
 	<div class="form-group">
-	  {$list.ep_cate02}
+	  {$list.en_cate02}
 	</div>
 	<div class="form-group">
-	  {$list.ep_cate03}
+	  {$list.en_cate03}
 	</div>
 	<div class="form-group">
-	  {$list.ep_shopname}
+	  {$list.en_shopname}
 	</div>
 	<div class="form-group">
-	  {$list.ep_shopname_sub}
+	  {$list.en_shopname_sub}
 	</div>
 	<div class="form-group">
-	  {$list.ep_url}
+	  {$list.en_url}
 	</div>
 	<div class="form-group">
-	  {$list.ep_zip01} {$list.ep_zip02}
+	  {$list.en_zip01} {$list.en_zip02}
 	</div>
 	<div class="form-group">
-	  {$list.ep_pref} {$list.ep_addr01} {$list.ep_addr02} {$list.ep_buil}
+	  {$list.en_pref} {$list.en_addr01} {$list.en_addr02} {$list.en_buil}
 	</div>
 	<div class="form-group">
-	  {$list.ep_tel}
+	  {$list.en_tel}
 	</div>
 	<div class="form-group">
-	  {$list.ep_mail}
+	  {$list.en_mail}
 	</div>
 	<div class="form-group">
-	  {$list.ep_opentime}
+	  {$list.en_opentime}
 	</div>
 	<div class="form-group">
-	  {$list.ep_holiday}
+	  {$list.en_holiday}
 	</div>
 	<div class="form-group">
-	  {$list.ep_since}
+	  {$list.en_since}
 	</div>
 	<div class="form-group">
-	  {$list.ep_parking}
+	  {$list.en_parking}
 	</div>
 	<div class="form-group">
-	  {$list.ep_seat}
+	  {$list.en_seat}
 	</div>
 	<div class="form-group">
-	  {$list.ep_card}
+	  {$list.en_card}
 	</div>
 	<div class="form-group">
-	  {$list.ep_access}
+	  {$list.en_access}
 	</div>
 	<div class="form-group">
-	  {$list.ep_access_sub}
+	  {$list.en_access_sub}
 	</div>
 	<div class="form-group">
-	  {$list.ep_contents01}
+	  {$list.en_contents01}
 	</div>
 	<div class="form-group">
-	  {$list.ep_contents02}
+	  {$list.en_contents02}
 	</div>
 	<div class="form-group">
-	  {$list.ep_description}
+	  {$list.en_description}
 	</div>
 	<div class="form-group">
-	  {$list.ep_keywords}
+	  {$list.en_keywords}
 	</div>
 	<div class="form-group">
-	  {$list.ep_sns01}
+	  {$list.en_sns01}
 	</div>
 	<div class="form-group">
-	  {$list.ep_sns02}
+	  {$list.en_sns02}
 	</div>
 	<div class="form-group">
-	  {$list.ep_sns03}
+	  {$list.en_sns03}
 	</div>
 	<div class="form-group">
-	  {$list.ep_sns04}
+	  {$list.en_sns04}
 	</div>
 	<div class="form-group">
-	  {$list.ep_sns05}
+	  {$list.en_sns05}
 	</div>
-	{if $list.ep_google_map}<div id="gmap" style="width : 500px; height : 500px;"></div>{$list.ep_google_map}{/if}
+	<div id="gmap" style="width : 500px; height : 500px;"></div>{$list.en_google_map}
 	<div class="form-group">
-	  {$list.ep_free01}
-	</div>
-	<div class="form-group">
-	  {$list.ep_free02}
+	  {$list.en_free01}
 	</div>
 	<div class="form-group">
-	  {$list.ep_free03}
+	  {$list.en_free02}
 	</div>
 	<div class="form-group">
-	  {$list.ep_free04}
+	  {$list.en_free03}
 	</div>
 	<div class="form-group">
-	  {$list.ep_free05}
+	  {$list.en_free04}
+	</div>
+	<div class="form-group">
+	  {$list.en_free05}
 	</div>
 
 </section>

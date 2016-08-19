@@ -66,26 +66,17 @@ function open_preview() {
 
 <H3><p class="bg-info">店舗（クライアント）情報設定</p></H3>
 
-<form method="post" target="_blank" action="../../../preview/pf/">
-
-  <div class="form-group">
-    <div class="col-sm-offset-10 col-sm-2">
-      一時保存 ->
-      <button type='submit' name='_submit' value='preview' class="btn btn-sm btn-primary">プレビュー</button>
-    </div>
-  </div>
-
-  <input type="hidden" name="en_seq" value={$list.en_seq}>
-  <input type="hidden" name="ticket" value={$ticket}>
-
-</form>
-
-<br><br>
 {form_open('entrytenpo/tenpo_conf/' , 'name="EntryForm" class="form-horizontal"')}
 
   <div class="form-group">
-    <label for="en_cate0" class="col-sm-3 control-label">第一カテゴリ選択</label>
-    <div class="col-sm-3">
+    <div class="col-sm-offset-10 col-sm-2">
+      <button type='submit' name='_submit' value='preview' class="btn btn-sm btn-primary" onclick="open_preview();">プレビュー</button>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="en_cate01" class="col-sm-3 control-label">カテゴリ１選択</label>
+    <div class="col-sm-2 btn-lg">
     <select name="en_cate01" onchange="getSelectedValAndText(this);">
       {foreach name=en_cate01 from=$opt_en_cate01 key=num item=item01}
         {if $num == $list.en_cate01}
@@ -96,7 +87,10 @@ function open_preview() {
      {/foreach}
     </select>
     </div>
-    <div class="col-sm-3">
+  </div>
+  <div class="form-group">
+    <label for="en_cate02" class="col-sm-3 control-label">カテゴリ２選択</label>
+    <div class="col-sm-2 btn-lg">
     <select name="en_cate02" onchange="getSelectedValAndText(this);">
       {foreach name=en_cate02 from=$opt_en_cate02 key=num item=item01}
         {if $num == $list.en_cate02}
@@ -107,7 +101,10 @@ function open_preview() {
      {/foreach}
     </select>
     </div>
-    <div class="col-sm-3">
+  </div>
+  <div class="form-group">
+    <label for="en_cate03" class="col-sm-3 control-label">カテゴリ３選択</label>
+    <div class="col-sm-2 btn-lg">
     <select name="en_cate03">
       {foreach name=en_cate03 from=$opt_en_cate03 key=num item=item01}
         {if $num == $list.en_cate03}
@@ -120,85 +117,15 @@ function open_preview() {
     </div>
   </div>
 
-  <div class="form-group">
-    <label for="en_cate1" class="col-sm-3 control-label">第二カテゴリ選択</label>
-    <div class="col-sm-3">
-    <select name="en_cate11" onchange="getSelectedValAndText(this);">
-      {foreach name=en_cate11 from=$opt_en_cate11 key=num item=item01}
-        {if $num == $list.en_cate11}
-          <option value="{$num}" selected>{$item01}</option>
-        {else}
-          <option value="{$num}">{$item01}</option>
-        {/if}
-     {/foreach}
-    </select>
-    </div>
-    <div class="col-sm-3">
-    <select name="en_cate12" onchange="getSelectedValAndText(this);">
-      {foreach name=en_cate12 from=$opt_en_cate12 key=num item=item01}
-        {if $num == $list.en_cate12}
-          <option value="{$num}" selected>{$item01}</option>
-        {else}
-          <option value="{$num}">{$item01}</option>
-        {/if}
-     {/foreach}
-    </select>
-    </div>
-    <div class="col-sm-3">
-    <select name="en_cate13">
-      {foreach name=en_cate13 from=$opt_en_cate13 key=num item=item01}
-        {if $num == $list.en_cate13}
-          <option value="{$num}" selected>{$item01}</option>
-        {else}
-          <option value="{$num}">{$item01}</option>
-        {/if}
-     {/foreach}
-    </select>
-    </div>
-  </div>
 
-  <div class="form-group">
-    <label for="en_cate2" class="col-sm-3 control-label">第三カテゴリ選択</label>
-    <div class="col-sm-3">
-    <select name="en_cate21" onchange="getSelectedValAndText(this);">
-      {foreach name=en_cate21 from=$opt_en_cate21 key=num item=item01}
-        {if $num == $list.en_cate21}
-          <option value="{$num}" selected>{$item01}</option>
-        {else}
-          <option value="{$num}">{$item01}</option>
-        {/if}
-     {/foreach}
-    </select>
-    </div>
-    <div class="col-sm-3">
-    <select name="en_cate22" onchange="getSelectedValAndText(this);">
-      {foreach name=en_cate22 from=$opt_en_cate22 key=num item=item01}
-        {if $num == $list.en_cate22}
-          <option value="{$num}" selected>{$item01}</option>
-        {else}
-          <option value="{$num}">{$item01}</option>
-        {/if}
-     {/foreach}
-    </select>
-    </div>
-    <div class="col-sm-3">
-    <select name="en_cate23">
-      {foreach name=en_cate23 from=$opt_en_cate23 key=num item=item01}
-        {if $num == $list.en_cate23}
-          <option value="{$num}" selected>{$item01}</option>
-        {else}
-          <option value="{$num}">{$item01}</option>
-        {/if}
-     {/foreach}
-    </select>
-    </div>
-  </div>
+
+
 
 
   <div class="form-group">
     <label for="en_shopname" class="col-sm-3 control-label">店舗名称<font color=red>【必須】</font></label>
     <div class="col-sm-9">
-      {form_input('en_shopname' , set_value('en_shopname', $list.en_shopname) , 'class="form-control" placeholder="店舗名称を入力してください。 max.100文字"')}
+      {form_input('en_shopname' , set_value('en_shopname', $list.en_shopname) , 'class="form-control" placeholder="店舗名称を入力してください"')}
       {if form_error('en_shopname')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_shopname')}</font></label>{/if}
     </div>
   </div>
@@ -212,7 +139,7 @@ function open_preview() {
   <div class="form-group">
     <label for="en_url" class="col-sm-3 control-label">店舗サイトURL</label>
     <div class="col-sm-9">
-      {form_input('en_url' , set_value('en_url', $list.en_url) , 'class="form-control" placeholder="店舗サイトURLを入力してください。 http(s)://～"')}
+      {form_input('en_url' , set_value('en_url', $list.en_url) , 'class="form-control" placeholder="店舗サイトURLを入力してください"')}
       {if form_error('en_url')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_url')}</font></label>{/if}
     </div>
   </div>
@@ -237,21 +164,21 @@ function open_preview() {
   <div class="form-group">
     <label for="en_addr01" class="col-sm-3 control-label">市区町村<font color=red>【必須】</font></label>
     <div class="col-sm-9">
-      {form_input('en_addr01' , set_value('en_addr01', $list.en_addr01) , 'class="form-control" placeholder="市区町村を入力してください。 max.100文字"')}
+      {form_input('en_addr01' , set_value('en_addr01', $list.en_addr01) , 'class="form-control" placeholder="市区町村を入力してください"')}
       {if form_error('en_addr01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_addr01')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_addr02" class="col-sm-3 control-label">町名・番地<font color=red>【必須】</font></label>
     <div class="col-sm-9">
-      {form_input('en_addr02' , set_value('en_addr02', $list.en_addr02) , 'class="form-control" placeholder="町名・番地を入力してください。 max.100文字"')}
+      {form_input('en_addr02' , set_value('en_addr02', $list.en_addr02) , 'class="form-control" placeholder="町名・番地を入力してください"')}
       {if form_error('en_addr02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_addr02')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_buil" class="col-sm-3 control-label">ビル・マンション名など</label>
     <div class="col-sm-9">
-      {form_input('en_buil' , set_value('en_buil', $list.en_buil) , 'class="form-control" placeholder="ビル・マンション名などを入力してください。 max.100文字"')}
+      {form_input('en_buil' , set_value('en_buil', $list.en_buil) , 'class="form-control" placeholder="ビル・マンション名などを入力してください"')}
       {if form_error('en_buil')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_buil')}</font></label>{/if}
     </div>
   </div>
@@ -527,7 +454,7 @@ function open_preview() {
   <div class="form-group">
     <label for="en_opentime" class="col-sm-3 control-label">営業時間 補足入力</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_opentime" name="en_opentime" placeholder="営業時間を入力してください。max.1000文字">{$list.en_opentime}</textarea>
+      <textarea class="form-control input-sm" id="en_opentime" name="en_opentime" placeholder="営業時間を入力してください。max.500文字">{$list.en_opentime}</textarea>
       {if form_error('en_opentime')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_opentime')}</font></label>{/if}
     </div>
   </div>
@@ -549,77 +476,77 @@ function open_preview() {
   <div class="form-group">
     <label for="en_holiday" class="col-sm-3 control-label">定休日 補足入力</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_holiday" name="en_holiday" placeholder="定休日を入力してください。max.1000文字">{$list.en_holiday}</textarea>
+      <textarea class="form-control input-sm" id="en_holiday" name="en_holiday" placeholder="定休日を入力してください。max.500文字">{$list.en_holiday}</textarea>
       {if form_error('en_holiday')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_holiday')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_since" class="col-sm-3 control-label">創業／設立日</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_since" name="en_since" placeholder="創業／設立日を入力してください。max.200文字">{$list.en_since}</textarea>
+      <textarea class="form-control input-sm" id="en_since" name="en_since" placeholder="創業／設立日を入力してください。max.500文字">{$list.en_since}</textarea>
       {if form_error('en_since')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_since')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_parking" class="col-sm-3 control-label">駐車場情報</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_parking" name="en_parking" placeholder="駐車場情報を入力してください。max.200文字">{$list.en_parking}</textarea>
+      <textarea class="form-control input-sm" id="en_parking" name="en_parking" placeholder="駐車場情報を入力してください。max.500文字">{$list.en_parking}</textarea>
       {if form_error('en_parking')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_parking')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_seat" class="col-sm-3 control-label">座席情報</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_seat" name="en_seat" placeholder="座席情報を入力してください。max.1000文字">{$list.en_seat}</textarea>
+      <textarea class="form-control input-sm" id="en_seat" name="en_seat" placeholder="座席情報を入力してください。max.500文字">{$list.en_seat}</textarea>
       {if form_error('en_seat')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_seat')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_card" class="col-sm-3 control-label">カード情報</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_card" name="en_card" placeholder="カード情報を入力してください。max.1000文字">{$list.en_seat}</textarea>
+      <textarea class="form-control input-sm" id="en_card" name="en_card" placeholder="カード情報を入力してください。max.500文字">{$list.en_seat}</textarea>
       {if form_error('en_card')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_card')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_access" class="col-sm-3 control-label">アクセス情報</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_access" name="en_access" placeholder="アクセス情報を入力してください。max.1000文字">{$list.en_access}</textarea>
+      <textarea class="form-control input-sm" id="en_access" name="en_access" placeholder="アクセス情報を入力してください。max.500文字">{$list.en_access}</textarea>
       {if form_error('en_access')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_access')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_access_sub" class="col-sm-3 control-label">アクセス情報予備</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_access_sub" name="en_access_sub" placeholder="アクセス情報予備を入力してください。max.1000文字">{$list.en_access_sub}</textarea>
+      <textarea class="form-control input-sm" id="en_access_sub" name="en_access_sub" placeholder="アクセス情報予備を入力してください。max.500文字">{$list.en_access_sub}</textarea>
       {if form_error('en_access_sub')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_access_sub')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_contents01" class="col-sm-3 control-label">メニュー情報１</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_contents01" name="en_contents01" placeholder="メニュー情報１を入力してください。max.1000文字">{$list.en_contents01}</textarea>
+      <textarea class="form-control input-sm" id="en_contents01" name="en_contents01" placeholder="メニュー情報１を入力してください。max.500文字">{$list.en_contents01}</textarea>
       {if form_error('en_contents01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_contents01')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_contents02" class="col-sm-3 control-label">メニュー情報２</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_contents02" name="en_contents02" placeholder="メニュー情報２を入力してください。max.1000文字">{$list.en_contents02}</textarea>
+      <textarea class="form-control input-sm" id="en_contents02" name="en_contents02" placeholder="メニュー情報２を入力してください。max.500文字">{$list.en_contents02}</textarea>
       {if form_error('en_contents02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_contents02')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_description" class="col-sm-3 control-label">ディスクリプション(METAタグ)</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_description" name="en_description" placeholder="ディスクリプションを入力してください。max.1000文字">{$list.en_description}</textarea>
+      <textarea class="form-control input-sm" id="en_description" name="en_description" placeholder="ディスクリプションを入力してください。max.500文字">{$list.en_description}</textarea>
       {if form_error('en_description')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_description')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_keywords" class="col-sm-3 control-label">キーワード(METAタグ)</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_keywords" name="en_keywords" placeholder="キーワードを入力してください。max.1000文字">{$list.en_keywords}</textarea>
+      <textarea class="form-control input-sm" id="en_keywords" name="en_keywords" placeholder="キーワードを入力してください。max.500文字">{$list.en_keywords}</textarea>
       {if form_error('en_keywords')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_keywords')}</font></label>{/if}
     </div>
   </div>
@@ -668,35 +595,35 @@ function open_preview() {
   <div class="form-group">
     <label for="en_free01" class="col-sm-3 control-label">フリー１</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_free01" name="en_free01" placeholder="フリー１を入力してください。max.1000文字">{$list.en_free01}</textarea>
+      <textarea class="form-control input-sm" id="en_free01" name="en_free01" placeholder="フリー１を入力してください。max.500文字">{$list.en_free01}</textarea>
       {if form_error('en_free01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_free01')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_free02" class="col-sm-3 control-label">フリー２</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_free02" name="en_free02" placeholder="フリー２を入力してください。max.1000文字">{$list.en_free02}</textarea>
+      <textarea class="form-control input-sm" id="en_free02" name="en_free02" placeholder="フリー２を入力してください。max.500文字">{$list.en_free02}</textarea>
       {if form_error('en_free02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_free02')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_free03" class="col-sm-3 control-label">フリー３</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_free03" name="en_free03" placeholder="フリー３を入力してください。max.1000文字">{$list.en_free03}</textarea>
+      <textarea class="form-control input-sm" id="en_free03" name="en_free03" placeholder="フリー３を入力してください。max.500文字">{$list.en_free03}</textarea>
       {if form_error('en_free03')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_free03')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_free04" class="col-sm-3 control-label">フリー４</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_free04" name="en_free04" placeholder="フリー４を入力してください。max.1000文字">{$list.en_free04}</textarea>
+      <textarea class="form-control input-sm" id="en_free04" name="en_free04" placeholder="フリー４を入力してください。max.500文字">{$list.en_free04}</textarea>
       {if form_error('en_free04')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_free04')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="en_free05" class="col-sm-3 control-label">フリー５</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_free05" name="en_free05" placeholder="フリー５を入力してください。max.1000文字">{$list.en_free05}</textarea>
+      <textarea class="form-control input-sm" id="en_free05" name="en_free05" placeholder="フリー５を入力してください。max.500文字">{$list.en_free05}</textarea>
       {if form_error('en_free05')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_free05')}</font></label>{/if}
     </div>
   </div>
@@ -704,12 +631,12 @@ function open_preview() {
   <input type="hidden" name="en_seq"    value={$list.en_seq}>
   <input type="hidden" name="en_cl_seq" value={$list.en_cl_seq}>
   <input type="hidden" name="ticket"    value={$ticket}>
+  <input type="hidden" name="type"      value="info">
 
   <!-- Button trigger modal -->
   <div class="row">
-    <div class="col-sm-3 col-sm-offset-3">
-      <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal01">登録 & 更新する</button>
-      <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal02">一時保存</button>
+    <div class="col-sm-2 col-sm-offset-3">
+      <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">登録 & 更新する</button>
     </div>
     <div class="col-sm-2 col-sm-offset-4">
       <button type="button" class="btn btn-primary btn-sm" onclick="fmSubmit('EntryForm', '/admin/entrytenpo/report_edit/', 'POST', '{$list.en_cl_seq}', 'chg_uniq');">記事本文</button>
@@ -717,7 +644,7 @@ function open_preview() {
     </div>
   </div>
 
-  <div class="modal fade" id="myModal01" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -728,25 +655,7 @@ function open_preview() {
           <p>登録 & 更新しますか。&hellip;</p>
         </div>
         <div class="modal-footer">
-          <button type='submit' name='_submit' value='save' class="btn btn-sm btn-primary">O  K</button>
-          <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-
-  <div class="modal fade" id="myModal02" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">店舗情報　一時保存</h4>
-        </div>
-        <div class="modal-body">
-          <p>一時保存された内容がプレビュー表示されます。&hellip;</p>
-        </div>
-        <div class="modal-footer">
-          <button type='submit' name='_submit' value='preview' class="btn btn-sm btn-primary">O  K</button>
+          <button type='submit' name='add' value='submit' class="btn btn-sm btn-primary">O  K</button>
           <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
         </div>
       </div><!-- /.modal-content -->

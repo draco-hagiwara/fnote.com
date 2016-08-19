@@ -31,6 +31,7 @@ function fmSubmit(formName, url, method, num) {
 
 <h4>【アカウント検索】</h4>
 {form_open('/accountlist/search/' , 'name="searchForm" class="form-horizontal"')}
+
   <table class="table table-hover table-bordered">
     <tbody>
 
@@ -66,63 +67,70 @@ function fmSubmit(formName, url, method, num) {
 </ul>
 
 {form_open('/accountlist/detail/' , 'name="detailForm" class="form-horizontal"')}
+
+  <div class="form-horizontal col-sm-10 col-sm-offset-1">
     <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>状態</th>
-                <th>Type</th>
-                <th>名前</th>
-                <th>メールアドレス</th>
-                <th></th>
-            </tr>
-        </thead>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>状態</th>
+          <th>Type</th>
+          <th>名前</th>
+          <th>メールアドレス</th>
+          <th></th>
+        </tr>
+      </thead>
 
-
-        {foreach from=$list item=ac}
-        <tbody>
-            <tr>
-                <td>
-                    {$ac.ac_seq}
-                </td>
-                <td>
-                    {if $ac.ac_status == "0"}<font color="#ffffff" style="background-color:#008000">登録中</font>
-                    {elseif $ac.ac_status == "1"}<font color="#ffffff" style="background-color:#0000ff">有　効</font>
-                    {elseif $ac.ac_status == "9"}<font color="#ffffff" style="background-color:#ff6347">無　効</font>
-                    {else}}エラー
-                    {/if}
-                </td>
-                <td>
-                    {if $ac.ac_type == "0"}<font color="#ffffff" style="background-color:#00ff00">Editor</font>
-                    {elseif $ac.ac_type == "1"}<font color="#ffffff" style="background-color:#00bfff">Sales</font>
-                    {elseif $ac.ac_type == "2"}<font color="#ffffff" style="background-color:#ff1493">Admin</font>
-                    {else}}エラー
-                    {/if}
-                </td>
-                <td>
-                    {$ac.ac_name01|escape}　{$ac.ac_name02|escape}
-                </td>
-                <td>
-                    {$ac.ac_mail}
-                </td>
-                <td>
-                    {if $ac.ac_type != 2 || $ac.ac_seq == $smarty.session.a_memSeq || $smarty.session.a_memSeq == 1}
-                    <button type="submit" class="btn btn-success btn-xs" name="ac_uniq" value="{$ac.ac_seq}">編集</button>
-                    {/if}
-                </td>
-            </tr>
-        </tbody>
-        {foreachelse}
-            検索結果はありませんでした。
-        {/foreach}
+      {foreach from=$list item=ac}
+      <tbody>
+        <tr>
+          <td>
+            {$ac.ac_seq}
+          </td>
+          <td>
+            {if $ac.ac_status == "0"}<font color="#ffffff" style="background-color:#008000">登録中</font>
+            {elseif $ac.ac_status == "1"}<font color="#ffffff" style="background-color:#0000ff">有　効</font>
+            {elseif $ac.ac_status == "9"}<font color="#ffffff" style="background-color:#ff6347">無　効</font>
+            {else}}エラー
+            {/if}
+          </td>
+          <td>
+            {if $ac.ac_type == "0"}<font color="#ffffff" style="background-color:#00ff00">Editor</font>
+            {elseif $ac.ac_type == "1"}<font color="#ffffff" style="background-color:#00bfff">Sales</font>
+            {elseif $ac.ac_type == "2"}<font color="#ffffff" style="background-color:#ff1493">Admin</font>
+            {else}}エラー
+            {/if}
+          </td>
+          <td>
+            {$ac.ac_name01|escape}　{$ac.ac_name02|escape}
+          </td>
+          <td>
+            {$ac.ac_mail}
+          </td>
+          <td>
+            {if $ac.ac_type != 2 || $ac.ac_seq == $smarty.session.a_memSeq || $smarty.session.a_memSeq == 1}
+              <button type="submit" class="btn btn-success btn-xs" name="ac_uniq" value="{$ac.ac_seq}">編集</button>
+            {/if}
+          </td>
+        </tr>
+      </tbody>
+      {foreachelse}
+        検索結果はありませんでした。
+      {/foreach}
 
     </table>
+  </div>
 
 {form_close()}
 
-<ul class="pagination pagination-sm">
-  {$set_pagination}
-</ul>
+
+<div class="row">
+  <div class="col-sm-2">
+    <ul class="pagination pagination-sm">
+      {$set_pagination}
+    </ul>
+  </div>
+</div>
 
 
 </div>

@@ -19,18 +19,25 @@ array(
 		"2" => "Admin (管理者)",
 );
 
+// カテゴリ：初期表示（selectリスト内で一番上に表示されるカテゴリを指定）
+$config['CATEGORY_INI_BIG'] = "22";										// 大カテゴリ：初期値「その他」
+$config['CATEGORY_INI_MED'] = "23";										// 中カテゴリ：初期値「その他」
+$config['CATEGORY_INI_SML'] = "24";										// 小カテゴリ：初期値「その他」
+// $config['CATEGORY_INI_BIG'] = "1";										// 大カテゴリ：初期値「グルメ」
+// $config['CATEGORY_INI_MED'] = "4";										// 中カテゴリ：初期値「飲み屋」
+// $config['CATEGORY_INI_SML'] = "10";										// 小カテゴリ：初期値「居酒屋」
 
 
 
 
 
 // 管理者：仮登録制限時間デフォルト値
-$config['ADMIN_ADD_LIMITTIME'] = '60';									// 「分」指定 (60)
-// $config['ADMIN_ADD_LIMITTIME'] = '6024';								// 「分」指定 (24h)
+// $config['ADMIN_ADD_LIMITTIME'] = '60';									// 「分」指定 (60)
+$config['ADMIN_ADD_LIMITTIME'] = '6024';								// 「分」指定 (24h)
 
 // クライアント：仮登録制限時間デフォルト値
-$config['CLIENT_ADD_LIMITTIME'] = '60';									// 「分」指定 (60)
-// $config['CLIENT_ADD_LIMITTIME'] = '6024';								// 「分」指定 (24h)
+// $config['CLIENT_ADD_LIMITTIME'] = '60';									// 「分」指定 (60)
+$config['CLIENT_ADD_LIMITTIME'] = '6024';								// 「分」指定 (24h)
 
 
 
@@ -62,7 +69,7 @@ array(
 
 // Pagination 設定:1ページ当たりの表示件数
 // ※ ～/system/libraries/Pagination.php に不具合あり
-$config['PAGINATION_PER_PAGE'] = '10';
+$config['PAGINATION_PER_PAGE'] = '5';
 
 
 /* End of file config_comm.php */

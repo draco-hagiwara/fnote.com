@@ -203,6 +203,7 @@ class Entryconf extends MY_Controller
     	}
 
     	// DB書き込み
+    	$_SESSION['a_memSeq']  = $this->input->post('ac_seq');					// ログ書き込み用
     	$set_data["ac_seq"]    = $this->input->post('ac_seq');
     	$set_data["ac_status"] = 1;
     	$set_data["ac_pw"]     = $this->input->post('ac_pw');
@@ -472,6 +473,7 @@ class Entryconf extends MY_Controller
     	}
 
     	// DB書き込み
+    	$_SESSION['a_memSeq']  = '';											// ログ書き込み用
     	$input_post["cl_status"] = 1;											// 「審査(仮登録)」ステータス
     	$input_post["cl_plan"]   = "basic";
     	$input_post["cl_auth"]   = NULL;
@@ -689,12 +691,12 @@ class Entryconf extends MY_Controller
     			array(
     					'field'   => 'cl_person01',
     					'label'   => '担当者姓',
-    					'rules'   => 'trim|required|max_length[20]'
+    					'rules'   => 'trim|required|max_length[50]'
     			),
     			array(
     					'field'   => 'cl_person02',
     					'label'   => '担当者名',
-    					'rules'   => 'trim|required|max_length[20]'
+    					'rules'   => 'trim|required|max_length[50]'
     			),
     			array(
     					'field'   => 'cl_tel',

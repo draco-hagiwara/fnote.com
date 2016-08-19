@@ -34,6 +34,34 @@ class Account extends CI_Model
     }
 
     /**
+     * 編集者アカウント情報を1件取得する
+     *
+     * @param    int
+     * @return   bool
+     */
+    public function get_ac_editor_limit()
+    {
+
+    	$sql = 'SELECT
+    			  ac_seq,
+    			  ac_status,
+    			  ac_type,
+    			  ac_name01,
+    			  ac_name02,
+    			  ac_mail
+    			FROM mb_account ';
+
+    	$sql .= 'where ac_type = 0 AND ac_status = 1 ORDER BY ac_seq DESC LIMIT 1';
+
+    	$query = $this->db->query($sql);
+
+    	$get_data = $query->result('array');
+
+    	return $get_data;
+
+    }
+
+    /**
      * アカウントメンバーの取得
      *
      * @param    array() : 検索項目値

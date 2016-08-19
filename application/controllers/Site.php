@@ -154,7 +154,7 @@ class Site extends MY_Controller
     			array(
     					'field'   => 'co_contact_name',
     					'label'   => 'お名前',
-    					'rules'   => 'trim|required|max_length[100]'
+    					'rules'   => 'trim|required|max_length[50]'
     			),
     			array(
     					'field'   => 'co_contact_mail',

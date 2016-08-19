@@ -43,18 +43,8 @@ class Gallery extends MY_Controller
     		$_SESSION['a_img_clseq'] = $input_post['chg_uniq'];
     	}
 
-
-//     	print_r($input_post);
-//     	print_r($_GET);
-
-
     	// URIセグメントの取得
     	$segments = $this->uri->segment_array();
-
-//     	print_r($segments);
-//     	print("<br>");
-//     	print(count($segments));
-//     	print("<br>");
 
     	$this->load->model('Image', 'img', TRUE);
 
@@ -411,6 +401,10 @@ EOS;
 
     		// 画像の保存先を指定
     		$img_updir = $this->input->server("DOCUMENT_ROOT") . "/images/" . $cl_data[0]['cl_siteid'] . "/s";
+    	    if (!file_exists($img_updir))
+    		{
+    			exit("<center>【画像の保存先ディレクトリが存在しません。システム管理者に連絡してください。】<br /><br /><a href='gd_list'>戻る&gt;&gt;</a></center>");
+    		}
     		$extensionTypeList = array('jpg','gif','png');
 
 			// 登録制限チェック
@@ -699,6 +693,21 @@ EOS;
 
         redirect('/gallery/gd_list/');
 //     	$this->view('gallery/gd_add.tpl');
+
+    }
+
+    // 画像リスト表示（別ウィンドウ）
+    public function images_list()
+    {
+
+    	// 画像リスト読み込み
+    	$this->load->model('Image', 'img', TRUE);
+    	$img_data = $this->img->get_image_clseq($_SESSION['a_img_clseq'], TRUE);
+
+    	$this->smarty->assign('list_image', $img_data);
+
+
+		$this->view('gallery/images_list.tpl');
 
     }
 

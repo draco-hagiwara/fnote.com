@@ -72,6 +72,16 @@ body#admin .submit_btn {
 
 </head>
 
+<script type="text/javascript">
+function open_preview() {
+    window.open("about:blank","preview","width=1170,height=650,scrollbars=yes");
+    var form = document.imagesForm;
+    form.target = "preview";
+    form.method = "post";
+    form.action = "/admin/gallery/images_list/";
+    form.submit();
+}
+</script>
 
 <script type="text/javascript">
 <!--
@@ -99,6 +109,14 @@ function fmSubmit(formName, url, method, num) {
 
 <body id="admin">
 <div id="wrapper">
+
+<form method="post" action="/admin/gallery/images_list/" enctype="multipart/form-data" name="imagesForm">
+    <div class="row">
+    <div class="col-sm-2">
+      <button type='submit' name='_submit' value='gdlist' class="btn btn-sm btn-primary" onclick="open_preview();">画像リスト表示</button>
+    </div>
+    </div>
+</form>
 
 <H3><p class="bg-info">画像登録・編集フォーム</p></H3>
 

@@ -4,6 +4,18 @@
 <body>
 {* ヘッダー部分　END *}
 
+
+<script type="text/javascript">
+function open_preview() {
+    window.open("about:blank","preview","width=950,height=650,scrollbars=yes");
+    var form = document.EntrytenpoForm;
+    form.target = "preview";
+    form.method = "post";
+    form.action = "../../../preview/pf/";
+    form.submit();
+}
+</script>
+
 <script type="text/javascript">
 <!--
 function fmSubmit(formName, url, method, num, type) {
@@ -29,24 +41,15 @@ function fmSubmit(formName, url, method, num, type) {
 
 <H3><p class="bg-info">店舗記事（クライアント）情報設定</p></H3>
 
-<form method="post" target="_blank" action="../../../preview/pf/">
+{form_open('entrytenpo/report_conf/' , 'name="EntrytenpoForm" class="form-horizontal"')}
 
   <div class="form-group">
-    <div class="col-sm-offset-10 col-sm-2">
-      一時保存 ->
-      <button type='submit' name='_submit' value='preview' class="btn btn-sm btn-primary">プレビュー</button>
+    <div class="col-sm-offset-9 col-sm-3">
+      <button type='submit' name='_submit1' value='preview' class="btn btn-sm btn-primary" onclick="open_preview();">プレビュー</button>
+      <br>※プレビュー後、F5キーを押してください。
     </div>
   </div>
 
-  <input type="hidden" name="en_seq" value={$list.en_seq}>
-  <input type="hidden" name="type"   value="body">
-  <input type="hidden" name="ticket" value={$ticket}>
-
-</form>
-
-
-<br><br>
-{form_open('entrytenpo/report_conf/' , 'name="EntrytenpoForm" class="form-horizontal"')}
   <div class="form-group">
     <label for="en_title01" class="col-sm-2 control-label">	タイトル<font color=red>【必須】</font></label>
     <div class="col-sm-10">
@@ -84,17 +87,18 @@ function fmSubmit(formName, url, method, num, type) {
     </div>
   </div>
   *}
-  <input type="hidden" name="en_seq" value={$list.en_seq}>
+  <input type="hidden" name="en_seq"    value={$list.en_seq}>
   <input type="hidden" name="cl_status" value={$cl_status}>
+  <input type="hidden" name="ticket"    value={$ticket}>
+  <input type="hidden" name="type"      value="body">
 
 
   <!-- Button trigger modal -->
   <div class="row">
     <div class="col-sm-4 col-sm-offset-2">
       <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal01">登録する</button>
-      <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal02">一時保存</button>
       {if $cl_status == "4" OR $cl_status == "9"}
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal03">営業 確認</button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal02">営業 確認</button>
       {/if}
     </div>
     <div class="col-sm-2 col-sm-offset-4">
@@ -122,24 +126,6 @@ function fmSubmit(formName, url, method, num, type) {
   </div><!-- /.modal -->
 
   <div class="modal fade" id="myModal02" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">店舗記事情報　一時保存</h4>
-        </div>
-        <div class="modal-body">
-          <p>一時保存された内容がプレビュー表示されます。&hellip;</p>
-        </div>
-        <div class="modal-footer">
-          <button type='submit' name='_submit' value='preview' class="btn btn-sm btn-primary">O  K</button>
-          <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-
-  <div class="modal fade" id="myModal03" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -173,11 +159,11 @@ function fmSubmit(formName, url, method, num, type) {
   <!-- Button trigger modal -->
   <div class="row">
   <div class="col-sm-4 col-sm-offset-2">
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal04">現在の内容をバックアップ (max.5)</button>
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal03">現在の内容をバックアップ (max.5)</button>
   </div>
   </div>
 
-  <div class="modal fade" id="myModal04" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal fade" id="myModal03" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -236,19 +222,19 @@ function fmSubmit(formName, url, method, num, type) {
         {/foreach}
 
     </table>
+    ※「復元」または「削除」を行う前に、記事の保存を必ず行ってください。
   </div>
 
 
 {form_close()}
 
 
-<br><br>
 {* フッター部分　START *}
     <!-- Bootstrapのグリッドシステムclass="row"で終了 -->
-    </div>
   </section>
 </div>
 
+<br><br>
 {include file="../footer.tpl"}
 {* フッター部分　END *}
 

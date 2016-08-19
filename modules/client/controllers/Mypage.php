@@ -212,7 +212,7 @@ class Mypage extends MY_Controller
 				array(
 						'field'   => 'inputComment',
 						'label'   => 'お問合せ内容',
-						'rules'   => 'trim|max_length[100]'
+						'rules'   => 'trim|max_length[1000]'
 				)
         );
 

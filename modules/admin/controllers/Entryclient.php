@@ -276,12 +276,12 @@ class Entryclient extends MY_Controller
     			),
     			array(
     					'field'   => 'cl_contract_str',
-    					'label'   => '契約開始日',
+    					'label'   => '開始日(yyyy/dd/mm)',
     					'rules'   => 'trim|regex_match[/^\d{4}\/\d{1,2}\/\d{1,2}+$/]|max_length[10]'
     			),
     			array(
     					'field'   => 'cl_contract_end',
-    					'label'   => '契約終了日',
+    					'label'   => '終了日(yyyy/dd/mm)',
     					'rules'   => 'trim|regex_match[/^\d{4}\/\d{1,2}\/\d{1,2}+$/]|max_length[10]'
     			),
     			array(
@@ -322,12 +322,12 @@ class Entryclient extends MY_Controller
     			array(
     					'field'   => 'cl_person01',
     					'label'   => '担当者姓',
-    					'rules'   => 'trim|required|max_length[20]'
+    					'rules'   => 'trim|required|max_length[50]'
     			),
     			array(
     					'field'   => 'cl_person02',
     					'label'   => '担当者名',
-    					'rules'   => 'trim|required|max_length[20]'
+    					'rules'   => 'trim|required|max_length[50]'
     			),
     			array(
     					'field'   => 'cl_tel',

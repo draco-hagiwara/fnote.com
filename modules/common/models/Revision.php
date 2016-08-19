@@ -167,6 +167,31 @@ class Revision extends CI_Model
     }
 
     /**
+     * 1レコード削除
+     *
+     * @param    int
+     * @return   bool
+     */
+    public function delete_revision($rv_seq)
+    {
+
+    	$where = array(
+    			'rv_seq' => $rv_seq
+    	);
+
+    	$result = $this->db->delete('tb_revision', $where);
+
+    	// ログ書き込み
+    	$set_data['lg_user_type'] = 2;
+    	$set_data['lg_type']      = 'revision_delete';
+    	$set_data['lg_func']      = 'delete_revision';
+    	$set_data['lg_detail']    = 'bar_seq = ' . $rv_seq;
+    	$this->insert_log($set_data);
+
+    	return $result;
+    }
+
+    /**
      * ログ書き込み
      *
      * @param    array()

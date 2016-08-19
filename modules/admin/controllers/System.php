@@ -555,6 +555,239 @@ class System extends MY_Controller
 
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+    // カテゴリ 順位設定＆登録
+    public function categroup_new()
+    {
+
+    	$input_post = $this->input->post();
+
+
+
+    	print_r($input_post);
+
+
+
+
+    	$err_mess01 = NULL;
+    	$err_mess02 = NULL;
+    	$err_mess03 = NULL;
+
+    	// バリデーション・チェック
+    	$this->_set_validation02();
+
+    	$arroptions_ca_cate01 = array();
+    	$arroptions_ca_cate02 = array();
+    	$arroptions_ca_cate03 = array();
+
+    	$this->load->model('Categroup', 'cate', TRUE);
+
+    	// カテゴリ登録
+    	if (isset($input_post['new']))
+    	{
+
+    		// 第一カテゴリ追加
+    		if ($input_post['new'] == "cate01")
+    		{
+    			if ($input_post['ca_name01'] != "")
+    			{
+    				// 最終データを読み込む
+    				$_cate_data = $this->cate->get_cate_parent1_last();
+    				$_ca_id = hexdec($_cate_data[0]['ca_id']) + 1;				// 16進数の文字列を10進数に変換
+    				$set_data['ca_id']     = dechex($_ca_id);					// 10進数の数値の16進数に変換
+
+
+    				$set_data['ca_name']   = $input_post['ca_name01'];
+    				$set_data['ca_level']  = 1;									// １カテ
+    				$set_data['ca_dispno'] = 0;
+
+    				$_row_id = $this->cate->insert_category($set_data);
+    				if (!is_numeric($_row_id))
+    				{
+    					$err_mess01 = 'カテゴリの登録に失敗しました。';
+    				}
+    			} else {
+    				$err_mess01 = 'カテゴリ欄に文字を入力してください。';
+    			}
+    		}
+
+    		// 第二カテゴリ追加
+    		if ($input_post['new'] == "cate02")
+    		{
+    			if ($input_post['ca_name02'] != "")
+    			{
+    				// 最終データを読み込む
+    				$_cate_data = $this->cate->get_cate_parent2_last($input_post['ca_cate01']);
+    				$_ca_id = hexdec($_cate_data[0]['ca_id']) + 1;				// 16進数の文字列を10進数に変換
+    				$set_data['ca_id']     = dechex($_ca_id);					// 10進数の数値の16進数に変換
+
+    				$set_data['ca_name']   = $input_post['ca_name02'];
+    				$set_data['ca_parent'] = $input_post['ca_cate01'];
+    				$set_data['ca_level']  = 2;									// ２カテ
+    				$set_data['ca_dispno'] = 0;
+
+    				$_row_id = $this->cate->insert_category($set_data);
+    				if (!is_numeric($_row_id))
+    				{
+    					$err_mess02 = 'カテゴリの登録に失敗しました。';
+    				}
+    			} else {
+    				$err_mess02 = 'カテゴリ欄に文字を入力してください。';
+    			}
+    		}
+
+    		// 第三カテゴリ追加
+    		if ($input_post['new'] == "cate03")
+    		{
+    			if ($input_post['ca_name03'] != "")
+    			{
+    				// 最終データを読み込む
+    				$_cate_data = $this->cate->get_cate_parent3_last($input_post['ca_cate02']);
+    				$_ca_id = hexdec($_cate_data[0]['ca_id']) + 1;				// 16進数の文字列を10進数に変換
+    				$set_data['ca_id']     = dechex($_ca_id);					// 10進数の数値の16進数に変換
+
+    				$set_data['ca_name']   = $input_post['ca_name03'];
+    				$set_data['ca_parent'] = $input_post['ca_cate02'];
+    				$set_data['ca_level']  = 3;									// ３カテ
+    				$set_data['ca_dispno'] = 0;
+
+    				$_row_id = $this->cate->insert_category($set_data);
+    				if (!is_numeric($_row_id))
+    				{
+    					$err_mess03 = 'カテゴリの登録に失敗しました。';
+    				}
+    			} else {
+    				$err_mess03 = 'カテゴリ欄に文字を入力してください。';
+    			}
+    		}
+
+    	// カテゴリ並び替え
+    	} else {
+
+    		// 第一カテゴリ並び替え
+    		if ((isset($input_post['result01'])) && ($input_post['result01'] != ""))
+    		{
+    			$result01 = $input_post['result01'];
+    			$result_array = explode(',', $result01);
+
+    			$this->_update_category($result_array);
+    		}
+
+    		// 第二カテゴリ並び替え
+    		if ((isset($input_post['result02'])) && ($input_post['result02'] != ""))
+    		{
+    			$result02 = $input_post['result02'];
+    			$result_array = explode(',', $result02);
+
+    			$this->_update_category($result_array);
+    		}
+
+    		// 第三カテゴリ並び替え
+    		if ((isset($input_post['result03'])) && ($input_post['result03'] != ""))
+    		{
+    			$result03 = $input_post['result03'];
+    			$result_array = explode(',', $result03);
+
+    			$this->_update_category($result_array);
+    		}
+    	}
+
+    	// カテゴリ情報取得
+    	if (count($input_post) == 0)
+    	{
+
+    		// 第一階層カテゴリデータ取得
+    		$cate01_data = $this->cate->get_category_parent1();
+    		foreach ($cate01_data as $key => $value)
+    		{
+    			$arroptions_ca_cate01[$value['ca_seq']] = $value['ca_name'];
+    		}
+
+    	} else {
+
+    		// 第一階層カテゴリデータ取得
+    		$cate01_data = $this->cate->get_category_parent1();
+    		foreach ($cate01_data as $key => $value)
+    		{
+    			$arroptions_ca_cate01[$value['ca_seq']] = $value['ca_name'];
+    		}
+
+    		// 第二階層カテゴリデータ取得
+    		$cate02_data = $this->cate->get_category_parent2($input_post['ca_cate01']);
+    		foreach ($cate02_data as $key => $value)
+    		{
+    			$arroptions_ca_cate02[$value['ca_seq']] = $value['ca_name'];
+    		}
+
+    		// 第三階層カテゴリデータ取得
+    		if ($_SESSION['a_cate01'] == $input_post["ca_cate01"])
+    		{
+    			if (isset($input_post['ca_cate02']))
+    			{
+    				$cate03_data = $this->cate->get_category_parent3($input_post['ca_cate02']);
+    				foreach ($cate03_data as $key => $value)
+    				{
+    					$arroptions_ca_cate03[$value['ca_seq']] = $value['ca_name'];
+    				}
+    			}
+    		}
+
+    		$_SESSION['a_cate01'] = $input_post["ca_cate01"];
+
+    	}
+
+    	$this->smarty->assign('opt_ca_cate01',  $arroptions_ca_cate01);
+    	$this->smarty->assign('opt_ca_cate02',  $arroptions_ca_cate02);
+    	$this->smarty->assign('opt_ca_cate03',  $arroptions_ca_cate03);
+    	$this->smarty->assign('err_mess01',     $err_mess01);
+    	$this->smarty->assign('err_mess02',     $err_mess02);
+    	$this->smarty->assign('err_mess03',     $err_mess03);
+
+    	$this->smarty->assign('list',  $input_post);
+
+    	$this->view('system/categroup_new.tpl');
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // 全メールテンプレの取得
     private function _get_mailtpl_title()
     {

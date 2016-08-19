@@ -83,7 +83,7 @@
   <div class="form-group">
     <label for="nw_title" class="col-sm-1 control-label">タイトル</label>
     <div class="col-sm-5">
-      {form_input('nw_title' , set_value('nw_title', $low.nw_title) , 'class="form-control" placeholder="タイトルを入力してください"')}
+      {form_input('nw_title' , set_value('nw_title', $low.nw_title) , 'class="form-control" placeholder="タイトルを入力してください。max.50文字"')}
       {if form_error('nw_title')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('nw_title')}</font></label>{/if}
     </div>
     <label for="nw_start_date" class="col-sm-1 control-label">開始日付</label>

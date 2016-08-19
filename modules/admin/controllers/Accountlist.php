@@ -51,6 +51,14 @@ class Accountlist extends MY_Controller
 								'ac_mail' => '',
 								'orderid' => '',
 								);
+
+			// セッションをフラッシュデータとして保存
+			$data = array(
+					'a_ac_name' => '',
+					'a_ac_mail' => '',
+			);
+			$this->session->set_userdata($data);
+
         }
 
         // Type別に表示を制限する(管理者以外)

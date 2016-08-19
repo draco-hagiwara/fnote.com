@@ -9,21 +9,6 @@
 </div>
 
 <p class="bg-info">　■　現在のステータス状況</p>
-{if $list.cl_status == 0}
-  <button type="button" class="btn btn-info">登録処理中</button>
-{else}
-  <button type="button" class="btn btn-default">登録処理中</button>
-{/if} -->
-{if $list.cl_status == 1}
-  <button type="button" class="btn btn-info">審査中</button>
-{else}
-  <button type="button" class="btn btn-default">審査中</button>
-{/if} -->
-{if $list.cl_status == 2}
-  <button type="button" class="btn btn-info">契約完了</button>
-{else}
-  <button type="button" class="btn btn-default">契約完了</button>
-{/if} -->
 {if $list.cl_status == 3}
   <button type="button" class="btn btn-info">取材中</button>
 {else}
@@ -103,7 +88,16 @@
 <br><br><br><br>
   <p class="bg-info">　■　掲載サイト確認</p>
 
-    <a href="https://{$smarty.server.HTTP_HOST}/site/pf/{$list.cl_siteid}" target="_blank">{$list.cl_siteid}</a>
+    <a href="https://{$smarty.server.HTTP_HOST}/site/pf/{$list.cl_siteid}" target="_blank">{$list.cl_siteid}　サイト</a>
+
+{/if}
+
+
+{if $list.cl_blog_status == 0}
+<br><br><br><br>
+  <p class="bg-info">　■　ブログサイト確認</p>
+
+    <a href="https://{$smarty.server.HTTP_HOST}/blog/pf/{$list.cl_siteid}" target="_blank">{$list.cl_siteid}　ブログ</a>
 
 {/if}
 

@@ -44,7 +44,7 @@
   <div class="form-group">
     <label for="cl_siteid" class="col-sm-4 control-label">サイトID(URL名)<font color=red>【必須】</font></label>
     <div class="col-sm-8">
-      {form_input('cl_siteid' , set_value('cl_siteid', '') , 'class="form-control" placeholder="サイトID(URL名)を英数字で入力してください"')}
+      {form_input('cl_siteid' , set_value('cl_siteid', '') , 'class="form-control" placeholder="サイトID(URL名)を英数字で入力してください。max.20文字"')}
       <p class="redText"><small>※基本後からの変更はできません。お客様と一緒に考えてください。max.20文字。</small></p>
       {if form_error('cl_siteid')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_siteid')}</font></label>{/if}
       {if $err_siteid==TRUE}<span class="label label-danger">Error : </span><label><font color=red>「サイトID(URL名)」欄で入力したIDは既に他で使用されています。再度他のIDを入力してください。</font></label>{/if}
@@ -53,7 +53,7 @@
   <div class="form-group">
     <label for="cl_id" class="col-sm-4 control-label">仮ログインID<font color=red>【必須】</font></label>
     <div class="col-sm-8">
-      {form_input('cl_id' , set_value('cl_id', '') , 'class="form-control" placeholder="ログインID(英数字、アンダースコア(_)、ダッシュ(-))を入力してください"')}
+      {form_input('cl_id' , set_value('cl_id', '') , 'class="form-control" placeholder="ログインID(英数字、アンダースコア(_)、ダッシュ(-))を入力してください。max.20文字"')}
       {if form_error('cl_id')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_id')}</font></label>{/if}
       {if $err_clid==TRUE}<span class="label label-danger">Error : </span><label><font color=red>「ログインID」欄で入力したIDは既に他で使用されています。再度他のIDを入力してください。</font></label>{/if}
     </div>
@@ -69,36 +69,36 @@
   <div class="form-group">
     <label for="cl_company" class="col-sm-4 control-label">会社名<font color=red>【必須】</font></label>
     <div class="col-sm-8">
-      {form_input('cl_company' , set_value('cl_company', '') , 'class="form-control" placeholder="会社名を入力してください"')}
+      {form_input('cl_company' , set_value('cl_company', '') , 'class="form-control" placeholder="会社名を入力してください。max.50文字"')}
       {if form_error('cl_company')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_company')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="cl_president" class="col-sm-4 control-label">代表者(承認メール宛先)<font color=red>【必須】</font></label>
     <div class="col-sm-4">
-      {form_input('cl_president01' , set_value('cl_president01', '') , 'class="form-control" placeholder="代表者姓を入力してください"')}
+      {form_input('cl_president01' , set_value('cl_president01', '') , 'class="form-control" placeholder="代表者姓を入力してください。max.50文字"')}
       {if form_error('cl_president01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_president01')}</font></label>{/if}
     </div>
     <div class="col-sm-4">
-      {form_input('cl_president02' , set_value('cl_president02', '') , 'class="form-control" placeholder="代表者名を入力してください"')}
+      {form_input('cl_president02' , set_value('cl_president02', '') , 'class="form-control" placeholder="代表者名を入力してください。max.50文字"')}
       {if form_error('cl_president02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_president02')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="cl_department" class="col-sm-4 control-label">所属部署</label>
     <div class="col-sm-8">
-      {form_input('cl_department' , set_value('cl_department', '') , 'class="form-control" placeholder="所属部署を入力してください"')}
+      {form_input('cl_department' , set_value('cl_department', '') , 'class="form-control" placeholder="所属部署を入力してください。max.50文字"')}
       {if form_error('cl_department')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_department')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="cl_person" class="col-sm-4 control-label">担当者<font color=red>【必須】</font></label>
     <div class="col-sm-4">
-      {form_input('cl_person01' , set_value('cl_person01', '') , 'class="form-control" placeholder="担当者姓を入力してください"')}
+      {form_input('cl_person01' , set_value('cl_person01', '') , 'class="form-control" placeholder="担当者姓を入力してください。max.50文字"')}
       {if form_error('cl_person01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_person01')}</font></label>{/if}
     </div>
     <div class="col-sm-4">
-      {form_input('cl_person02' , set_value('cl_person02', '') , 'class="form-control" placeholder="担当者名を入力してください"')}
+      {form_input('cl_person02' , set_value('cl_person02', '') , 'class="form-control" placeholder="担当者名を入力してください。max.50文字"')}
       {if form_error('cl_person02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_person02')}</font></label>{/if}
     </div>
   </div>
@@ -126,14 +126,14 @@
   <div class="form-group">
     <label for="cl_mail" class="col-sm-4 control-label">メールアドレス(承認メール送信先)<font color=red>【必須】</font></label>
     <div class="col-sm-8">
-      {form_input('cl_mail' , set_value('cl_mail', '') , 'class="col-sm-4 form-control" placeholder="メールアドレスを入力してください"')}
+      {form_input('cl_mail' , set_value('cl_mail', '') , 'class="col-sm-4 form-control" placeholder="メールアドレスを入力してください。max.100文字"')}
       {if form_error('cl_mail')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_mail')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="cl_mailsub" class="col-sm-4 control-label">メールアドレス(サブ)</label>
     <div class="col-sm-8">
-      {form_input('cl_mailsub' , set_value('cl_mailsub', '') , 'class="col-sm-4 form-control" placeholder="メールアドレスを入力してください"')}
+      {form_input('cl_mailsub' , set_value('cl_mailsub', '') , 'class="col-sm-4 form-control" placeholder="メールアドレスを入力してください。max.100文字"')}
       {if form_error('cl_mailsub')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_mailsub')}</font></label>{/if}
     </div>
   </div>

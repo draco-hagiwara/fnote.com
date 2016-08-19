@@ -26,7 +26,7 @@
     </div>
     <div class="col-sm-4">
       {if form_error('cl_sales_id')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_sales_id')}</font></label>{/if}
-      {if $select_salesno===""}<span class="label label-danger">Error : </span><label><font color=red>該当する担当営業が存在しません。</font></label>{/if}
+      {if $select_salesno===""}<span class="label label-danger">Error : </span><label><font color=red>該当する担当営業({$salse_name})が存在しません。</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
@@ -36,21 +36,24 @@
     </div>
     <div class="col-sm-4">
       {if form_error('cl_editor_id')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_editor_id')}</font></label>{/if}
-      {if $select_editorno===""}<span class="label label-danger">Error : </span><label><font color=red>該当する担当編集者が存在しません。</font></label>{/if}
+      {if $select_editorno===""}<span class="label label-danger">Error : </span><label><font color=red>該当する担当編集者({$editor_name})が存在しません。</font></label>{/if}
     </div>
   </div>
+  {else}
+    {form_hidden('cl_status', $info.cl_status)}
+    {form_hidden('cl_sales_id', $select_salesno)}
+    {form_hidden('cl_editor_id', $select_editorno)}
   {/if}
 
   {if $smarty.session.a_memType!=0}
-
   <div class="form-group">
     <label for="cl_contract" class="col-sm-4 control-label">契約期間</label>
     <div class="col-sm-4">
-      {form_input('cl_contract_str' , set_value('cl_contract_str', $info.cl_contract_str) , 'class="form-control" placeholder="契約開始日(yyyy/dd/mm)を入力してください"')}
+      {form_input('cl_contract_str' , set_value('cl_contract_str', $info.cl_contract_str) , 'class="form-control" placeholder="契約開始日(yyyy-dd-mm)を入力してください"')}
       {if form_error('cl_contract_str')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_contract_str')}</font></label>{/if}
     </div>
     <div class="col-sm-4">
-      {form_input('cl_contract_end' , set_value('cl_contract_end', $info.cl_contract_end) , 'class="form-control" placeholder="契約終了日(yyyy/dd/mm)を入力してください"')}
+      {form_input('cl_contract_end' , set_value('cl_contract_end', $info.cl_contract_end) , 'class="form-control" placeholder="契約終了日(yyyy-dd-mm)を入力してください"')}
       {if form_error('cl_contract_end')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_contract_end')}</font></label>{/if}
     </div>
   </div>
@@ -160,6 +163,7 @@
   <div class="row">
   <div class="col-sm-2 col-sm-offset-4">
     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">更新する</button>
+    {if $info.cl_status==0}<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal01">メール再発行</button>{/if}
   </div>
   </div>
 
@@ -175,6 +179,23 @@
         </div>
         <div class="modal-footer">
           <button type='submit' name='submit' value='submit' class="btn btn-sm btn-primary">O  K</button>
+          <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <div class="modal fade" id="myModal01" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">クライアント情報　メール再発行</h4>
+        </div>
+        <div class="modal-body">
+          <p>メールを再発行しますか。&hellip;</p>
+        </div>
+        <div class="modal-footer">
+          <button type='submit' name='submit' value='re_mail' class="btn btn-sm btn-primary">O  K</button>
           <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
         </div>
       </div><!-- /.modal-content -->

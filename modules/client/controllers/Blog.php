@@ -42,6 +42,11 @@ class Blog extends MY_Controller
     		$tmp_offset = 0;
     	}
 
+    	// クライアントデータを取得
+    	$this->load->model('Client', 'cl', TRUE);
+    	$cl_data = $this->cl->get_cl_seq($_SESSION['c_memSeq'], TRUE);
+    	$this->smarty->assign('cl', $cl_data[0]);
+
     	// ブログデータを取得
 		$this->load->model('Blog_article', 'blar', TRUE);
 		list($blog_list, $blog_countall) = $this->blar->get_bloglist($_SESSION['c_memSeq'], $tmp_per_page, $tmp_offset);
@@ -85,7 +90,7 @@ class Blog extends MY_Controller
 	    	$this->smarty->assign('bar_seq', $input_post['chg_uniq']);
     		$this->smarty->assign('low',     $news_data[0]);
 
-    	} else {
+    	} elseif (isset($input_post['_submit'])) {
 
 	    	if ($this->form_validation->run() == TRUE)
 	    	{
@@ -137,6 +142,18 @@ class Blog extends MY_Controller
 
 			redirect('/blog/');
 
+    	} else {
+
+    		$this->smarty->assign('bar_seq',        NULL);
+    		$this->smarty->assign('low',            NULL);
+
+//     		$_dummy['bar_subject'] = NULL;
+//     		$_dummy['bar_tag']     = NULL;
+//     		$_dummy['bar_comment'] = 0;
+//     		$_dummy['bar_status']  = 0;
+//     		$_dummy['bar_text']    = "";
+//     		$this->smarty->assign('low',            $_dummy);
+
     	}
 
     	// 1ページ当たりの表示件数
@@ -151,6 +168,11 @@ class Blog extends MY_Controller
     	} else {
     		$tmp_offset = 0;
     	}
+
+    	// クライアントデータを取得
+    	$this->load->model('Client', 'cl', TRUE);
+    	$cl_data = $this->cl->get_cl_seq($_SESSION['c_memSeq'], TRUE);
+    	$this->smarty->assign('cl', $cl_data[0]);
 
     	// ブログデータを取得
     	list($blog_list, $blog_countall) = $this->blar->get_bloglist($_SESSION['c_memSeq'], $tmp_per_page, $tmp_offset);

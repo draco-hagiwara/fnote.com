@@ -56,6 +56,8 @@
                   <li><a href="/admin/system/cate_search/"><i class="glyphicon glyphicon-cloud"></i>カテゴリ編集</a></li>
                   <li><a href="/admin/system/backup/"><i class="glyphicon glyphicon-cloud"></i>手動バックアップ</a></li>
                   <li><a href="/admin/system/sess_destroy/"><i class="glyphicon glyphicon-cloud"></i>セッション削除</a></li>
+                  <li><a href="/admin/system/categroup_new/"><i class="glyphicon glyphicon-cloud"></i>カテゴリ並替</a></li>
+                  <li><a href="/admin/system/categroup_search/"><i class="glyphicon glyphicon-cloud"></i>カテゴリ編集</a></li>
                 {/if}
               </ul>
             </li>
@@ -116,4 +118,4 @@
     </div>
     {/if}
 
-</div>
+    </div>

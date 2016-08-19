@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Entry extends CI_Model
+class Entry_pre extends CI_Model
 {
 
     public function __construct()
@@ -14,12 +14,12 @@ class Entry extends CI_Model
      * @param    char
      * @return   array
      */
-    public function get_entry_seq($en_seq)
+    public function get_entry_siteid($siteid)
     {
 
-		$set_where["en_seq"] = $en_seq;
+		$set_where["ep_cl_siteid"] = $siteid;
 
-    	$query = $this->db->get_where('tb_entry', $set_where);
+    	$query = $this->db->get_where('tb_entry_pre', $set_where);
 
     	// データ有無判定
     	if ($query->num_rows() > 0) {
@@ -36,16 +36,12 @@ class Entry extends CI_Model
      * @param    char
      * @return   array
      */
-    public function get_entry_siteid($en_cl_siteid, $empty = FALSE)
+    public function get_entry_seq($ep_seq)
     {
 
-    	if ($empty == TRUE){
-    		$set_where["en_cl_seq"] = 0;
-    	} else {
-    		$set_where["en_cl_siteid"] = $en_cl_siteid;
-    	}
+    	$set_where["ep_seq"] = $ep_seq;
 
-    	$query = $this->db->get_where('tb_entry', $set_where);
+    	$query = $this->db->get_where('tb_entry_pre', $set_where);
 
     	// データ有無判定
     	if ($query->num_rows() > 0) {
@@ -55,6 +51,67 @@ class Entry extends CI_Model
     		return FALSE;
     	}
     }
+
+    /**
+     * 店舗情報の登録＆更新
+     *
+     * @param    array()
+     * @return   int
+     */
+    public function inup_entry_pre($setData)
+    {
+
+    	// INSERT or UPDATE
+    	$sql = 'SELECT * FROM `tb_entry_pre` '
+    			. 'WHERE `ep_cl_siteid` = ? ';
+
+    	$values = array(
+    			$setData['ep_cl_siteid'],
+    	);
+
+    	$query = $this->db->query($sql, $values);
+    	if ($query->num_rows() > 0) {
+
+    		// データ更新
+    		$where = array(
+    				'ep_cl_siteid' => $setData['ep_cl_siteid']
+    		);
+
+    		$result = $this->db->update('tb_entry_pre', $setData, $where);
+
+    	} else {
+
+    		// データ追加
+    		$result = $this->db->insert('tb_entry_pre', $setData);
+
+    	}
+
+    	return $result;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * データ有無判定＆データ取得
@@ -82,46 +139,6 @@ class Entry extends CI_Model
     	}
     }
 
-    /**
-     * データ有無判定＆データ取得
-     *
-     * @param    char
-     * @return   array
-     */
-    public function get_entry_clseq($cl_seq)
-    {
-
-    	$set_where["en_cl_seq"] = $cl_seq;
-
-    	$query = $this->db->get_where('tb_entry', $set_where);
-
-    	// データ有無判定
-    	if ($query->num_rows() > 0) {
-    		$get_data = $query->result('array');
-    		return $get_data;
-    	} else {
-    		return FALSE;
-    	}
-    }
-
-    /**
-     * カラムのみ取得
-     *
-     * @param
-     * @return   array
-     */
-    public function get_entry_columns()
-    {
-
-    	$sql = 'SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA= \'fnote\' AND TABLE_NAME= \'tb_entry\'';
-
-    	$query = $this->db->query($sql);
-
-    	$get_col = $query->result('array');
-
-    	return $get_col;
-
-    }
 
     /**
      * 店舗情報の登録＆更新

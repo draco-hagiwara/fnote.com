@@ -90,12 +90,12 @@ function fmSubmit(formName, url, method, num) {
                     {if $cl.cl_status == "0"}<font color="#ffffff" style="background-color:royalblue">[ 登録中 ]</font>
                     {elseif $cl.cl_status == "1"}<font color="#ffffff" style="background-color:deeppink">[ 審　査 ]</font>
                     {elseif $cl.cl_status == "2"}<font color="#ffffff" style="background-color:royalblue">[ 受　注 ]</font>
-                    {elseif $cl.cl_status == "3"}<font color="#ffffff" style="background-color:royalblue">[ 取　材 ]</font>
-                    {elseif $cl.cl_status == "4"}<font color="#ffffff" style="background-color:royalblue">[ 編　集 ]</font>
+                    {elseif $cl.cl_status == "3"}<font color="#ffffff" style="background-color:royalblue">[ 取材中 ]</font>
+                    {elseif $cl.cl_status == "4"}<font color="#ffffff" style="background-color:royalblue">[ 編集中 ]</font>
                     {elseif $cl.cl_status == "5"}<font color="#ffffff" style="background-color:deeppink">[ 営業確認 ]</font>
                     {elseif $cl.cl_status == "6"}<font color="#ffffff" style="background-color:royalblue">[ クライアント確認 ]</font>
                     {elseif $cl.cl_status == "7"}<font color="#ffffff" style="background-color:deeppink">[ 編集最終確認 ]</font>
-                    {elseif $cl.cl_status == "8"}<font color="#ffffff" style="background-color:green">[ 掲　載 ]</font>
+                    {elseif $cl.cl_status == "8"}<font color="#ffffff" style="background-color:green">[ 掲載中 ]</font>
                     {elseif $cl.cl_status == "9"}<font color="#ffffff" style="background-color:deeppink">[ 再編集 ]</font>
                     {elseif $cl.cl_status == "19"}<font color="#ffffff" style="background-color:gray">[ 一時停止 ]</font>
                     {elseif $cl.cl_status == "20"}<font color="#ffffff" style="background-color:gray">[ 解　約 ]</font>
@@ -133,7 +133,6 @@ function fmSubmit(formName, url, method, num) {
                     {/if}{/if}
                     {if $cl.cl_status >= "3" && $cl.cl_status <= "9"}
                     <button type="button" class="btn btn-warning btn-xs" onclick="fmSubmit('detailForm', '/admin/gallery/gd_list/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">画像管理</button>
-                    {*<button type="button" class="btn btn-warning btn-xs" onclick="fmSubmit('detailForm', '/admin/gallery/gd_add/', 'POST', '{$cl.cl_seq}', 'chg_uniq');">画像登録</button>*}
                     {else}
                     <button type="button" class="btn btn-default btn-xs");">画像管理</button>
                     {/if}

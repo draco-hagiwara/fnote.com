@@ -43,7 +43,7 @@ class Blog extends MY_Controller
     	$tmp_per_page = 20;
 
     	// Pagination 現在ページ数の取得：：URIセグメントの取得
-    	$segments = $this->uri->segment_array();
+//     	$segments = $this->uri->segment_array();
     	if (isset($segments[4]))
     	{
     		$tmp_offset = $segments[4];
@@ -379,7 +379,7 @@ class Blog extends MY_Controller
     			array(
     					'field'   => 'co_contact_name',
     					'label'   => 'お名前',
-    					'rules'   => 'trim|required|max_length[100]'
+    					'rules'   => 'trim|required|max_length[50]'
     			),
     			array(
     					'field'   => 'co_contact_mail',

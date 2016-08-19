@@ -36,7 +36,7 @@ class Image extends CI_Model
      * @param    char
      * @return   array
      */
-    public function get_image_clseq($cl_seq)
+    public function get_image_clseq($cl_seq, $status=FALSE)
     {
 
     	$sql = 'SELECT
@@ -56,6 +56,12 @@ class Image extends CI_Model
 
     	// WHERE文 作成
     	$sql .= ' WHERE im_cl_seq = ' . $cl_seq;
+
+    	if ($status == TRUE)
+    	{
+    		$sql .= ' AND im_status = 1';
+    	}
+
 
     	$sql .= ' ORDER BY im_disp_no ASC';
 

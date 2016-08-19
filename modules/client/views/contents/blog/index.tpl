@@ -11,8 +11,12 @@
 <body>
 {* ヘッダー部分　END *}
 
-<p class="bg-info">　■　投稿一覧</p>
+{if $cl.cl_blog_status == 0}
+  <a href="https://{$smarty.server.HTTP_HOST}/blog/pf/{$cl.cl_siteid}" target="_blank">{$cl.cl_siteid}ブログ はこちら</a>
+<br><br>
+{/if}
 
+<p class="bg-info">　■　投稿一覧</p>
 
 {form_open('blog/detail/' , 'name="blogForm" class="form-horizontal"')}
 
@@ -77,14 +81,14 @@
   <div class="form-group">
     <label for="bar_subject" class="col-sm-2 control-label">題　　名</label>
     <div class="col-sm-6">
-      {form_input('bar_subject' , set_value('bar_subject', $low.bar_subject) , 'class="form-control" placeholder="題名を入力してください"')}
+      {form_input('bar_subject' , set_value('bar_subject', $low.bar_subject) , 'class="form-control" placeholder="題名を入力してください。max.50文字"')}
       {if form_error('bar_subject')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('bar_subject')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="bar_tag" class="col-sm-2 control-label">タ　　グ</label>
     <div class="col-sm-6">
-      {form_input('bar_tag' , set_value('bar_tag', $low.bar_tag) , 'class="form-control" placeholder="タグ（カンマ「，」区切り）を入力してください"')}
+      {form_input('bar_tag' , set_value('bar_tag', $low.bar_tag) , 'class="form-control" placeholder="タグ（カンマ「，」区切り）を入力してください。max.50文字"')}
       {if form_error('bar_tag')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('bar_tag')}</font></label>{/if}
     </div>
   </div>
@@ -119,7 +123,7 @@
   {form_hidden('bar_seq', $bar_seq)}
 
 
-  <br><br>
+  <br>
   <!-- Button trigger modal -->
   <div class="row">
   <div class="col-sm-2 col-sm-offset-4">

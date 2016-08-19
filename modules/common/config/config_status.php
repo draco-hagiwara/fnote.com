@@ -35,14 +35,14 @@ array(
 );
 
 // 画像：ステータス
-$config['CLIENT_BLOG_STATUS'] =
+$config['ADMIN_IMG_STATUS'] =
 array(
 		"0" => "非表示",
 		"1" => "表示",
 );
 
-// 問合せ：ステータス
-$config['CLIENT_BLOG_STATUS'] =
+// お客様問合せ返信：ステータス
+$config['CLIENT_REPLY_STATUS'] =
 array(
 		"0" => "未開封",
 		"1" => "開封",
@@ -64,10 +64,17 @@ array(
 );
 
 // 新着お知らせ：ステータス
-$config['CLIENT_BLOG_STATUS'] =
+$config['CLIENT_NEWS_STATUS'] =
 array(
 		"0" => "表示",
 		"1" => "非表示",
+);
+
+// 新着お知らせ：タイプ
+$config['CLIENT_NEWS_TYPE'] =
+array(
+		"0" => "新着情報",
+		"1" => "お知らせ",
 );
 
 // ログインロック
