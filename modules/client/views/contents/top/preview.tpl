@@ -43,13 +43,7 @@
 	  {$list.en_body02}
 	</div>
 	<div class="form-group">
-	  {$list.en_cate01}
-	</div>
-	<div class="form-group">
-	  {$list.en_cate02}
-	</div>
-	<div class="form-group">
-	  {$list.en_cate03}
+	  {$list.en_cate}
 	</div>
 	<div class="form-group">
 	  {$list.en_shopname}
@@ -124,6 +118,7 @@
 	  {$list.en_sns05}
 	</div>
 	{if $list.en_google_map}<div id="gmap" style="width : 500px; height : 500px;"></div>{$list.en_google_map}{/if}
+	{if $list.en_qrcode_site}<img src='/client/top/qr_site/{$list.en_seq}' />{/if}
 	<div class="form-group">
 	  {$list.en_free01}
 	</div>

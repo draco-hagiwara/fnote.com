@@ -42,13 +42,7 @@
 	  {$list.ep_body02}
 	</div>
 	<div class="form-group">
-	  {$list.ep_cate01}
-	</div>
-	<div class="form-group">
-	  {$list.ep_cate02}
-	</div>
-	<div class="form-group">
-	  {$list.ep_cate03}
+	  {$list.ep_cate}
 	</div>
 	<div class="form-group">
 	  {$list.ep_shopname}
@@ -123,6 +117,9 @@
 	  {$list.ep_sns05}
 	</div>
 	{if $list.ep_google_map}<div id="gmap" style="width : 500px; height : 500px;"></div>{$list.ep_google_map}{/if}
+	<div class="form-group">
+	  <img src='/qr/qr_pre/{$list.ep_seq}' />
+	</div>
 	<div class="form-group">
 	  {$list.ep_free01}
 	</div>

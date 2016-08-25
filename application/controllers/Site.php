@@ -48,6 +48,8 @@ class Site extends MY_Controller
     {
 
     	$post_data = $this->input->post();
+    	$post_data1 = $this->input->post('en_google_map', FALSE);
+    	$post_data2 = $this->input->post(NULL, FALSE);
 
     	// バリデーション・チェック
     	$this->_set_validation();
@@ -57,10 +59,17 @@ class Site extends MY_Controller
 	    	$this->load->model('Entry', 'ent', TRUE);
 	    	$entry_data = $this->ent->get_entry_siteid($post_data['en_cl_siteid']);
 
+
+// 	    	// XSS対策：戻す
+// 	    	$_xss_gmap = str_replace("[removed]", "", $this->security->xss_clean($entry_data[0]['en_google_map']));
+// 	    	$_xss_gmap1 = '<script type="text/javascript">' . $_xss_gmap . '</script>';
+// 	    	$entry_data[0]['en_google_map'] = $_xss_gmap;
+
+// 	    	$this->smarty->assign('list', $this->security->xss_clean($entry_data[0]));
 	    	$this->smarty->assign('list', $entry_data[0]);
 
     		$this->view('site/pf.tpl');
-    		return;
+//     		return;
 
     	} else {
 
@@ -68,6 +77,11 @@ class Site extends MY_Controller
 
     		$this->view('site/inquiry_conf.tpl');
     	}
+
+
+
+
+
 
     }
 

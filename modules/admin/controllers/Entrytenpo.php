@@ -85,88 +85,23 @@ class Entrytenpo extends MY_Controller
     	$entry_data = $this->ent->get_entry_siteid($cl_data[0]['cl_siteid']);
     	if ($entry_data == FALSE)
 		{
-			// tb_entry のカラムを取得
-			$entry_col = $this->ent->get_entry_columns();
-			foreach ($entry_col as $key => $value)
-			{
-				$set_data[$value['COLUMN_NAME']] = NULL;
-			}
 
-			// カテゴリセット : 初期値で「その他」固定表示
-			$this->config->load('config_comm');
-			$_cat_big = $this->config->item('CATEGORY_INI_BIG');
-			$_cat_med = $this->config->item('CATEGORY_INI_MED');
-			$_cat_sml = $this->config->item('CATEGORY_INI_SML');
-
-			$_SESSION['a_cate01'] = $_cat_big;
-			$_SESSION['a_cate02'] = $_cat_med;
-			$_SESSION['a_cate03'] = $_cat_sml;
-			$_SESSION['a_cate11'] = $_cat_big;
-			$_SESSION['a_cate12'] = $_cat_med;
-			$_SESSION['a_cate13'] = $_cat_sml;
-			$_SESSION['a_cate21'] = $_cat_big;
-			$_SESSION['a_cate22'] = $_cat_med;
-			$_SESSION['a_cate23'] = $_cat_sml;
-
-			list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($_cat_big, $_cat_med, $_cat_sml);		// 初期値で「その他」固定表示
-			$this->smarty->assign('opt_en_cate01', $opt_en_cate01);
-			$this->smarty->assign('opt_en_cate02', $opt_en_cate02);
-			$this->smarty->assign('opt_en_cate03', $opt_en_cate03);
-
-			$this->smarty->assign('opt_en_cate11', $opt_en_cate01);
-			$this->smarty->assign('opt_en_cate12', $opt_en_cate02);
-			$this->smarty->assign('opt_en_cate13', $opt_en_cate03);
-
-			$this->smarty->assign('opt_en_cate21', $opt_en_cate01);
-			$this->smarty->assign('opt_en_cate22', $opt_en_cate02);
-			$this->smarty->assign('opt_en_cate23', $opt_en_cate03);
-
-			$set_data['en_cate01'] = $_cat_big;
-			$set_data['en_cate02'] = $_cat_med;
-			$set_data['en_cate03'] = $_cat_sml;
-			$set_data['en_cate11'] = $_cat_big;
-			$set_data['en_cate12'] = $_cat_med;
-			$set_data['en_cate13'] = $_cat_sml;
-			$set_data['en_cate21'] = $_cat_big;
-			$set_data['en_cate22'] = $_cat_med;
-			$set_data['en_cate23'] = $_cat_sml;
-
+			$this->smarty->assign('cate_list',  NULL);						// カテゴリ表示
 			$this->smarty->assign('eigyo_chk',  $eigyo_chk);				// 営業時間
 			$this->smarty->assign('closed_chk', $closed_chk);				// 定休日
 
-			$this->smarty->assign('list', $set_data);
+			$this->smarty->assign('list', NULL);
 
 		} else {
 			$this->smarty->assign('list', $entry_data[0]);
 
-			// カテゴリセット
-			$_SESSION['a_cate01'] = $entry_data[0]['en_cate01'];
-			$_SESSION['a_cate02'] = $entry_data[0]['en_cate02'];
-			$_SESSION['a_cate03'] = $entry_data[0]['en_cate03'];
-			$_SESSION['a_cate11'] = $entry_data[0]['en_cate11'];
-			$_SESSION['a_cate12'] = $entry_data[0]['en_cate12'];
-			$_SESSION['a_cate13'] = $entry_data[0]['en_cate13'];
-			$_SESSION['a_cate21'] = $entry_data[0]['en_cate21'];
-			$_SESSION['a_cate22'] = $entry_data[0]['en_cate22'];
-			$_SESSION['a_cate23'] = $entry_data[0]['en_cate23'];
+			// 登録カテゴリ名称の表示
+			$this->load->model('Categroup', 'cate', TRUE);
+			$_cate_namelist = $this->cate->get_category_name($entry_data[0]['en_cate']);
+			$this->smarty->assign('cate_list', $_cate_namelist);
 
 			// 営業時間セット
 			$this->_item_eigyo_set();
-
-			list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($entry_data[0]['en_cate01'], $entry_data[0]['en_cate02'], $entry_data[0]['en_cate03']);
-			$this->smarty->assign('opt_en_cate01', $opt_en_cate01);
-			$this->smarty->assign('opt_en_cate02', $opt_en_cate02);
-			$this->smarty->assign('opt_en_cate03', $opt_en_cate03);
-
-			list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($entry_data[0]['en_cate11'], $entry_data[0]['en_cate12'], $entry_data[0]['en_cate13']);
-			$this->smarty->assign('opt_en_cate11', $opt_en_cate01);
-			$this->smarty->assign('opt_en_cate12', $opt_en_cate02);
-			$this->smarty->assign('opt_en_cate13', $opt_en_cate03);
-
-			list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($entry_data[0]['en_cate21'], $entry_data[0]['en_cate22'], $entry_data[0]['en_cate23']);
-			$this->smarty->assign('opt_en_cate21', $opt_en_cate01);
-			$this->smarty->assign('opt_en_cate22', $opt_en_cate02);
-			$this->smarty->assign('opt_en_cate23', $opt_en_cate03);
 
 		}
 
@@ -187,22 +122,6 @@ class Entrytenpo extends MY_Controller
 
     	// 初期値セット
     	$this->_item_set();
-
-    	// カテゴリセット
-    	list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($input_post['en_cate01'], $input_post['en_cate02'], $input_post['en_cate03']);
-    	$this->smarty->assign('opt_en_cate01', $opt_en_cate01);
-    	$this->smarty->assign('opt_en_cate02', $opt_en_cate02);
-    	$this->smarty->assign('opt_en_cate03', $opt_en_cate03);
-
-    	list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($input_post['en_cate11'], $input_post['en_cate12'], $input_post['en_cate13']);
-    	$this->smarty->assign('opt_en_cate11', $opt_en_cate01);
-    	$this->smarty->assign('opt_en_cate12', $opt_en_cate02);
-    	$this->smarty->assign('opt_en_cate13', $opt_en_cate03);
-
-    	list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($input_post['en_cate21'], $input_post['en_cate22'], $input_post['en_cate23']);
-    	$this->smarty->assign('opt_en_cate21', $opt_en_cate01);
-    	$this->smarty->assign('opt_en_cate22', $opt_en_cate02);
-    	$this->smarty->assign('opt_en_cate23', $opt_en_cate03);
 
         // 都道府県チェック
         $this->smarty->assign('pref_name', $this->_pref_name);
@@ -279,6 +198,11 @@ class Entrytenpo extends MY_Controller
     	// 日付け初期化
     	$this->_item_eigyo_set();
 
+    	// 登録カテゴリ名称の表示
+    	$this->load->model('Categroup', 'cate', TRUE);
+    	$_cate_namelist = $this->cate->get_category_name($input_post['en_cate']);
+    	$this->smarty->assign('cate_list', $_cate_namelist);
+
 		$this->smarty->assign('list', $input_post);
     	$this->view('entrytenpo/tenpo_edit.tpl');
 
@@ -314,130 +238,16 @@ class Entrytenpo extends MY_Controller
 
     }
 
-    // カテゴリ選択
-    public function tenpo_cate()
+    // カテゴリリスト表示
+    public function cate_list()
     {
 
-    	// バリデーション・チェック
-    	$this->_set_validation();												// バリデーション設定
+    	// カテゴリリスト取得
+    	$_cate_list = $this->_item_cate_list();
 
-    	$input_post = $this->input->post();
+    	$this->smarty->assign('catelist', $_cate_list);
 
-		// 第一カテゴリ
-    	if ($_SESSION['a_cate01'] != $input_post['en_cate01'])
-    	{
-    		$_SESSION['a_cate01'] = $input_post["en_cate01"];
-    		$_SESSION['a_cate02'] = $input_post["en_cate02"];
-    		$_SESSION['a_cate03'] = $input_post["en_cate03"];
-
-    		list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($input_post['en_cate01'], TRUE);
-    		$this->smarty->assign('opt_en_cate01', $opt_en_cate01);
-    		$this->smarty->assign('opt_en_cate02', $opt_en_cate02);
-    		$this->smarty->assign('opt_en_cate03', $opt_en_cate03);
-
-    		$input_post["en_cate02"] = 0;
-    		$input_post["en_cate03"] = 0;
-
-    	} elseif ($_SESSION['a_cate02'] != $input_post['en_cate02']) {
-    		$_SESSION['a_cate01'] = $input_post["en_cate01"];
-    		$_SESSION['a_cate02'] = $input_post["en_cate02"];
-    		$_SESSION['a_cate03'] = $input_post["en_cate03"];
-
-    		list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($input_post['en_cate01'], FALSE, TRUE);
-    		$this->smarty->assign('opt_en_cate01', $opt_en_cate01);
-    		$this->smarty->assign('opt_en_cate02', $opt_en_cate02);
-    		$this->smarty->assign('opt_en_cate03', $opt_en_cate03);
-
-    		$input_post["en_cate03"] = 0;
-    	} else {
-    		list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($input_post['en_cate01'], $input_post['en_cate02'], $input_post['en_cate03']);
-    		$this->smarty->assign('opt_en_cate01', $opt_en_cate01);
-    		$this->smarty->assign('opt_en_cate02', $opt_en_cate02);
-    		$this->smarty->assign('opt_en_cate03', $opt_en_cate03);
-    	}
-
-		// 第二カテゴリ
-    	if ($_SESSION['a_cate11'] != $input_post['en_cate11'])
-    	{
-    		$_SESSION['a_cate11'] = $input_post["en_cate11"];
-    		$_SESSION['a_cate12'] = $input_post["en_cate12"];
-    		$_SESSION['a_cate13'] = $input_post["en_cate13"];
-
-    		list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($input_post['en_cate11'], TRUE);
-    		$this->smarty->assign('opt_en_cate11', $opt_en_cate01);
-    		$this->smarty->assign('opt_en_cate12', $opt_en_cate02);
-    		$this->smarty->assign('opt_en_cate13', $opt_en_cate03);
-
-    		$input_post["en_cate12"] = 0;
-    		$input_post["en_cate13"] = 0;
-
-    	} elseif ($_SESSION['a_cate12'] != $input_post['en_cate12']) {
-    		$_SESSION['a_cate02'] = $input_post["en_cate12"];							// 応急処置
-
-    		list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($input_post['en_cate11'], FALSE, TRUE);
-    		$this->smarty->assign('opt_en_cate11', $opt_en_cate01);
-    		$this->smarty->assign('opt_en_cate12', $opt_en_cate02);
-    		$this->smarty->assign('opt_en_cate13', $opt_en_cate03);
-
-    		$_SESSION['a_cate02'] = $input_post["en_cate02"];
-    		$_SESSION['a_cate11'] = $input_post["en_cate11"];
-    		$_SESSION['a_cate12'] = $input_post["en_cate12"];
-    		$_SESSION['a_cate13'] = $input_post["en_cate13"];
-
-    		$input_post["en_cate13"] = 0;
-    	} else {
-    		list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($input_post['en_cate11'], $input_post['en_cate12'], $input_post['en_cate13']);
-    		$this->smarty->assign('opt_en_cate11', $opt_en_cate01);
-    		$this->smarty->assign('opt_en_cate12', $opt_en_cate02);
-    		$this->smarty->assign('opt_en_cate13', $opt_en_cate03);
-    	}
-
-		// 第三カテゴリ
-    	if ($_SESSION['a_cate21'] != $input_post['en_cate21'])
-    	{
-    		$_SESSION['a_cate21'] = $input_post["en_cate21"];
-    		$_SESSION['a_cate22'] = $input_post["en_cate22"];
-    		$_SESSION['a_cate23'] = $input_post["en_cate23"];
-
-    		list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($input_post['en_cate21'], TRUE);
-    		$this->smarty->assign('opt_en_cate21', $opt_en_cate01);
-    		$this->smarty->assign('opt_en_cate22', $opt_en_cate02);
-    		$this->smarty->assign('opt_en_cate23', $opt_en_cate03);
-
-    		$input_post["en_cate22"] = 0;
-    		$input_post["en_cate23"] = 0;
-
-    	} elseif ($_SESSION['a_cate22'] != $input_post['en_cate22']) {
-    		$_SESSION['a_cate02'] = $input_post["en_cate22"];
-
-    		list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($input_post['en_cate21'], FALSE, TRUE);
-    		$this->smarty->assign('opt_en_cate21', $opt_en_cate01);
-    		$this->smarty->assign('opt_en_cate22', $opt_en_cate02);
-    		$this->smarty->assign('opt_en_cate23', $opt_en_cate03);
-
-    		$_SESSION['a_cate02'] = $input_post["en_cate02"];
-    		$_SESSION['a_cate21'] = $input_post["en_cate21"];
-    		$_SESSION['a_cate22'] = $input_post["en_cate22"];
-    		$_SESSION['a_cate23'] = $input_post["en_cate23"];
-
-    		$input_post["en_cate23"] = 0;
-    	} else {
-    		list($opt_en_cate01, $opt_en_cate02, $opt_en_cate03) = $this->_item_cate_set($input_post['en_cate21'], $input_post['en_cate22'], $input_post['en_cate23']);
-    		$this->smarty->assign('opt_en_cate21', $opt_en_cate01);
-    		$this->smarty->assign('opt_en_cate22', $opt_en_cate02);
-    		$this->smarty->assign('opt_en_cate23', $opt_en_cate03);
-    	}
-
-    	// 初期値セット
-    	$this->_item_set();
-
-    	// 営業時間セット
-    	$this->load->model('Entry', 'ent', TRUE);
-    	$this->_item_eigyo_set();
-
-		$this->smarty->assign('list', $input_post);
-
-    	$this->view('entrytenpo/tenpo_edit.tpl');
+    	$this->view('entrytenpo/cate_list.tpl');
 
     }
 
@@ -1023,6 +833,47 @@ class Entrytenpo extends MY_Controller
 
     }
 
+    public function qr_site()
+    {
+
+    	$input_post = $this->input->post();
+
+    	// URIセグメントの取得
+    	$segments = $this->uri->segment_array();
+    	if (isset($segments[3]))
+    	{
+    		$tmp_en_seq = $segments[3];
+    	} else {
+    		$tmp_en_seq = 0;
+    	}
+
+    	// 店舗データの取得
+    	$this->load->model('Entry', 'ent', TRUE);
+    	$entry_data = $this->ent->get_entry_seq($tmp_en_seq);
+    	if ($entry_data == FALSE)
+    	{
+    		show_404();
+    	}
+
+    	// QRコード作成
+    	$this->smarty->assign('qr_code', NULL);
+    	if ($entry_data[0]['en_qrcode_site'] != "")
+    	{
+    		require_once("/usr/share/pear/Image/QRCode.php");
+
+    		$qr = new Image_QRCode();
+    		$option = array(
+    				"module_size"=>3,				//サイズ=>1〜19で指定
+    				"image_type"=>"jpeg",			//画像形式=>jpegかpngを指定
+    				"output_type"=>"display",		//出力方法=>displayかreturnで指定 returnの場合makeCodeで画像リソースが返される
+    				"error_correct"=>"H"			//クオリティ(L<M<Q<H)を指定
+    		);
+    		$qr_code = $qr->makeCode(htmlspecialchars($entry_data[0]['en_qrcode_site']), $option);
+    		imagepng($image, "qr.png");
+    		imagedestroy($image);
+    	}
+    }
+
     // 初期値セット
     private function _item_set()
     {
@@ -1044,66 +895,39 @@ class Entrytenpo extends MY_Controller
 
     }
 
-    // カテゴリセット
-    private function _item_cate_set($cate01, $cate02=FALSE, $cate03=FALSE)
+    // カテゴリリスト
+    public function _item_cate_list()
     {
 
-    	$this->load->model('Category', 'cate', TRUE);
+    	$this->load->model('Categroup', 'cate', TRUE);
 
-    	$arroptions_en_cate01 = array();
-    	$arroptions_en_cate02 = array();
-    	$arroptions_en_cate03 = array();
+    	// 第一カテゴリを取得
+    	$_cate_data1 = $this->cate->get_category_parent1();
 
-    	// 第一階層カテゴリデータ取得
-    	$cate01_data = $this->cate->get_category_parent1();
-    	foreach ($cate01_data as $key => $value)
+    	$_arr_catelist = array();
+    	$i = 0;
+    	foreach ($_cate_data1 as $val1)
     	{
-    		$arroptions_en_cate01[$value['ca_seq']] = $value['ca_name'];
+
+    		// 第二カテゴリを取得
+    		$_cate_data2 = $this->cate->get_category_parent2($val1['ca_seq']);
+    		foreach ($_cate_data2 as $key2 => $val2)
+    		{
+
+    			// 第三カテゴリを取得
+    			$_cate_data3 = $this->cate->get_category_parent3($val2['ca_seq']);
+    			foreach ($_cate_data3 as $val3)
+    			{
+
+    				$_arr_catelist[$i] = sprintf("%02s", $val1['ca_id']) . sprintf("%02s", $val2['ca_id']) . sprintf("%02s", $val3['ca_id'])
+    				. ' :: ' . $val1['ca_name'] . ' -> ' . $val2['ca_name'] . ' -> ' . $val3['ca_name'];
+    				$i++;
+
+    			}
+    		}
     	}
 
-    	// 第二階層カテゴリデータ取得
-    	$cate02_data = $this->cate->get_category_parent2($cate01);
-    	foreach ($cate02_data as $key => $value)
-    	{
-    		$arroptions_en_cate02[$value['ca_seq']] = $value['ca_name'];
-    	}
-
-    	// 第三階層カテゴリデータ取得
-		if ($cate02 == TRUE)
-		{
-			if ($cate03 == TRUE)
-			{
-				$cate03_data = $this->cate->get_category_parent3($cate02);
-				foreach ($cate03_data as $key => $value)
-				{
-					$arroptions_en_cate03[$value['ca_seq']] = $value['ca_name'];
-				}
-			} else {
-				$cate03_data = $this->cate->get_category_parent3($cate02_data[0]['ca_seq']);
-				foreach ($cate03_data as $key => $value)
-				{
-					$arroptions_en_cate03[$value['ca_seq']] = $value['ca_name'];
-				}
-			}
-		} else {
-	    	$cate03_data = $this->cate->get_category_parent3($_SESSION['a_cate02']);
-	    	foreach ($cate03_data as $key => $value)
-	    	{
-	    		$arroptions_en_cate03[$value['ca_seq']] = $value['ca_name'];
-	    	}
-
-
-	    	print("<br><br>");
-	    	print_r($arroptions_en_cate03);
-
-
-		}
-
-		return array($arroptions_en_cate01, $arroptions_en_cate02, $arroptions_en_cate03);
-
-//     	$this->smarty->assign('opt_en_cate01',  $arroptions_en_cate01);
-//     	$this->smarty->assign('opt_en_cate02',  $arroptions_en_cate02);
-//     	$this->smarty->assign('opt_en_cate03',  $arroptions_en_cate03);
+    	return $_arr_catelist;
 
     }
 
@@ -1339,19 +1163,9 @@ class Entrytenpo extends MY_Controller
     {
     	$rule_set = array(
     			array(
-    					'field'   => 'en_cate01',
-    					'label'   => 'カテゴリ１選択',
-    					'rules'   => 'trim|max_length[2]'
-    			),
-    			array(
-    					'field'   => 'en_cate02',
-    					'label'   => 'カテゴリ２選択',
-    					'rules'   => 'trim|max_length[2]'
-    			),
-    			array(
-    					'field'   => 'en_cate03',
-    					'label'   => 'カテゴリ３選択',
-    					'rules'   => 'trim|max_length[2]'
+    					'field'   => 'en_cate',
+    					'label'   => 'カテゴリ選択',
+    					'rules'   => 'trim|required|regex_match[/^[a-z0-9]{6}(,[a-z0-9]{6})*$/]|max_length[510]'		// (6+1)*50=350 : max.50個
     			),
     			array(
     					'field'   => 'en_shopname',
@@ -1371,12 +1185,12 @@ class Entrytenpo extends MY_Controller
     			array(
     					'field'   => 'en_zip01',
     					'label'   => '郵便番号（3ケタ）',
-    					'rules'   => 'trim|required|max_length[3]|is_numeric'
+    					'rules'   => 'trim|required|exact_length[3]|is_numeric'
     			),
     			array(
     					'field'   => 'en_zip02',
     					'label'   => '郵便番号（4ケタ）',
-    					'rules'   => 'trim|required|max_length[4]|is_numeric'
+    					'rules'   => 'trim|required|exact_length[4]|is_numeric'
     			),
     			array(
     					'field'   => 'en_pref',
@@ -1502,6 +1316,11 @@ class Entrytenpo extends MY_Controller
     					'field'   => 'en_google_map',
     					'label'   => 'googleマップコード',
     					'rules'   => 'trim|max_length[1000]'
+    			),
+    			array(
+    					'field'   => 'en_qrcode_site',
+    					'label'   => 'QRコード',
+    					'rules'   => 'trim|max_length[500]'
     			),
     			array(
     					'field'   => 'en_free02',

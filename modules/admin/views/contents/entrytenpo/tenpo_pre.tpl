@@ -18,13 +18,7 @@
 	  {$list.en_body02}
 	</div>
 	<div class="form-group">
-	  {$list.en_cate01|escape:"html"}
-	</div>
-	<div class="form-group">
-	  {$list.en_cate02|escape:"html"}
-	</div>
-	<div class="form-group">
-	  {$list.en_cate03|escape:"html"}
+	  {$list.en_cate|escape:"html"}
 	</div>
 	<div class="form-group">
 	  {$list.en_shopname}
@@ -102,6 +96,7 @@
 	  {$list.en_sns05}
 	</div>
 	{if $list.en_google_map}<div id="gmap" style="width : 500px; height : 500px;"></div>{$list.en_google_map}{/if}
+	{if $list.en_qrcode_site}<img src='/admin/entrytenpo/qr_site/{$list.en_seq}' />{/if}
 	<div class="form-group">
 	  {$list.en_free01}
 	</div>

@@ -109,11 +109,23 @@ class Mailtpl extends CI_Model
     private function _sendmail($mail)
     {
 
-        $from_name = mb_encode_mimeheader($mail['from_name'], 'ISO-2022-JP', 'UTF-8');
-        $subject   = mb_convert_encoding ($mail['subject'],   'SJIS-win',    'UTF-8');
-        $body      = mb_convert_encoding ($mail['body'],      'SJIS-win',    'UTF-8');
-        //$subject   = mb_convert_encoding ($mail['subject'], 'ISO-2022-JP-MS', 'UTF-8');        // 一部で文字化けが発生！
-        //$body      = mb_convert_encoding ($mail['body'],    'ISO-2022-JP-MS', 'UTF-8');
+
+    	// ---------------------------------------------------
+    	// 以下のPGを修正する。
+    	//
+    	// /var/www/fnote.com/vendor/codeigniter/framework/system/libraries/Email.php
+    	//
+
+//         $from_name = mb_encode_mimeheader($mail['from_name'], 'ISO-2022-JP', 'UTF-8');
+// //      $subject   = mb_convert_encoding ($mail['subject'],   'ISO-2022-JP',    'UTF-8');
+// //      $subject   = mb_convert_encoding ($mail['subject'],   'SJIS-win',    'UTF-8');
+//         $subject   = mb_convert_encoding ($mail['subject'],   'ISO-2022-JP-MS', 'UTF-8');        // 一部で文字化けが発生！
+//         $body      = mb_convert_encoding ($mail['body'],      'SJIS-win',    'UTF-8');
+// //      $body      = mb_convert_encoding ($mail['body'],      'ISO-2022-JP-MS', 'UTF-8');
+
+        $from_name = $mail['from_name'];
+        $subject   = $mail['subject'];
+        $body      = $mail['body'];
 
         $this->email->clear();
         $this->email->reply_to('autoreply@fnote.com.dev', 'Platform');

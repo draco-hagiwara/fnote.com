@@ -52,12 +52,12 @@ function fmSubmit(formName, url, method, num) {
   return true;
 }
 
-function open_catelist() {
-    window.open("about:blank","categorylist","width=950,height=650,scrollbars=yes");
-    var form = document.catelistForm;
-    form.target = "categorylist";
+function open_preview() {
+    window.open("about:blank","preview","width=950,height=650,scrollbars=yes");
+    var form = document.EntryForm;
+    form.target = "preview";
     form.method = "post";
-    form.action = "/admin/entrytenpo/cate_list/";
+    form.action = "../../../preview/pf/";
     form.submit();
 }
 // -->
@@ -70,7 +70,8 @@ function open_catelist() {
 
   <div class="form-group">
     <div class="col-sm-offset-10 col-sm-2">
-      <button type='submit' name='_submit' value='preview' class="btn btn-sm btn-primary">プレビュー</button>(一時保存後)
+      一時保存 ->
+      <button type='submit' name='_submit' value='preview' class="btn btn-sm btn-primary">プレビュー</button>
     </div>
   </div>
 
@@ -80,34 +81,118 @@ function open_catelist() {
 </form>
 
 <br><br>
-{form_open('entrytenpo/tenpo_conf/' , 'name="catelistForm" class="form-horizontal"')}
-  <div class="form-group">
-    <label for="en_cate" class="col-sm-3 control-label">カテゴリ選択<font color=red>【必須】</font></label>
-    <div class="col-sm-9">
-      <button type='submit' name='_submit' value='gdlist' class="btn btn-sm btn-info" onclick="open_catelist();">カテゴリ一覧を表示</button>
-      : カテゴリ番号（0x0x0x,[0-9a-z]）を入力してください。複数入力する場合は「,(カンマ)」で区切ってください。
-    </div><br>
-  </div>
-</form>
-
-
 {form_open('entrytenpo/tenpo_conf/' , 'name="EntryForm" class="form-horizontal"')}
 
   <div class="form-group">
-    <div class="col-sm-9 col-sm-offset-3">
-      {form_input('en_cate' , set_value('en_cate', $list.en_cate) , 'class="form-control" placeholder="カテゴリ番号（0x0x0x）を入力してください。複数入力する場合は「,(カンマ)」で区切ってください。max.50"')}
-      {if form_error('en_cate')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_cate')}</font></label>{/if}
+    <label for="en_cate0" class="col-sm-3 control-label">第一カテゴリ選択</label>
+    <div class="col-sm-3">
+    <select name="en_cate01" onchange="getSelectedValAndText(this);">
+      {foreach name=en_cate01 from=$opt_en_cate01 key=num item=item01}
+        {if $num == $list.en_cate01}
+          <option value="{$num}" selected>{$item01}</option>
+        {else}
+          <option value="{$num}">{$item01}</option>
+        {/if}
+     {/foreach}
+    </select>
+    </div>
+    <div class="col-sm-3">
+    <select name="en_cate02" onchange="getSelectedValAndText(this);">
+      {foreach name=en_cate02 from=$opt_en_cate02 key=num item=item01}
+        {if $num == $list.en_cate02}
+          <option value="{$num}" selected>{$item01}</option>
+        {else}
+          <option value="{$num}">{$item01}</option>
+        {/if}
+     {/foreach}
+    </select>
+    </div>
+    <div class="col-sm-3">
+    <select name="en_cate03">
+      {foreach name=en_cate03 from=$opt_en_cate03 key=num item=item01}
+        {if $num == $list.en_cate03}
+          <option value="{$num}" selected>{$item01}</option>
+        {else}
+          <option value="{$num}">{$item01}</option>
+        {/if}
+     {/foreach}
+    </select>
     </div>
   </div>
-  {if !form_error('en_cate')}
+
   <div class="form-group">
-    <div class="col-sm-9 col-sm-offset-3">
-          {foreach name=cate_list from=$cate_list item=item}
-            {$item}<br>
-        {/foreach}
+    <label for="en_cate1" class="col-sm-3 control-label">第二カテゴリ選択</label>
+    <div class="col-sm-3">
+    <select name="en_cate11" onchange="getSelectedValAndText(this);">
+      {foreach name=en_cate11 from=$opt_en_cate11 key=num item=item01}
+        {if $num == $list.en_cate11}
+          <option value="{$num}" selected>{$item01}</option>
+        {else}
+          <option value="{$num}">{$item01}</option>
+        {/if}
+     {/foreach}
+    </select>
+    </div>
+    <div class="col-sm-3">
+    <select name="en_cate12" onchange="getSelectedValAndText(this);">
+      {foreach name=en_cate12 from=$opt_en_cate12 key=num item=item01}
+        {if $num == $list.en_cate12}
+          <option value="{$num}" selected>{$item01}</option>
+        {else}
+          <option value="{$num}">{$item01}</option>
+        {/if}
+     {/foreach}
+    </select>
+    </div>
+    <div class="col-sm-3">
+    <select name="en_cate13">
+      {foreach name=en_cate13 from=$opt_en_cate13 key=num item=item01}
+        {if $num == $list.en_cate13}
+          <option value="{$num}" selected>{$item01}</option>
+        {else}
+          <option value="{$num}">{$item01}</option>
+        {/if}
+     {/foreach}
+    </select>
     </div>
   </div>
-  {/if}
+
+  <div class="form-group">
+    <label for="en_cate2" class="col-sm-3 control-label">第三カテゴリ選択</label>
+    <div class="col-sm-3">
+    <select name="en_cate21" onchange="getSelectedValAndText(this);">
+      {foreach name=en_cate21 from=$opt_en_cate21 key=num item=item01}
+        {if $num == $list.en_cate21}
+          <option value="{$num}" selected>{$item01}</option>
+        {else}
+          <option value="{$num}">{$item01}</option>
+        {/if}
+     {/foreach}
+    </select>
+    </div>
+    <div class="col-sm-3">
+    <select name="en_cate22" onchange="getSelectedValAndText(this);">
+      {foreach name=en_cate22 from=$opt_en_cate22 key=num item=item01}
+        {if $num == $list.en_cate22}
+          <option value="{$num}" selected>{$item01}</option>
+        {else}
+          <option value="{$num}">{$item01}</option>
+        {/if}
+     {/foreach}
+    </select>
+    </div>
+    <div class="col-sm-3">
+    <select name="en_cate23">
+      {foreach name=en_cate23 from=$opt_en_cate23 key=num item=item01}
+        {if $num == $list.en_cate23}
+          <option value="{$num}" selected>{$item01}</option>
+        {else}
+          <option value="{$num}">{$item01}</option>
+        {/if}
+     {/foreach}
+    </select>
+    </div>
+  </div>
 
 
   <div class="form-group">
@@ -578,13 +663,6 @@ function open_catelist() {
     <div class="col-sm-9">
       <textarea class="form-control input-sm" id="en_google_map" name="en_google_map" placeholder="googleマップコードを入力してください。">{$list.en_google_map}</textarea>
       {if form_error('en_google_map')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_google_map')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="en_qrcode_site" class="col-sm-3 control-label">QRコード</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="en_qrcode_site" name="en_qrcode_site" placeholder="googleマップコードを入力してください。">{$list.en_qrcode_site}</textarea>
-      {if form_error('en_qrcode_site')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('en_qrcode_site')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">

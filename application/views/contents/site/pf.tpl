@@ -42,14 +42,7 @@
 	  {$list.en_body02}
 	</div>
 	<div class="form-group">
-	  {$list.en_cate01}
-	</div>
-	<div class="form-group">
-	  {$list.en_cate02}
-	</div>
-	<div class="form-group">
-	  {$list.en_cate03}
-	</div>
+	  {$list.en_cate}
 	<div class="form-group">
 	  {$list.en_shopname}
 	</div>
@@ -122,7 +115,8 @@
 	<div class="form-group">
 	  {$list.en_sns05}
 	</div>
-	<div id="gmap" style="width : 500px; height : 500px;"></div>{$list.en_google_map}
+	{if $list.en_google_map!=""}<div id="gmap" style="width : 500px; height : 500px;"></div>{$list.en_google_map}{/if}
+	{if $list.en_qrcode_site}<img src='/qr/qr_site/{$list.en_seq}' />{/if}
 	<div class="form-group">
 	  {$list.en_free01}
 	</div>
@@ -149,7 +143,7 @@
   <div class="form-group">
     <label for="co_contact_name" class="col-sm-3 control-label">お名前<font color=red>【必須】</font></label>
     <div class="col-sm-8">
-      {form_input('co_contact_name' , set_value('co_contact_name', '') , 'class="form-control" placeholder="お名前を入力してください"')}
+      {form_input('co_contact_name' , set_value('co_contact_name', '') , 'class="form-control" placeholder="お名前を入力してください。max.50文字"')}
       {if form_error('co_contact_name')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('co_contact_name')}</font></label>{/if}
     </div>
   </div>

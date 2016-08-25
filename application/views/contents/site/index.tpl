@@ -119,7 +119,8 @@
 	</div>
 	<div class="form-group">
 	  {$list.en_sns05}
-	</div>
+	</div>{$list.en_google_map}
+	{if $list.en_google_map}<div id="gmap" style="width : 500px; height : 500px;"></div>{$list.en_google_map}{/if}
 	<div class="form-group">
 	  {$list.en_free01}
 	</div>

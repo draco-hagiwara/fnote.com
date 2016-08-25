@@ -29,6 +29,36 @@ class Categroup extends CI_Model
     }
 
     /**
+     * カテゴリデータ取得 : id and level and parent
+     *
+     * @param    char
+     * @return   array
+     */
+    public function get_category_id($ca_id, $ca_parent=NULL, $ca_level=NULL)
+    {
+
+    	$sql = 'SELECT ca_seq, ca_name, ca_id, ca_parent, ca_level, ca_dispno FROM `mb_categroup` '
+    			. 'WHERE `ca_id` = \'' . ltrim($ca_id, 0) . '\'';
+
+    	if (isset($ca_parent))
+    	{
+    		$sql .= ' AND `ca_parent` = ' . $ca_parent;
+    	}
+
+    	if (isset($ca_level))
+    	{
+    		$sql .= ' AND `ca_level` = ' . $ca_level;
+    	}
+
+    	$query = $this->db->query($sql);
+
+    	$get_data = $query->result('array');
+
+    	return $get_data;
+
+    }
+
+    /**
      * 第一階層カテゴリデータ取得
      *
      * @param    char
@@ -37,7 +67,7 @@ class Categroup extends CI_Model
     public function get_category_parent1()
     {
 
-    	$sql = 'SELECT * FROM `mb_categroup` '
+    	$sql = 'SELECT ca_seq, ca_name, ca_id, ca_parent, ca_level, ca_dispno FROM `mb_categroup` '
     			. 'WHERE `ca_level` = 1 ORDER BY ca_dispno ASC';
 
     	$query = $this->db->query($sql);
@@ -57,7 +87,7 @@ class Categroup extends CI_Model
     public function get_category_parent2($cate01)
     {
 
-    	$sql = 'SELECT * FROM `mb_categroup` '
+    	$sql = 'SELECT ca_seq, ca_name, ca_id, ca_parent, ca_level, ca_dispno FROM `mb_categroup` '
     			. 'WHERE `ca_parent` = ? ORDER BY ca_dispno ASC';
 
     	$values = array(
@@ -81,7 +111,7 @@ class Categroup extends CI_Model
     public function get_category_parent3($cate02)
     {
 
-    	$sql = 'SELECT * FROM `mb_categroup` '
+    	$sql = 'SELECT ca_seq, ca_name, ca_id, ca_parent, ca_level, ca_dispno FROM `mb_categroup` '
     			. 'WHERE `ca_parent` = ? ORDER BY ca_dispno ASC';
 
     	$values = array(
@@ -96,11 +126,46 @@ class Categroup extends CI_Model
 
     }
 
+    /**
+     * カテゴリIDからリスト取得
+     *
+     * @param    char
+     * @return   array
+     */
+    public function get_category_name($en_cate)
+    {
 
+    	$cate_no = explode(',', $en_cate);											// 分割
 
+    	$i = 0;
+    	foreach ($cate_no as $val)
+    	{
 
+    		$cate_id = str_split($val, 2);											// 2桁毎に分割
 
+    		// 第一カテ名称
+    		$cate1 = $this->get_category_id($cate_id[0], NULL, 1);
 
+    		// 第二カテ名称
+    		$cate2 = $this->get_category_id($cate_id[1], $cate1[0]['ca_seq'], 2);
+
+    		// 第三カテ名称
+    		$cate3 = $this->get_category_id($cate_id[2], $cate2[0]['ca_seq'], 3);
+
+			// 名称
+			if (isset($cate1[0]['ca_name']) && isset($cate2[0]['ca_name']) && isset($cate3[0]['ca_name']))
+			{
+				$cate_name[$i] = $cate1[0]['ca_name'] . ' -> ' . $cate2[0]['ca_name'] . ' -> ' . $cate3[0]['ca_name'];
+			} else {
+				$cate_name[$i] = "カテゴリのコードエラー";
+			}
+
+			$i++;
+    	}
+
+    	return $cate_name;
+
+    }
 
     /**
      * 第一階層カテゴリ：最終データ取得

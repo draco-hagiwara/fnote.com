@@ -228,6 +228,13 @@
     </div>
   </div>
   <div class="form-group">
+    <label for="en_qrcode_site" class="col-sm-3 control-label">QRコード</label>
+    <div class="col-sm-9">
+      {set_value('en_qrcode_site', '')}
+      {form_hidden('en_qrcode_site', set_value('en_qrcode_site', ''))}
+    </div>
+  </div>
+  <div class="form-group">
     <label for="en_free01" class="col-sm-3 control-label">フリー１</label>
     <div class="col-sm-9">
       {set_value('en_free01', '')}
