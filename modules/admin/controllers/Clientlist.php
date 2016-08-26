@@ -26,6 +26,7 @@ class Clientlist extends MY_Controller
 
         $this->smarty->assign('err_siteid', FALSE);
         $this->smarty->assign('err_clid',   FALSE);
+        $this->smarty->assign('err_status', FALSE);
         $this->smarty->assign('err_mail',   FALSE);
         $this->smarty->assign('err_passwd', FALSE);
         $this->smarty->assign('mess',       FALSE);
@@ -194,7 +195,8 @@ class Clientlist extends MY_Controller
     		$this->load->model('Client', 'cl', TRUE);
 
     		// サイトID(URL名)入力チェック
-    		if ($this->cl->check_siteid($input_post['cl_seq'], $input_post['cl_siteid'])) {
+    		if ($this->cl->check_siteid($input_post['cl_seq'], $input_post['cl_siteid']))
+    		{
     			$this->smarty->assign('err_siteid', TRUE);
     			$this->smarty->assign('info', $input_post);
     			$this->view('clientlist/detail.tpl');
@@ -202,12 +204,43 @@ class Clientlist extends MY_Controller
     		}
 
     		// メールアドレス入力チェック
-    		if ($this->cl->check_mailaddr($input_post['cl_seq'], $input_post['cl_mail'])) {
+    		if ($this->cl->check_mailaddr($input_post['cl_seq'], $input_post['cl_mail']))
+    		{
     			$this->smarty->assign('err_mail', TRUE);
     			$this->smarty->assign('info', $input_post);
     			$this->view('clientlist/detail.tpl');
     			return;
     		}
+
+
+
+
+    		// ステータス変更チェック:「2：受注」で区切る
+    		$_status_no = $this->cl->check_statusno($input_post['cl_seq']);
+
+
+    		print_r($_status_no);
+    		print(" :: ");
+    		print_r($input_post['cl_status']);
+//     		exit;
+
+    		if (($_status_no[0]['cl_status'] < 2) && ($input_post['cl_status'] > 2) && ($input_post['cl_status'] != 20))
+    		{
+    			$this->smarty->assign('err_status', "必ず「受注」ステータスを選択してください。");
+    			$this->smarty->assign('info', $input_post);
+    			$this->view('clientlist/detail.tpl');
+    			return;
+    		} elseif (($_status_no[0]['cl_status'] >= 2) && ($input_post['cl_status'] < 2)) {
+    			$this->smarty->assign('err_status', "「受注」ステータス以下は選択できません。");
+    			$this->smarty->assign('info', $input_post);
+    			$this->view('clientlist/detail.tpl');
+    			return;
+    		}
+
+
+
+
+
 
     		// メール再発行 or データ更新
     		if ($input_post['submit'] == 're_mail')

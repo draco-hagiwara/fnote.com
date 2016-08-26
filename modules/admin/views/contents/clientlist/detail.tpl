@@ -17,6 +17,7 @@
     <div class="col-sm-2 btn-lg">
       {form_dropdown('cl_status', $options_cl_status, set_value('cl_status', $info.cl_status))}
       {if form_error('cl_status')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_status')}</font></label>{/if}
+      {if $err_status!=NULL}<span class="label label-danger">Error : </span><label><font color=red>{$err_status}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">

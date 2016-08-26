@@ -206,7 +206,8 @@ function fmSubmit(formName, url, method, num) {
   {form_open('/gallery/gd_new/' , 'name="galleryForm" enctype="multipart/form-data" class="form-horizontal"')}
 
   <p>画像アップロード（jpg、gif、pngのみ）</p>
-  <p><input type="file" name="upfile" size="50" /> （MAX 2MB）</p>
+  <p><input type="file" name="upfile[]" multiple="multiple" /> （MAX 2MB）</p>
+  {*<p><input type="file" name="upfile" size="50" /> （MAX 2MB）</p>*}
 
   <br>
   <div class="form-group">

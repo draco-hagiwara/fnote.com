@@ -307,6 +307,26 @@ class Client extends CI_Model
     }
 
     /**
+     * クライアントSEQから登録情報を取得する
+     *
+     * @param    int
+     * @return   int
+     */
+    public function check_statusno($seq_no)
+    {
+
+    	$sql = 'SELECT cl_status FROM `mb_client` '
+    			. 'WHERE `cl_seq` = ' . $seq_no;
+
+    	$query = $this->db->query($sql);
+
+    	$get_data = $query->result('array');
+
+    	return $get_data;
+
+    }
+
+    /**
      * クライアント新規会員登録
      *
      * @param    array()
