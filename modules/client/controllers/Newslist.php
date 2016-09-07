@@ -228,12 +228,12 @@ class Newslist extends MY_Controller
 				),
         		array(
                         'field'   => 'nw_start_date',
-                        'label'   => '開始日付(yyyy/dd/mm)',
+                        'label'   => '開始日付(yyyy-dd-mm)',
                         'rules'   => 'trim|required|regex_match[/^\d{4}-\d{1,2}-\d{1,2}+$/]|max_length[10]'
                 ),
         		array(
                         'field'   => 'nw_end_date',
-                        'label'   => '表示終了日付(yyyy/dd/mm)',
+                        'label'   => '表示終了日付(yyyy-dd-mm)',
                         'rules'   => 'trim|required|regex_match[/^\d{4}-\d{1,2}-\d{1,2}+$/]|max_length[10]'
                 ),
     	);

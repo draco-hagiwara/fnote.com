@@ -88,12 +88,12 @@
     </div>
     <label for="nw_start_date" class="col-sm-1 control-label">開始日付</label>
     <div class="col-sm-2">
-      {form_input('nw_start_date' , set_value('nw_start_date', $low.nw_start_date) , 'class="form-control" placeholder="形式：20xx/xx/xx"')}
+      {form_input('nw_start_date' , set_value('nw_start_date', $low.nw_start_date) , 'class="form-control" placeholder="形式：20xx-xx-xx"')}
       {if form_error('nw_start_date')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('nw_start_date')}</font></label>{/if}
     </div>
     <label for="nw_end_date" class="col-sm-1 control-label">終了日付</label>
     <div class="col-sm-2">
-      {form_input('nw_end_date' , set_value('nw_end_date', $low.nw_end_date) , 'class="form-control" placeholder="形式：20xx/xx/xx"')}
+      {form_input('nw_end_date' , set_value('nw_end_date', $low.nw_end_date) , 'class="form-control" placeholder="形式：20xx-xx-xx"')}
       {if form_error('nw_end_date')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('nw_end_date')}</font></label>{/if}
     </div>
   </div>

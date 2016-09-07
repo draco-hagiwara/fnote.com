@@ -1,20 +1,25 @@
 {* ヘッダー部分　START *}
     {include file="../header.tpl" head_index="1"}
+{* ヘッダー部分　END *}
 
 <body>
-{* ヘッダー部分　END *}
+
+
+
 
 <script src="../../js/main.js"></script>
 
 <!--Body content-->
 
   <div id="typo">
-    {if $PcorMob==FALSE}<div class="inner">fnote.com</div>{else}<div><img src="/images/fnote/s/s_20160721_776805790a0fe8945a.gif" alt=""></div>{/if}
+    {if $PcorMob==FALSE}<div class="inner">fnote.com</div>{/if}
   </div>
 
 
 <br><br><label>■■　お知らせ</label>
 <dl class="dl-horizontal">
+  <dt>2016.08.25</dt><dd>fnote.com.dev 更新</dd>
+  <dt>2016.08.12</dt><dd>fnote.com.dev 更新</dd>
   <dt>2016.08.01</dt><dd>fnote.com.dev AWS仮公開</dd>
   <dt>2016.07.19</dt><dd>fnote.com.dev 社内公開</dd>
   <dt>2016.07.04</dt><dd>fnote.com.dev 開発スタート</dd>

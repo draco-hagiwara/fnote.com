@@ -249,8 +249,8 @@ function fmSubmit(formName, url, method, num) {
       <button type='submit' name='_submit' value='_new' class="btn btn-sm btn-primary">　新規登録　</button>
     </div>
     <div class="col-sm-2 col-sm-offset-4">
-      <button type="button" class="btn btn-primary btn-sm" onclick="fmSubmit('galleryForm', '/admin/entrytenpo/tenpo_edit/', 'POST', '{$smarty.session.a_img_clseq}', 'chg_uniq');">店舗情報</button>
-      <button type="button" class="btn btn-primary btn-sm" onclick="fmSubmit('galleryForm', '/admin/entrytenpo/report_edit/', 'POST', '{$smarty.session.a_img_clseq}', 'chg_uniq');">記事本文</button>
+      <button type="button" class="btn btn-primary btn-sm" onclick="fmSubmit('galleryForm', '/admin/tenpo_site/tenpo_edit/', 'POST', '{$smarty.session.a_img_clseq}', 'chg_uniq');">店舗情報</button>
+      <button type="button" class="btn btn-primary btn-sm" onclick="fmSubmit('galleryForm', '/admin/tenpo_interview/report_edit/', 'POST', '{$smarty.session.a_img_clseq}', 'chg_uniq');">記事本文</button>
     </div>
   </div>
 

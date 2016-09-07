@@ -5,7 +5,7 @@
 {* ヘッダー部分　END *}
 
 <div class="jumbotron">
-  <h3>ログイン TOP画面</h3>
+  <h3>　TOP画面</h3>
 </div>
 
 <p class="bg-info">　■　現在のステータス状況</p>

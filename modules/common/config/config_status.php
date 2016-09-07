@@ -77,6 +77,28 @@ array(
 		"1" => "お知らせ",
 );
 
+// 店舗メニュー：ステータス
+$config['TENPO_MENU_STATUS'] =
+array(
+		"0" => "公開",
+		"1" => "非公開",
+);
+
+// 店舗クーポン：ステータス
+$config['TENPO_COUPON_STATUS'] =
+array(
+		"0" => "公開",
+		"1" => "非公開",
+);
+
+// 店舗クーポン：自動更新有無
+$config['TENPO_COUPON_UPDATE'] =
+array(
+		"0" => "更新する",
+		"1" => "更新しない",
+);
+
+
 // ログインロック
 $config['LOGIN_LOCK_STATUS'] =
 array(

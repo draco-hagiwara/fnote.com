@@ -34,14 +34,14 @@ class Preview extends MY_Controller
 		}
 
 		// 店舗データの取得
-		$this->load->model('Entry_pre', 'pre', TRUE);
-		$pre_data = $this->pre->get_entry_seq($input_post['en_seq']);
-		if ($pre_data == FALSE)
+		$this->load->model('Interview_pre', 'ivp', TRUE);
+		$interview_data = $this->ivp->get_interview_seq($input_post['iv_seq']);
+		if ($interview_data == FALSE)
 		{
 			show_404();
 		}
 
-		$this->smarty->assign('list', $pre_data[0]);
+		$this->smarty->assign('list', $interview_data[0]);
 
     	$this->view('preview/pf.tpl');
 

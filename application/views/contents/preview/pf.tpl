@@ -27,117 +27,20 @@
 
 <body>
 
-<H3><p class="bg-info">事業者プラットフォーム</p></H3>
+<H3><p class="bg-success">事業者プラットフォーム</p></H3>
 
 	<div class="form-group">
-	  {$list.ep_title01}
+	  {$list.ivp_title01}
 	</div>
 	<div class="form-group">
-	  {$list.ep_body01}
+	  {$list.ivp_body01}
 	</div>
 	<div class="form-group">
-	  {$list.ep_title02}
+	  {$list.ivp_title02}
 	</div>
 	<div class="form-group">
-	  {$list.ep_body02}
+	  {$list.ivp_body02}
 	</div>
-	<div class="form-group">
-	  {$list.ep_cate}
-	</div>
-	<div class="form-group">
-	  {$list.ep_shopname}
-	</div>
-	<div class="form-group">
-	  {$list.ep_shopname_sub}
-	</div>
-	<div class="form-group">
-	  {$list.ep_url}
-	</div>
-	<div class="form-group">
-	  {$list.ep_zip01} {$list.ep_zip02}
-	</div>
-	<div class="form-group">
-	  {$list.ep_pref} {$list.ep_addr01} {$list.ep_addr02} {$list.ep_buil}
-	</div>
-	<div class="form-group">
-	  {$list.ep_tel}
-	</div>
-	<div class="form-group">
-	  {$list.ep_mail}
-	</div>
-	<div class="form-group">
-	  {$list.ep_opentime}
-	</div>
-	<div class="form-group">
-	  {$list.ep_holiday}
-	</div>
-	<div class="form-group">
-	  {$list.ep_since}
-	</div>
-	<div class="form-group">
-	  {$list.ep_parking}
-	</div>
-	<div class="form-group">
-	  {$list.ep_seat}
-	</div>
-	<div class="form-group">
-	  {$list.ep_card}
-	</div>
-	<div class="form-group">
-	  {$list.ep_access}
-	</div>
-	<div class="form-group">
-	  {$list.ep_access_sub}
-	</div>
-	<div class="form-group">
-	  {$list.ep_contents01}
-	</div>
-	<div class="form-group">
-	  {$list.ep_contents02}
-	</div>
-	<div class="form-group">
-	  {$list.ep_description}
-	</div>
-	<div class="form-group">
-	  {$list.ep_keywords}
-	</div>
-	<div class="form-group">
-	  {$list.ep_sns01}
-	</div>
-	<div class="form-group">
-	  {$list.ep_sns02}
-	</div>
-	<div class="form-group">
-	  {$list.ep_sns03}
-	</div>
-	<div class="form-group">
-	  {$list.ep_sns04}
-	</div>
-	<div class="form-group">
-	  {$list.ep_sns05}
-	</div>
-	{if $list.ep_google_map}<div id="gmap" style="width : 500px; height : 500px;"></div>{$list.ep_google_map}{/if}
-	<div class="form-group">
-	  <img src='/qr/qr_pre/{$list.ep_seq}' />
-	</div>
-	<div class="form-group">
-	  {$list.ep_free01}
-	</div>
-	<div class="form-group">
-	  {$list.ep_free02}
-	</div>
-	<div class="form-group">
-	  {$list.ep_free03}
-	</div>
-	<div class="form-group">
-	  {$list.ep_free04}
-	</div>
-	<div class="form-group">
-	  {$list.ep_free05}
-	</div>
-
-</section>
-
 
 <br><br>
 <div class="panel panel-default">
@@ -145,6 +48,8 @@
     Copyright(C) 2016 - {{$smarty.now|date_format:"%Y"}} Themis Inc. All Rights Reserved.
   </div>
 </div>
+
+</section>
 
 </body>
 </html>

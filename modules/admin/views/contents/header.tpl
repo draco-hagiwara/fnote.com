@@ -41,25 +41,25 @@
         </div>
         <div id="patern05" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/admin/top/"><i class="glyphicon glyphicon-cloud"></i>TOP</a></li>
-            <li class="active"><a href="/admin/clientlist/"><i class="glyphicon glyphicon-cloud"></i>クライアント一覧</a></li>
-            <li class="active"><a href="/admin/entryclient/"><i class="glyphicon glyphicon-cloud"></i>クライアント登録</a></li>
-            <li class="active"><a href="/admin/accountlist/"><i class="glyphicon glyphicon-cloud"></i>アカウント一覧</a></li>
-            <li class="active"><a href="/admin/Entryadmin/"><i class="glyphicon glyphicon-cloud"></i>アカウント登録</a></li>
+            <li class="active"><a href="/admin/top/"><i class="glyphicon glyphicon-home"></i> TOP</a></li>
+            <li class="active"><a href="/admin/clientlist/"><i class="glyphicon glyphicon-list-alt"></i> クライアント一覧</a></li>
+            <li class="active"><a href="/admin/entryclient/"><i class="glyphicon glyphicon-pencil"></i> クライアント登録</a></li>
+            <li class="active"><a href="/admin/accountlist/"><i class="glyphicon glyphicon-list-alt"></i> アカウント一覧</a></li>
+            <li class="active"><a href="/admin/Entryadmin/"><i class="glyphicon glyphicon-pencil"></i> アカウント登録</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-cloud"></i>システム設定<b class="caret"></b></a>
+            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-wrench"></i> システム設定<b class="caret"></b></a>
               <ul class="dropdown-menu right">
-                <li><a href="/admin/system/mailtpl/"><i class="glyphicon glyphicon-envelope"></i>メールテンプレ管理</a></li>
+                <li><a href="/admin/system/mailtpl/"><i class="glyphicon glyphicon-envelope"></i> メールテンプレ管理</a></li>
                 {if $smarty.session.a_memSeq==1}
-                  <li><a href="/admin/system/categroup_new/"><i class="glyphicon glyphicon-cloud"></i>カテゴリ並替</a></li>
-                  <li><a href="/admin/system/categroup_search/"><i class="glyphicon glyphicon-cloud"></i>カテゴリ編集</a></li>
-                  <li><a href="/admin/system/backup/"><i class="glyphicon glyphicon-cloud"></i>手動バックアップ</a></li>
-                  <li><a href="/admin/system/sess_destroy/"><i class="glyphicon glyphicon-cloud"></i>セッション削除</a></li>
+                  <li><a href="/admin/system/categroup_new/"><i class="glyphicon glyphicon-th-list"></i> カテゴリ並替</a></li>
+                  <li><a href="/admin/system/categroup_search/"><i class="glyphicon glyphicon-th-list"></i> カテゴリ編集</a></li>
+                  <li><a href="/admin/system/backup/"><i class="glyphicon glyphicon-floppy-save"></i> 手動バックアップ</a></li>
+                  <li><a href="/admin/system/sess_destroy/"><i class="glyphicon glyphicon-remove-circle"></i> セッション削除</a></li>
                 {/if}
               </ul>
             </li>
-            <li class="active"><a href="/admin/login/logout/"><i class="glyphicon glyphicon-cloud"></i>ログアウト</a></li>
+            <li class="active"><a href="/admin/login/logout/"><i class="glyphicon glyphicon-log-out"></i> ログアウト</a></li>
           </ul>
         </div>
         </nav>

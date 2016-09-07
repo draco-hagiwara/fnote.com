@@ -212,17 +212,8 @@ class Clientlist extends MY_Controller
     			return;
     		}
 
-
-
-
     		// ステータス変更チェック:「2：受注」で区切る
     		$_status_no = $this->cl->check_statusno($input_post['cl_seq']);
-
-
-    		print_r($_status_no);
-    		print(" :: ");
-    		print_r($input_post['cl_status']);
-//     		exit;
 
     		if (($_status_no[0]['cl_status'] < 2) && ($input_post['cl_status'] > 2) && ($input_post['cl_status'] != 20))
     		{
@@ -236,11 +227,6 @@ class Clientlist extends MY_Controller
     			$this->view('clientlist/detail.tpl');
     			return;
     		}
-
-
-
-
-
 
     		// メール再発行 or データ更新
     		if ($input_post['submit'] == 're_mail')
@@ -277,7 +263,7 @@ class Clientlist extends MY_Controller
     			);
 
     			// メールテンプレートの読み込み
-    			$this->config->load('config_mailtpl');									// メールテンプレート情報読み込み
+    			$this->config->load('config_mailtpl');												// メールテンプレート情報読み込み
     			$mail_tpl = $this->config->item('MAILTPL_ENT_CLIENT_ID');
 
     			// メール送信
@@ -285,6 +271,7 @@ class Clientlist extends MY_Controller
     			if ($this->mailtpl->get_mail_tpl($mail, $arrRepList, $mail_tpl)) {
 
     				// 「cl_update_date」を更新 <= アクセス時間
+    				unset($input_post["tp_status"]);
     				$cl_data[0]['cl_update_date'] = date('Y-m-d H:i:s');
     				$this->cl->update_client($cl_data[0]);
 
@@ -297,31 +284,38 @@ class Clientlist extends MY_Controller
 
     		} else {
 
+    			$this->load->model('Tenpoinfo', 'tnp', TRUE);
+    			$this->load->model('Interview', 'itv', TRUE);
+
 		    	// 担当編集者＆営業のＩＤを取り出す
 		    	$_tmp_editor_id = explode(' : ', $this->_arreditorlist[$input_post['cl_editor_id']], 3);
 		    	$input_post['cl_editor_id'] = $_tmp_editor_id[0];
 		    	$_tmp_salse_id = explode(' : ', $this->_arrsaleslist[$input_post['cl_sales_id']], 3);
 		    	$input_post['cl_sales_id'] = $_tmp_salse_id[0];
 
-		    	// DB書き込み
 		    	// 不要パラメータ削除
 		    	unset($input_post["submit"]) ;
 		    	unset($input_post["retype_password"]) ;
 
-		    	$this->cl->update_client($input_post);
-		    	$this->smarty->assign('mess',  "更新が完了しました。");
-
 		    	// 掲載日アップ
 		    	if ($input_post['cl_status'] == 8)
 		    	{
-		    		$this->load->model('Entry', 'ent', TRUE);
-		    		$set_data['en_cl_siteid']    = $input_post['cl_siteid'];
-		    		$set_data['en_posting_date'] = date("Y-m-d H:i:s");
-		    		$this->ent->inup_tenpo($set_data);
+		    		$set_data['tp_cl_siteid']    = $input_post['cl_siteid'];
+		    		$set_data['tp_posting_date'] = date("Y-m-d H:i:s");
+		    		$this->tnp->inup_tenpo($set_data);
+
+		    		$input_post['tp_status'] = 0;													// サイトへの掲載許可！
+		    	} else {
+		    		$input_post['tp_status'] = 1;
 		    	}
 
-		    	// 「受注」ステータスで審査完了メール送信＆画像用ディレクトリ作成
-		    	if ($input_post['cl_status'] == 2)
+		    	// DB書き込み
+		    	unset($input_post["tp_status"]);
+		    	$this->cl->update_client($input_post);
+		    	$this->smarty->assign('mess',  "更新が完了しました。");
+
+		    	// 「受注」ステータスで審査完了メール送信＆画像用ディレクトリ作成＆仮店舗データ作成
+		    	if (($_status_no[0]['cl_status'] < 2) && ($input_post['cl_status'] == 2))
 		    	{
 		    		// ディレクトリ存在チェック
 		    		$dir_path = $this->input->server("DOCUMENT_ROOT") . "/images/" . $input_post['cl_siteid'] . "/s";
@@ -337,6 +331,18 @@ class Clientlist extends MY_Controller
 		    			mkdir($dir_path, 0775);
 		    			chmod($dir_path, 0775);
 		    		}
+
+
+		    		// 仮店舗データ作成
+		    		$set_data_tnp['tp_cl_seq']    = $input_post['cl_seq'];
+		    		$set_data_tnp['tp_cl_siteid'] = $input_post['cl_siteid'];
+		    		$row_id = $this->tnp->inup_tenpo($set_data_tnp);
+
+		    		$set_data_itv['iv_tp_seq']    = $row_id;
+		    		$set_data_itv['iv_cl_seq']    = $input_post['cl_seq'];
+		    		$set_data_itv['iv_cl_siteid'] = $input_post['cl_siteid'];
+		    		$this->itv->inup_interview($set_data_itv);
+
 
 		    		// 審査完了メール送信
 		    		// 担当管理者のメール取得

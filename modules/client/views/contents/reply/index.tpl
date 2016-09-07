@@ -29,7 +29,7 @@ function fmSubmit(formName, url, method, num) {
 
 <div id="contents" class="container">
 
-<h4>【お問合せ　一覧】</h4>
+<p class="bg-info">　【 問合せ　一覧 】</p>
 
 <ul class="pagination pagination-sm">
     お問合せ件数： {$countall}件<br />

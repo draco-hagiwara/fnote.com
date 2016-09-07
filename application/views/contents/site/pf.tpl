@@ -22,176 +22,56 @@
   <section class="container">
   <!-- TwitterBootstrapのグリッドシステムclass="row"で開始 -->
   <div class="row">
-
+    <ul class="list-inline text-right"></ul>
+    <nav class="navbar navbar-inverse">
+    <div class="navbar-header">
+      <a href="/" class="navbar-brand">FNOTE</a>
+    </div>
+    <div id="patern05" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/site/pf/{$tenpo.tp_cl_siteid}"><i class="glyphicon glyphicon-home"></i> TOP</a></li>
+        <li class="active"><a href="/site/mn/{$tenpo.tp_cl_siteid}"><i class="glyphicon glyphicon-menu-hamburger"></i> メニュー</a></li>
+        {*<li class="active"><a href="/site/rv/{$tenpo.tp_cl_siteid}"><i class="glyphicon glyphicon-bullhorn"></i> 口コミ</a></li>*}
+        <li class="active"><a href="/site/gd/{$tenpo.tp_cl_siteid}"><i class="glyphicon glyphicon-eye-open"></i> こだわり</a></li>
+        <li class="active"><a href="/site/iv/{$tenpo.tp_cl_siteid}"><i class="glyphicon glyphicon-facetime-video"></i> インタビュー</a></li>
+        <li class="active"><a href="/site/gl/{$tenpo.tp_cl_siteid}"><i class="glyphicon glyphicon-picture"></i> ギャラリー</a></li>
+        <li class="active"><a href="/site/tc/{$tenpo.tp_cl_siteid}"><i class="glyphicon glyphicon-barcode"></i> チケット</a></li>
+        <li class="active"><a href="/site/mp/{$tenpo.tp_cl_siteid}"><i class="glyphicon glyphicon-road"></i> クーポン・地図</a></li>
+      </ul>
+    </div>
+    </nav>
   </div>
 
 <body>
 
-<H3><p class="bg-info">事業者プラットフォーム</p></H3>
+<H3><p class="bg-info">事業者プラットフォーム　：　サイトTOP</p></H3>
 
-	<div class="form-group">
-	  {$list.en_title01}
-	</div>
-	<div class="form-group">
-	  {$list.en_body01}
-	</div>
-	<div class="form-group">
-	  {$list.en_title02}
-	</div>
-	<div class="form-group">
-	  {$list.en_body02}
-	</div>
-	<div class="form-group">
-	  {$list.en_cate}
-	<div class="form-group">
-	  {$list.en_shopname}
-	</div>
-	<div class="form-group">
-	  {$list.en_shopname_sub}
-	</div>
-	<div class="form-group">
-	  {$list.en_url}
-	</div>
-	<div class="form-group">
-	  {$list.en_zip01} {$list.en_zip02}
-	</div>
-	<div class="form-group">
-	  {$list.en_pref} {$list.en_addr01} {$list.en_addr02} {$list.en_buil}
-	</div>
-	<div class="form-group">
-	  {$list.en_tel}
-	</div>
-	<div class="form-group">
-	  {$list.en_mail}
-	</div>
-	<div class="form-group">
-	  {$list.en_opentime}
-	</div>
-	<div class="form-group">
-	  {$list.en_holiday}
-	</div>
-	<div class="form-group">
-	  {$list.en_since}
-	</div>
-	<div class="form-group">
-	  {$list.en_parking}
-	</div>
-	<div class="form-group">
-	  {$list.en_seat}
-	</div>
-	<div class="form-group">
-	  {$list.en_card}
-	</div>
-	<div class="form-group">
-	  {$list.en_access}
-	</div>
-	<div class="form-group">
-	  {$list.en_access_sub}
-	</div>
-	<div class="form-group">
-	  {$list.en_contents01}
-	</div>
-	<div class="form-group">
-	  {$list.en_contents02}
-	</div>
-	<div class="form-group">
-	  {$list.en_description}
-	</div>
-	<div class="form-group">
-	  {$list.en_keywords}
-	</div>
-	<div class="form-group">
-	  {$list.en_sns01}
-	</div>
-	<div class="form-group">
-	  {$list.en_sns02}
-	</div>
-	<div class="form-group">
-	  {$list.en_sns03}
-	</div>
-	<div class="form-group">
-	  {$list.en_sns04}
-	</div>
-	<div class="form-group">
-	  {$list.en_sns05}
-	</div>
-	{if $list.en_google_map!=""}<div id="gmap" style="width : 500px; height : 500px;"></div>{$list.en_google_map}{/if}
-	{if $list.en_qrcode_site}<img src='/qr/qr_site/{$list.en_seq}' />{/if}
-	<div class="form-group">
-	  {$list.en_free01}
-	</div>
-	<div class="form-group">
-	  {$list.en_free02}
-	</div>
-	<div class="form-group">
-	  {$list.en_free03}
-	</div>
-	<div class="form-group">
-	  {$list.en_free04}
-	</div>
-	<div class="form-group">
-	  {$list.en_free05}
-	</div>
 
-</section>
 
-<section class="container">
 
-<H3><p class="bg-info">問合せフォーム</p></H3>
-{form_open('site/inquiry_conf/' , 'name="InquiryForm" class="form-horizontal"')}
-
-  <div class="form-group">
-    <label for="co_contact_name" class="col-sm-3 control-label">お名前<font color=red>【必須】</font></label>
-    <div class="col-sm-8">
-      {form_input('co_contact_name' , set_value('co_contact_name', '') , 'class="form-control" placeholder="お名前を入力してください。max.50文字"')}
-      {if form_error('co_contact_name')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('co_contact_name')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="co_contact_mail" class="col-sm-3 control-label">メールアドレス<font color=red>【必須】</font></label>
-    <div class="col-sm-8">
-      {form_input('co_contact_mail' , set_value('co_contact_mail', '') , 'class="form-control" placeholder="ご利用プランを入力してください"')}
-      {if form_error('co_contact_mail')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('co_contact_mail')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="co_contact_tel" class="col-sm-3 control-label">電話番号</label>
-    <div class="col-sm-8">
-      {form_input('co_contact_tel' , set_value('co_contact_tel', '') , 'class="form-control" placeholder="ご利用プランを入力してください"')}
-      {if form_error('co_contact_tel')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('co_contact_tel')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="co_contact_body" class="col-sm-3 control-label">お問合せ内容<font color=red>【必須】</font></label>
-    <div class="col-sm-8">
-      {$attr01['name'] = 'co_contact_body'}
-      {$attr01['rows'] = 10}
-      {form_textarea($attr01 , set_value('co_contact_body', '') , 'class="form-control"')}
-      <!-- <textarea class="form-control" id="inputComment" rows="5"></textarea> -->
-      {if form_error('co_contact_body')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('co_contact_body')}</font></label>{/if}
-    </div>
-  </div>
-</section>
-
-  {form_hidden($list)}
-
-  <div class="form-group">
-    <div class="col-sm-offset-4 col-sm-8">
-      {$attr['name'] = 'submit'}
-      {$attr['type'] = 'submit'}
-      {form_button($attr , '確　　認' , 'class="btn btn-default"')}
-    </div>
-  </div>
-
-{form_close()}
-
-<!-- </form> -->
 
 
 
 
 
 <br><br>
+<HR>
+{* 店舗情報の読み込み *}{include file="../tenpoinfo.tpl"}
+<HR>
+
+
+<section class="container">
+
+  <br><br>
+  <div class="panel-body">
+    <ul class="list-inline text-center">
+        <li><a href="../../site/inquiry_edit/{$tenpo.tp_cl_siteid}">問合せ</a></li>
+    </ul>
+  </div>
+
+</section>
+
+
 <div class="panel panel-default">
   <div class="panel-footer text-center">
     Copyright(C) 2016 - {{$smarty.now|date_format:"%Y"}} Themis Inc. All Rights Reserved.

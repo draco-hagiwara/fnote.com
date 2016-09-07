@@ -132,16 +132,17 @@ class Categroup extends CI_Model
      * @param    char
      * @return   array
      */
-    public function get_category_name($en_cate)
+    public function get_category_name($tp_cate)
     {
 
-    	$cate_no = explode(',', $en_cate);											// 分割
+    	$cate_no = explode(',', $tp_cate);											// 分割
 
     	$i = 0;
     	foreach ($cate_no as $val)
     	{
 
-    		$cate_id = str_split($val, 2);											// 2桁毎に分割
+    		$rep_val = str_replace("-", "", $val);
+    		$cate_id = str_split($rep_val, 2);										// 2桁毎に分割
 
     		// 第一カテ名称
     		$cate1 = $this->get_category_id($cate_id[0], NULL, 1);

@@ -7,6 +7,9 @@ class Contact extends MY_Controller
     {
         parent::__construct();
 
+        $this->smarty->assign('serch_keyword', NULL);
+        $this->smarty->assign('serch_access',  NULL);
+
     }
 
     // 問合せフォーム

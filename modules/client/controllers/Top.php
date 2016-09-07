@@ -54,11 +54,11 @@ class Top extends MY_Controller
     			$this->load->model('Client', 'cl', TRUE);
 
     			$set_data['cl_seq']     = $post_data['cl_seq'];
-    			$set_data['cl_id']      = $post_data['cl_id'];
+//     			$set_data['cl_id']      = $post_data['cl_id'];
     			$set_data['cl_status']  = 7;
     			$set_data['cl_comment'] = $post_data['cl_comment'];
 
-    			$this->cl->update_client($set_data, 3);
+    			$this->cl->update_client($set_data, FALSE, 3);
 
     			// クライアントデータから全担当者を取得
     			$clac_data = $this->cl->get_clac_seq($post_data['cl_seq'], NULL);
@@ -107,11 +107,11 @@ class Top extends MY_Controller
     			$this->load->model('Client', 'cl', TRUE);
 
     			$set_data['cl_seq']     = $post_data['cl_seq'];
-    			$set_data['cl_id']      = $post_data['cl_id'];
+//     			$set_data['cl_id']      = $post_data['cl_id'];
     			$set_data['cl_status']  = 9;
     			$set_data['cl_comment'] = $post_data['cl_comment'];
 
-    			$this->cl->update_client($set_data, 3);
+    			$this->cl->update_client($set_data, FALSE, 3);
 
     			// クライアントデータから担当者を取得
     			$clac_data = $this->cl->get_clac_seq($post_data['cl_seq'], NULL);
@@ -160,11 +160,11 @@ class Top extends MY_Controller
     			$cl_data = $this->cl->get_cl_seq($_SESSION['c_memSeq'], TRUE);
 
     			// 表示用にデータの取得
-    			$this->load->model('Entry', 'ent', TRUE);
-    			$entry_data = $this->ent->get_entry_clseq($_SESSION['c_memSeq']);
+    			$this->load->model('Interview', 'itv', TRUE);
+    			$interview_data = $this->itv->get_interview_clseq($_SESSION['c_memSeq']);
 
-    			$entry_data[0]['cl_status'] = $cl_data[0]['cl_status'];
-    			$this->smarty->assign('list', $entry_data[0]);
+    			$interview_data[0]['cl_status'] = $cl_data[0]['cl_status'];
+    			$this->smarty->assign('list', $interview_data[0]);
     			$this->view('top/preview.tpl');
 
     	}
@@ -196,6 +196,7 @@ class Top extends MY_Controller
     	$this->smarty->assign('qr_code', NULL);
     	if ($entry_data[0]['en_qrcode_site'] != "")
     	{
+//     		require_once("/usr/share/pear7/Image/QRCode.php");
     		require_once("/usr/share/pear/Image/QRCode.php");
 
     		$qr = new Image_QRCode();

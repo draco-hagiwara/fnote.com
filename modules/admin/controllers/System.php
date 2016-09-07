@@ -309,7 +309,7 @@ class System extends MY_Controller
     		}
 
     		// 第三階層カテゴリデータ取得
-    		if ($_SESSION['a_cate01'] == $input_post["ca_cate01"])
+    		if (isset($_SESSION['a_cate01']) && ($_SESSION['a_cate01'] == $input_post["ca_cate01"]))
     		{
     			if (isset($input_post['ca_cate02']))
     			{
