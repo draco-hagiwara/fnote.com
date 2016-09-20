@@ -75,7 +75,7 @@ function getSelectedValAndText(obj)
 
 
   <div class="form-group">
-    <div class="col-sm-offset-1 col-sm-6">
+    <div class="col-sm-offset-1 col-sm-2">
       <ul class="sortable">
         {foreach name=ca_cate01 from=$sort_menu01 key=num item=item}
           <li id="{$num}">{$item}</li>

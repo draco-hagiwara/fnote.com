@@ -31,6 +31,9 @@ class Batch extends MY_Controller
 
     	$_st_day = date("Y-m-d H:i:s", time());
 
+    	// クーポン締日の延長処理
+    	$this->_tenpocoupon_adjust();
+
     	// DB & PG のバックアップ処理
     	$this->_system_backup();
 
@@ -49,6 +52,41 @@ class Batch extends MY_Controller
 
     }
 
+
+    /**
+     *  クーポン締日の延長処理
+     */
+    public function _tenpocoupon_adjust()
+    {
+
+    	$time = time();
+    	$_set_time = date("Y-m-d H:i:s", $time);
+
+        $this->load->model('Tenpocoupon', 'cp',  TRUE);
+
+    	// 該当のデータを取得
+    	$coupon_data = $this->cp->get_coupon_enddate();
+    	if ($coupon_data != FALSE)
+    	{
+    		$date         = new DateTime();
+    		$_cp_end_date = $date->modify('+1 months - 1 days')->format('Y-m-d');			// 1ヶ月後
+
+	    	foreach ($coupon_data as $key => $val)
+	    	{
+
+	    		$set_data['cp_seq']      = $val['cp_seq'];
+	    		$set_data['cp_end_date'] = $_cp_end_date;
+
+	    		$this->cp->update_coupon($set_data);
+
+	    	}
+    	}
+
+    	// ログ出力
+    	$_ed_time = date("Y-m-d H:i:s", time());
+    	log_message('info', 'bat::クーポン締日の延長処理が実行されました。' . $_set_time . ' => ' . $_ed_time);
+
+    }
 
     /**
      *  DB & PG のシステムバックアップ処理

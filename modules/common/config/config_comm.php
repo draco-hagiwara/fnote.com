@@ -7,8 +7,9 @@
 */
 
 // ログインメンバー
-$config['LOGIN_CLIENT']     = 'client';                     // クライアント
-$config['LOGIN_ADMIN']      = 'admin';                      // 管理者
+$config['LOGIN_CLIENT']   = 'client';                     // クライアント
+$config['LOGIN_A_CLIENT'] = 'a_client';                   // 管理者 ⇒ クライアント
+$config['LOGIN_ADMIN']    = 'admin';                      // 管理者
 
 // 管理者種類
 $config['ADMIN_ACCOUNT_TYPE'] =

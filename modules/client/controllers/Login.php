@@ -10,8 +10,6 @@ class Login extends MY_Controller
     {
         parent::__construct();
 
-        $this->_set_validation();												// バリデーション設定
-
 //         if ($_SESSION['c_login'] == TRUE)
         if (isset($_SESSION['c_login']) && $_SESSION['c_login'] == TRUE)
         {
@@ -34,14 +32,16 @@ class Login extends MY_Controller
     public function index()
     {
 
+    	$this->_set_validation();												// バリデーション設定
+
     }
 
     // ログインID＆パスワード チェック
     public function check()
     {
 
-        // バリデーション・チェック
-        $this->_set_validation();												// バリデーション設定
+       // バリデーション・チェック
+    	$this->_set_validation();												// バリデーション設定
         if ($this->form_validation->run() == FALSE) {
             $this->smarty->assign('err_mess', '');
             $this->view('login/index.tpl');
@@ -73,6 +73,51 @@ class Login extends MY_Controller
         }
     }
 
+    // ADMIN管理者用ログイン 初期表示
+    public function adminlogin()
+    {
+
+    	$this->_set_validation01();												// バリデーション設定
+
+    	$this->smarty->assign('err_mess',  '');
+    	$this->view('login/adminlogin.tpl');
+
+    }
+
+    // ADMIN管理者用ログインID＆パスワード チェック
+    public function admincheck()
+    {
+
+    	// バリデーション・チェック
+    	$this->_set_validation01();												// バリデーション設定
+    	if ($this->form_validation->run() == FALSE) {
+    		$this->smarty->assign('err_mess', '');
+    		$this->view('login/adminlogin.tpl');
+    	} else {
+    		// ログインメンバーの読み込み
+    		$this->config->load('config_comm');
+    		$login_member = $this->config->item('LOGIN_A_CLIENT');
+
+    		// ログインID＆パスワードチェック
+    		$this->load->model('comm_auth', 'auth', TRUE);
+
+    		$loginid  = $this->input->post('ac_id');
+    		$password = $this->input->post('ac_pw');
+
+    		$err_mess = $this->auth->check_Login($loginid, $password, $login_member, $this->input->post('cl_siteid'));
+    		if (isset($err_mess)) {
+    			// 入力エラー
+    			$this->smarty->assign('err_mess', $err_mess);
+    			$this->view('login/adminlogin.tpl');
+    		} else {
+    			// ADMIN認証OK
+
+    			// 管理・マイページ画面TOPへ
+    			redirect('/top/');
+    		}
+    	}
+    }
+
     // ログアウト チェック
     public function logout()
     {
@@ -82,6 +127,17 @@ class Login extends MY_Controller
 
         // TOPへリダイレクト
         redirect(base_url());
+    }
+
+    // ログアウト チェック
+    public function adminlogout()
+    {
+    	// SESSION クリア
+    	$this->load->model('comm_auth', 'auth', TRUE);
+    	$this->auth->logout('a_client');
+
+    	// TOPへリダイレクト
+    	redirect('/login/adminlogin/');
     }
 
     // フォーム・バリデーションチェック
@@ -105,4 +161,29 @@ class Login extends MY_Controller
 
     }
 
+    // フォーム・バリデーションチェック
+    private function _set_validation01()
+    {
+
+    	$rule_set = array(
+                array(
+                        'field'   => 'cl_siteid',
+                        'label'   => 'サイトID',
+                        'rules'   => 'trim|required|max_length[50]'
+                ),
+    			array(
+                        'field'   => 'ac_id',
+                        'label'   => 'ログインID',
+                        'rules'   => 'trim|required|max_length[50]'
+                ),
+                array(
+                        'field'   => 'ac_pw',
+                        'label'   => 'パスワード',
+                        'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|max_length[50]'
+                ),
+    	);
+
+    	$this->load->library('form_validation', $rule_set);                     // バリデーションクラス読み込み
+
+    }
 }

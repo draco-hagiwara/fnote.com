@@ -46,6 +46,41 @@ class Site extends MY_Controller
     		show_404();
     	}
 
+    	// 営業の有無をチェック
+    	$_close_chk = $this->_tenpo_close_chk($tenpo_data[0]['tp_closed']);
+
+
+    	print("<br>");
+    	print("営業check　：：　");
+    	var_dump($_close_chk);
+    	print("<br>");
+
+
+    	if ($_close_chk == FALSE)
+    	{
+    		print("【定休日】<br>");
+    		$_eigyo_chk = 0;
+    	} else {
+
+
+
+    		// 営業時間のチェック
+    		$_open_chk = $this->_tenpo_open_chk($tenpo_data[0]['tp_eigyo']);
+    		if ($_open_chk == TRUE)
+    		{
+    			print("【営業時間外】<br>");
+    			$_eigyo_chk = 1;
+    		} else {
+    			print("【営業中】<br>");
+    			$_eigyo_chk = 2;
+    		}
+
+
+
+    	}
+
+    	$this->smarty->assign('eigyo_chk', $_eigyo_chk);
+
     	$interview_data = $this->itv->get_interview_siteid($segments[3]);
 
     	$this->smarty->assign('tenpo',     $tenpo_data[0]);
@@ -244,6 +279,85 @@ class Site extends MY_Controller
 
     }
 
+    // サイトメニュー：ギャラリー
+    public function gl()
+    {
+
+    	// URIセグメントからクライアントSITEIDを取得
+    	$segments = $this->uri->segment_array();
+    	if (!isset($segments[3]))
+    	{
+    		show_404();
+    	}
+
+    	// 表示用にデータの取得
+    	$this->load->model('Tenpoinfo', 'tnp', TRUE);
+    	$this->load->model('Image_gl',  'img', TRUE);
+
+    	// 店舗情報データの取得
+    	$tenpo_data = $this->tnp->get_tenpo_siteid($segments[3]);
+    	if ($tenpo_data == FALSE)
+    	{
+    		show_404();
+    	} else {
+    		$this->smarty->assign('tenpo', $tenpo_data[0]);
+    	}
+
+    	// ギャラリー画像データの取得
+    	$gl_data = $this->img->get_image_clsiteid($segments[3]);
+    	if ($gl_data == FALSE)
+    	{
+    		$this->smarty->assign('gallery', NULL);
+    	} else {
+
+    		// 表示用に編集：横6列表示
+
+//     		// *2016.09.16 以下は masonry / imagesLoaded 使用時のコード
+//     		$set_gldata[] = array (
+//     								"title"  => "A Day in the Life",
+//     								"images" => array(
+//     												"thumb" =>  "https://fnote.com.dev/images/client10/b/t_20160913_5763857d7544da4cd8.jpg",
+//     												"large" =>  "https://fnote.com.dev/images/client10/b/20160913_5763857d7544da4cd8.jpg",
+//     											)
+//     							);
+//     		$set_gldata[] = array (
+//     								"title"  => "A Day in the Life",
+//     								"images" => array(
+//     												"thumb" =>  "https://fnote.com.dev/images/client10/b/t_20160913_5586457d81245dd90d.jpg",
+//     												"large" =>  "https://fnote.com.dev/images/client10/b/20160913_5586457d81245dd90d.jpg",
+//     											)
+//     							);
+
+//     		$set_gldata = json_encode($set_gldata);
+
+//     		print_r($set_gldata);
+
+
+    		// *2016.09.15 以下はbootstrap使用時のコード
+    		$i = 0;
+    		$j = 0;
+    		foreach ($gl_data as $key => $value)
+    		{
+    			$set_gldata[$i][$j]['gl_cl_siteid'] = $value['gl_cl_siteid'];
+    			$set_gldata[$i][$j]['gl_filename'] = $value['gl_filename'];
+    			$set_gldata[$i][$j]['gl_title'] = $value['gl_title'];
+
+    			$j++;
+    			if ($j == 6)
+    			{
+    				$i++;
+    				$j = 0;
+    			}
+
+    		}
+
+    		$this->smarty->assign('gallery', $set_gldata);
+    	}
+
+    	$this->view('site/gl.tpl');
+
+    }
+
     // サイトメニュー：クーポン＆地図
     public function mp()
     {
@@ -397,6 +511,191 @@ class Site extends MY_Controller
 
     }
 
+    // 定休日チェック
+    private function _tenpo_close_chk($tp_closed)
+    {
+
+    	// 本日の曜日は？ (0:日曜～6:土曜)
+    	$week_int = date('w', time());
+		$result = strpos($tp_closed, $week_int);
+
+		print("曜日check　：：　");
+		var_dump($result);
+		print("<br>");
+
+
+
+		// 祝日チェック
+		if (is_numeric($result))
+		{
+			return FALSE;
+		} else {
+			// 営業中
+			$this->load->library('HolidayDateTime');
+			$result = $this->holidaydatetime->holiday();
+
+			print("祝日check　：：　");
+			var_dump($result);
+			print("<br>");
+
+			if ($result)
+			{
+				return FALSE;
+			} else {
+				return TRUE;
+			}
+		}
+
+
+
+    }
+
+    // 営業時間チェック
+    private function _tenpo_open_chk($tp_open)
+    {
+
+    	// 本日の曜日は？ (0:日曜～6:土曜)
+    	$week_int = date('w', time());
+
+
+
+    	print($week_int);
+    	print("<br>");
+    	print_r($tp_open);
+    	print("<br>");
+
+    	// ３つの設定に分割
+    	$open_time01 = explode("/", $tp_open);
+
+    	print("time01::");
+    	print_r($open_time01);
+    	print("<br>");
+
+
+    	// 曜日と時間に分割
+    	foreach ($open_time01 as $key => $value)
+    	{
+   			$open_time02[$key] = explode(",", $value);
+    	}
+
+    	print("time02::");
+    	print_r($open_time02);
+    	print("<br>");
+
+
+    	// 該当曜日の２つの時間を取得
+    	foreach ($open_time02 as $key => $value)
+    	{
+
+    		print("strpos = ");
+    		print(strpos($value[0], $week_int));
+    		print("<br>");
+
+
+
+
+    		if (is_numeric(strpos($value[0], $week_int)))
+    		{
+
+    			print("該当曜日時間::");
+    			print_r($value[1]);
+    			print("<br>");
+
+
+
+    			$open_time03 = explode("+", $value[1]);
+    		}
+    	}
+
+
+    	if (!isset($open_time03))
+    	{
+    		print("営業時間外3！<br>");
+
+    		return TRUE;
+    	} else {
+	    	print("time03::");
+	    	print_r($open_time03);
+	    	print("<br>");
+    	}
+
+
+
+    	$date = new DateTime();
+    	$_now_time = $date->modify('now')->format('H:i');
+
+    	print("now時間::");
+    	print($_now_time);
+    	print("<br>");
+
+
+
+
+    	// 該当曜日の２つの時間を取得
+    	foreach ($open_time03 as $key => $value)
+    	{
+			$open_time04 = explode("-", $value);
+
+			print("time04::");
+			print_r($open_time04);
+			print("<br>");
+
+
+			// 入力時間のチェック : 営業時間が設定されている
+			if ($open_time04[0] != $open_time04[1])
+			{
+
+				print("入力時間のチェック::");
+				print_r($open_time04);
+				print("<br>");
+
+
+
+
+
+				// 24h チェック
+				if ($open_time04[0] < $open_time04[1])
+				{
+					if (($open_time04[0] <= $_now_time) && ($_now_time <= $open_time04[1]))
+					{
+						print("営業中1！<br>");
+						return FALSE;
+
+
+					} else {
+						print("営業時間外1！<br>");
+
+					}
+
+
+				} else {
+
+					if (($open_time04[0] <= $_now_time) && ($_now_time <= "23:59"))
+					{
+						print("営業中1！<br>");
+						return FALSE;
+
+
+					} elseif (("0:00" <= $_now_time) && ($_now_time <= $open_time04[1])) {
+						print("営業中1！<br>");
+						return FALSE;
+
+
+					} else {
+						print("営業時間外2！<br>");
+					}
+
+				}
+
+
+			}
+
+    	}
+
+
+    	return TRUE;			// 「営業時間外」
+
+    }
 
     // フォーム・バリデーションチェック
     private function _set_validation()
@@ -429,9 +728,6 @@ class Site extends MY_Controller
 
 
 }
-
-
-
 
 
 /* End of file top.php */

@@ -22,6 +22,52 @@ class Top extends MY_Controller
 
     }
 
+
+
+
+
+
+
+
+
+    // テストOKで「Batch.php」に移行
+    public function batchtest()
+    {
+
+
+
+    	$this->load->model('Tenpocoupon', 'cp',  TRUE);
+
+    	// 該当のデータを取得
+    	$coupon_data = $this->cp->get_coupon_enddate();
+    	if ($coupon_data != FALSE)
+    	{
+    		$date = new DateTime();
+
+	    	foreach ($coupon_data as $key => $val)
+	    	{
+
+	    		print_r($val);
+
+	    		$set_data['cp_seq']      = $val['cp_seq'];
+	    		$set_data['cp_end_date'] = $date->modify('+1 months - 1 days')->format('Y-m-d');		// 1ヶ月後
+
+	    		$this->cp->update_coupon($set_data);
+
+	    	}
+    	}
+
+
+    	$this->view('top/index.tpl');
+
+    }
+
+
+
+
+
+
+
     public function index()
     {
 
@@ -144,7 +190,7 @@ class Top extends MY_Controller
 
 //     }
 
-    // ご利用ガイド
+    // このサイトについて
     public function guide()
     {
 
@@ -156,7 +202,19 @@ class Top extends MY_Controller
 
     }
 
-    // 会社概要
+    // 掲載希望の事業者様へ
+    public function publish()
+    {
+
+    	// バリデーション・チェック
+    	$this->_set_validation();                                            // バリデーション設定1
+    	$this->form_validation->run();
+
+    	$this->view('top/publish.tpl');
+
+    }
+
+    // 運営会社
     public function aboutus()
     {
 
@@ -168,7 +226,7 @@ class Top extends MY_Controller
 
     }
 
-    // 個人情報保護方針
+    // プライバシーポリシー・個人情報保護方針
     public function privacy()
     {
 
@@ -177,6 +235,30 @@ class Top extends MY_Controller
         $this->form_validation->run();
 
         $this->view('top/privacy.tpl');
+
+    }
+
+    // 利用規約
+    public function rules()
+    {
+
+    	// バリデーション・チェック
+    	$this->_set_validation();                                            // バリデーション設定
+    	$this->form_validation->run();
+
+    	$this->view('top/rules.tpl');
+
+    }
+
+    // 会員規約
+    public function member()
+    {
+
+    	// バリデーション・チェック
+    	$this->_set_validation();                                            // バリデーション設定
+    	$this->form_validation->run();
+
+    	$this->view('top/member.tpl');
 
     }
 

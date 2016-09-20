@@ -28,6 +28,20 @@
 
 
 
+
+{* バッチテスト用ボタン *}
+<br><br><hr>
+<form class="form-horizontal" name="batchForm" method="post" action="/top/batchtest/">
+  <button type='submit' name='_submit' value='submit' class="btn btn-sm btn-primary">テスト用バッチ</button>
+</form>
+<hr><br><br>
+
+
+
+
+
+
+
 {* フッター部分　START *}
     <!-- TwitterBootstrapのグリッドシステムclass="row"で終了 -->
     </div>

@@ -4,11 +4,10 @@
 <body>
 {* ヘッダー部分　END *}
 
-<div class="jumbotron">
-  <h3>基本情報 変更画面</h3>
-</div>
 
 {form_open('/mypage/info/' , 'name="idpwForm" class="form-horizontal"')}
+
+<p class="bg-info">　【 ログイン・パスワード　変更 】</p>
 
   <div class="form-group">
     <label for="cl_id" class="col-sm-2 col-sm-offset-1 control-label">ログインID<font color=red>　【必須】</font></label>
@@ -36,9 +35,9 @@
     </div>
   </div>
 
+<br><hr>
 
-<br><hr><br>
-
+<p class="bg-info">　【 ブログ　基本項目設定 】</p>
 
   <div class="form-group">
     <label for="cl_blog_title" class="col-sm-2 col-sm-offset-1 control-label">ブログ：タイトル<font color=red>　【必須】</font></label>
@@ -63,6 +62,83 @@
       </label>
       <label>　　
         <input type="radio" name="optionsRadios01" id="optionsRadios2" value="1" {if $cl_blog_status==1}checked{/if}>使用しない
+      </label>
+    </div>
+  </div>
+
+<br><hr>
+
+<p class="bg-info">　【 画像カテゴリ分類名称　設定 】</p>
+
+  <div class="form-group">
+    <label for="cl_blog_title" class="col-sm-2 col-sm-offset-1 control-label">画像カテゴリ分類名称</label>
+    <div class="col-sm-2">
+      {form_input('ci_name01' , set_value('ci_name01', $ci_cate.ci_name01) , 'class="col-sm-4 form-control" placeholder="名称。max.10文字"')}
+      {if form_error('ci_name01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_name01')}</font></label>{/if}
+    </div>
+    <div class="radio col-sm-3">
+      <label>
+        <input type="radio" name="optionsRadios01" id="optionsRadios1" value="0" {if $ci_cate.ci_status01==0}checked{/if}>使用する
+      </label>
+      <label>　　
+        <input type="radio" name="optionsRadios01" id="optionsRadios2" value="1" {if $ci_cate.ci_status01==1}checked{/if}>使用しない
+      </label>
+    </div>
+    <button type="button" class="col-sm-1 col-sm-offset-2 btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal03">更新する</button>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-2 col-sm-offset-3">
+      {form_input('ci_name02' , set_value('ci_name02', $ci_cate.ci_name02) , 'class="col-sm-4 form-control" placeholder="名称。max.10文字"')}
+      {if form_error('ci_name02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_name02')}</font></label>{/if}
+    </div>
+    <div class="radio col-sm-4">
+      <label>
+        <input type="radio" name="optionsRadios02" id="optionsRadios1" value="0" {if $ci_cate.ci_status02==0}checked{/if}>使用する
+      </label>
+      <label>　　
+        <input type="radio" name="optionsRadios02" id="optionsRadios2" value="1" {if $ci_cate.ci_status02==1}checked{/if}>使用しない
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-2 col-sm-offset-3">
+      {form_input('ci_name03' , set_value('ci_name03', $ci_cate.ci_name03) , 'class="col-sm-4 form-control" placeholder="名称。max.10文字"')}
+      {if form_error('ci_name03')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_name03')}</font></label>{/if}
+    </div>
+    <div class="radio col-sm-4">
+      <label>
+        <input type="radio" name="optionsRadios03" id="optionsRadios1" value="0" {if $ci_cate.ci_status03==0}checked{/if}>使用する
+      </label>
+      <label>　　
+        <input type="radio" name="optionsRadios03" id="optionsRadios2" value="1" {if $ci_cate.ci_status03==1}checked{/if}>使用しない
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-2 col-sm-offset-3">
+      {form_input('ci_name04' , set_value('ci_name04', $ci_cate.ci_name04) , 'class="col-sm-4 form-control" placeholder="名称。max.10文字"')}
+      {if form_error('ci_name04')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_name04')}</font></label>{/if}
+    </div>
+    <div class="radio col-sm-4">
+      <label>
+        <input type="radio" name="optionsRadios04" id="optionsRadios1" value="0" {if $ci_cate.ci_status04==0}checked{/if}>使用する
+      </label>
+      <label>　　
+        <input type="radio" name="optionsRadios04" id="optionsRadios2" value="1" {if $ci_cate.ci_status04==1}checked{/if}>使用しない
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-2 col-sm-offset-3">
+      {form_input('ci_name05' , set_value('ci_name05', $ci_cate.ci_name05) , 'class="col-sm-4 form-control" placeholder="名称。max.10文字"')}
+      {if form_error('ci_name05')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_name05')}</font></label>{/if}
+    </div>
+    <div class="radio col-sm-4">
+      <label>
+        <input type="radio" name="optionsRadios05" id="optionsRadios1" value="0" {if $ci_cate.ci_status05==0}checked{/if}>使用する
+      </label>
+      <label>　　
+        <input type="radio" name="optionsRadios05" id="optionsRadios2" value="1" {if $ci_cate.ci_status05==1}checked{/if}>使用しない
       </label>
     </div>
   </div>
@@ -99,6 +175,24 @@
         </div>
         <div class="modal-footer">
           <button type='submit' name='submit' value='blog' class="btn btn-sm btn-primary">O  K</button>
+          <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <div class="modal fade" id="myModal03" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">画像カテゴリ分類名称　設定</h4>
+        </div>
+        <div class="modal-body">
+          <p></p>
+        </div>
+        <div class="modal-footer">
+          <button type='submit' name='submit' value='image' class="btn btn-sm btn-primary">O  K</button>
           <button type="button" class="btn btn-sm" data-dismiss="modal">キャンセル</button>
         </div>
       </div><!-- /.modal-content -->

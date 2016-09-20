@@ -111,8 +111,8 @@ class Image extends CI_Model
     public function get_image_header($cl_siteid)
     {
 
-    	$sql = 'SELECT im_seq FROM tb_image'
-    			. ' WHERE im_cl_siteid = ? AND im_header = 1';
+    	$sql = 'SELECT im_seq, im_filename FROM tb_image'
+    			. ' WHERE im_cl_siteid = ? AND im_header = 1 AND im_status = 1';
 
     	$values = array($cl_siteid);
 

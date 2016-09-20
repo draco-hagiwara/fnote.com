@@ -48,6 +48,34 @@ class Tenpocoupon extends CI_Model
     }
 
     /**
+     * クーポン締日を取得する
+     *
+     * @param
+     * @return   bool
+     */
+    public function get_coupon_enddate()
+    {
+
+    	$sql = 'SELECT cp_seq, cp_end_date FROM tb_tenpocoupon'
+    			. ' WHERE cp_status = 0 AND cp_update = 0 AND cp_end_date = ?';
+
+    	$date = new DateTime();
+    	$last_date = $date->modify('-1 day')->format('Y-m-d');						// 1日前
+
+    	$values = array($last_date);
+
+    	$query = $this->db->query($sql, $values);
+
+    	// データ有無判定
+    	if ($query->num_rows() > 0) {
+    		$get_data = $query->result('array');
+    		return $get_data;
+    	} else {
+    		return FALSE;
+    	}
+    }
+
+    /**
      * 店舗クーポンの取得
      *
      * @param    array() : 検索項目値

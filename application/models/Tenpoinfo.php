@@ -58,53 +58,6 @@ class Tenpoinfo extends CI_Model
     	}
     }
 
-//     /**
-//      * データ有無判定＆データ取得
-//      *
-//      * @param    char
-//      * @return   array
-//      */
-//     public function get_entry_clid($cl_id, $empty = FALSE)
-//     {
-
-//     	if ($empty == TRUE){
-//     		$set_where["en_cl_seq"] = 0;
-//     	} else {
-//     		$set_where["en_cl_id"] = $cl_id;
-//     	}
-
-//     	$query = $this->db->get_where('tb_entry', $set_where);
-
-//     	// データ有無判定
-//     	if ($query->num_rows() > 0) {
-//     		$get_data = $query->result('array');
-//     		return $get_data;
-//     	} else {
-//     		return FALSE;
-//     	}
-//     }
-
-//     /**
-//      * データ有無判定＆データ取得
-//      *
-//      * @param    char
-//      * @return   array
-//      */
-//     public function get_entry_clseq($cl_seq)
-//     {
-
-//     	$set_where["en_cl_seq"] = $cl_seq;
-
-//     	$query = $this->db->get_where('tb_entry', $set_where);
-
-//     	// データ有無判定
-//     	if ($query->num_rows() > 0) {
-//     		$get_data = $query->result('array');
-//     		return $get_data;
-//     	} else {
-//     		return FALSE;
-//     	}
-//     }
 
 //     /**
 //      * カラムのみ取得
@@ -157,7 +110,8 @@ class Tenpoinfo extends CI_Model
     	{
 
     		$set_select_like[$key]["tp_shopname"]   = $value;					// 店舗名
-    		$set_select_like[$key]["tp_overview"]   = $value;					// 店舗概要
+    		$set_select_like[$key]["tp_ovtitle"]    = $value;					// 店舗TOPタイトル
+    		$set_select_like[$key]["tp_overview"]   = $value;					// 店舗TOP概要
     		$set_select_like[$key]["tp_searchword"] = $value;					// 検索キーワード
 
     	}
@@ -209,6 +163,7 @@ class Tenpoinfo extends CI_Model
     			  tp_tel,
     			  tp_mail,
     			  tp_accessinfo,
+    			  tp_ovtitle,
     			  tp_overview
     			FROM tb_tenpoinfo WHERE tp_status = 0 ';
 
@@ -324,6 +279,7 @@ class Tenpoinfo extends CI_Model
     			  tp_tel,
     			  tp_mail,
     			  tp_accessinfo,
+    			  tp_ovtitle,
     			  tp_overview
     			FROM tb_tenpoinfo WHERE tp_status = 0 ';
 

@@ -88,37 +88,45 @@ function optp_catelist() {
   {if !form_error('tp_cate')}
   <div class="form-group">
     <div class="col-sm-9 col-sm-offset-3">
-          {foreach name=cate_list from=$cate_list item=item}
-            {$item}<br>
+      <ul>
+        {foreach name=cate_list from=$cate_list item=item}
+          <li>{$item}</li>
         {/foreach}
+      </ul>
     </div>
   </div>
   {/if}
 
-
   <div class="form-group">
-    <label for="tp_shopname" class="col-sm-3 control-label">店舗名称<font color=red>【必須】</font><br>(検索対象)</label>
+    <label for="tp_genre" class="col-sm-3 control-label">ジャンル<font color=red>【必須】</font><br>(表示)</label>
+    <div class="col-sm-9">
+      {form_input('tp_genre' , set_value('tp_genre', $list.tp_genre) , 'class="form-control" placeholder="ジャンル名称を入力してください。 max.50文字"')}
+      {if form_error('tp_genre')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_genre')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_shopname" class="col-sm-3 control-label">店舗名称<font color=red>【必須】</font><br>(表示、検索)</label>
     <div class="col-sm-9">
       {form_input('tp_shopname' , set_value('tp_shopname', $list.tp_shopname) , 'class="form-control" placeholder="店舗名称を入力してください。 max.100文字"')}
       {if form_error('tp_shopname')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_shopname')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_shopname_sub" class="col-sm-3 control-label">店舗名称予備</label>
+    <label for="tp_shopname_sub" class="col-sm-3 control-label">店舗名称予備<br>(表示)</label>
     <div class="col-sm-9">
       <textarea class="form-control input-sm" id="tp_shopname_sub" name="tp_shopname_sub" placeholder="店舗名称予備を入力してください。max.500文字">{$list.tp_shopname_sub}</textarea>
       {if form_error('tp_shopname_sub')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_shopname_sub')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_url" class="col-sm-3 control-label">店舗サイトURL</label>
+    <label for="tp_url" class="col-sm-3 control-label">店舗公式サイト<br>(表示)</label>
     <div class="col-sm-9">
-      {form_input('tp_url' , set_value('tp_url', $list.tp_url) , 'class="form-control" placeholder="店舗サイトURLを入力してください。 http(s)://～"')}
+      {form_input('tp_url' , set_value('tp_url', $list.tp_url) , 'class="form-control" placeholder="公式サイトのURLを入力してください。 http(s)://～"')}
       {if form_error('tp_url')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_url')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_zip" class="col-sm-3 control-label">郵便番号<font color=red>【必須】</font></label>
+    <label for="tp_zip" class="col-sm-3 control-label">郵便番号<font color=red>【必須】</font><br>(表示)</label>
     <div class="col-sm-2">
       {form_input('tp_zip01' , set_value('tp_zip01', $list.tp_zip01) , 'class="form-control" placeholder="郵便番号（3ケタ）"')}
       {if form_error('tp_zip01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_zip01')}</font></label>{/if}
@@ -129,35 +137,35 @@ function optp_catelist() {
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_pref" class="col-sm-3 control-label">都道府県<font color=red>【必須】</font><br>(検索対象)</label>
+    <label for="tp_pref" class="col-sm-3 control-label">都道府県<font color=red>【必須】</font><br>(表示、検索)</label>
     <div class="col-sm-2 btn-lg">
       {form_dropdown('tp_pref', $opt_pref, set_value('tp_pref', $list.tp_pref))}
       {if form_error('tp_pref')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_pref')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_addr01" class="col-sm-3 control-label">市区町村<font color=red>【必須】</font><br>(検索対象)</label>
+    <label for="tp_addr01" class="col-sm-3 control-label">市区町村<font color=red>【必須】</font><br>(表示、検索)</label>
     <div class="col-sm-9">
       {form_input('tp_addr01' , set_value('tp_addr01', $list.tp_addr01) , 'class="form-control" placeholder="市区町村を入力してください。 max.100文字"')}
       {if form_error('tp_addr01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_addr01')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_addr02" class="col-sm-3 control-label">町名・番地<font color=red>【必須】</font></label>
+    <label for="tp_addr02" class="col-sm-3 control-label">町名・番地<font color=red>【必須】</font><br>(表示)</label>
     <div class="col-sm-9">
       {form_input('tp_addr02' , set_value('tp_addr02', $list.tp_addr02) , 'class="form-control" placeholder="町名・番地を入力してください。 max.100文字"')}
       {if form_error('tp_addr02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_addr02')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_buil" class="col-sm-3 control-label">ビル・マンション名など</label>
+    <label for="tp_buil" class="col-sm-3 control-label">ビル・マンション名など<br>(表示)</label>
     <div class="col-sm-9">
       {form_input('tp_buil' , set_value('tp_buil', $list.tp_buil) , 'class="form-control" placeholder="ビル・マンション名などを入力してください。 max.100文字"')}
       {if form_error('tp_buil')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_buil')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_tel" class="col-sm-3 control-label">電話番号</label>
+    <label for="tp_tel" class="col-sm-3 control-label">電話番号<br>(表示)</label>
     <div class="col-sm-9">
       {form_input('tp_tel' , set_value('tp_tel', $list.tp_tel) , 'class="form-control" placeholder="電話番号を入力してください"')}
       {if form_error('tp_tel')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_tel')}</font></label>{/if}
@@ -179,15 +187,15 @@ function optp_catelist() {
   </div>
 
   <div class="form-group">
-    <label for="tp_eigyou" class="col-sm-3 control-label">営業時間</label>
+    <label for="tp_eigyou" class="col-sm-3 control-label">営業時間<font color=red>【必須】</font></label>
     <div class="col-sm-9">
-      {form_checkbox('eigyo1[]','0',$eigyo_chk[0][0])}月
-      {form_checkbox('eigyo1[]','1',$eigyo_chk[0][1])}火
-      {form_checkbox('eigyo1[]','2',$eigyo_chk[0][2])}水
-      {form_checkbox('eigyo1[]','3',$eigyo_chk[0][3])}木
-      {form_checkbox('eigyo1[]','4',$eigyo_chk[0][4])}金
-      {form_checkbox('eigyo1[]','5',$eigyo_chk[0][5])}土
-      {form_checkbox('eigyo1[]','6',$eigyo_chk[0][6])}日
+      {form_checkbox('eigyo1[]','0',$eigyo_chk[0][0])}日
+      {form_checkbox('eigyo1[]','1',$eigyo_chk[0][1])}月
+      {form_checkbox('eigyo1[]','2',$eigyo_chk[0][2])}火
+      {form_checkbox('eigyo1[]','3',$eigyo_chk[0][3])}水
+      {form_checkbox('eigyo1[]','4',$eigyo_chk[0][4])}木
+      {form_checkbox('eigyo1[]','5',$eigyo_chk[0][5])}金
+      {form_checkbox('eigyo1[]','6',$eigyo_chk[0][6])}土
       <br>
       <select name="eigyo_time11">
         {foreach name=eigyo_time11 from=$opt_time_h key=num item=item01}
@@ -263,15 +271,14 @@ function optp_catelist() {
         {/foreach}
       </select>分
     </div>
-
-    <div class="col-sm-9  col-sm-offset-3">
-      {form_checkbox('eigyo2[]','0',$eigyo_chk[1][0])}月
-      {form_checkbox('eigyo2[]','1',$eigyo_chk[1][1])}火
-      {form_checkbox('eigyo2[]','2',$eigyo_chk[1][2])}水
-      {form_checkbox('eigyo2[]','3',$eigyo_chk[1][3])}木
-      {form_checkbox('eigyo2[]','4',$eigyo_chk[1][4])}金
-      {form_checkbox('eigyo2[]','5',$eigyo_chk[1][5])}土
-      {form_checkbox('eigyo2[]','6',$eigyo_chk[1][6])}日
+    <div class="col-sm-9  col-sm-offset-3"><hr>
+      {form_checkbox('eigyo2[]','0',$eigyo_chk[1][0])}日
+      {form_checkbox('eigyo2[]','1',$eigyo_chk[1][1])}月
+      {form_checkbox('eigyo2[]','2',$eigyo_chk[1][2])}火
+      {form_checkbox('eigyo2[]','3',$eigyo_chk[1][3])}水
+      {form_checkbox('eigyo2[]','4',$eigyo_chk[1][4])}木
+      {form_checkbox('eigyo2[]','5',$eigyo_chk[1][5])}金
+      {form_checkbox('eigyo2[]','6',$eigyo_chk[1][6])}土
       <br>
       <select name="eigyo_time51">
         {foreach name=eigyo_time51 from=$opt_time_h key=num item=item01}
@@ -348,14 +355,14 @@ function optp_catelist() {
       </select>分
     </div>
 
-    <div class="col-sm-9  col-sm-offset-3">
-      {form_checkbox('eigyo3[]','0',$eigyo_chk[2][0])}月
-      {form_checkbox('eigyo3[]','1',$eigyo_chk[2][1])}火
-      {form_checkbox('eigyo3[]','2',$eigyo_chk[2][2])}水
-      {form_checkbox('eigyo3[]','3',$eigyo_chk[2][3])}木
-      {form_checkbox('eigyo3[]','4',$eigyo_chk[2][4])}金
-      {form_checkbox('eigyo3[]','5',$eigyo_chk[2][5])}土
-      {form_checkbox('eigyo3[]','6',$eigyo_chk[2][6])}日
+    <div class="col-sm-9  col-sm-offset-3"><hr>
+      {form_checkbox('eigyo3[]','0',$eigyo_chk[2][0])}日
+      {form_checkbox('eigyo3[]','1',$eigyo_chk[2][1])}月
+      {form_checkbox('eigyo3[]','2',$eigyo_chk[2][2])}火
+      {form_checkbox('eigyo3[]','3',$eigyo_chk[2][3])}水
+      {form_checkbox('eigyo3[]','4',$eigyo_chk[2][4])}木
+      {form_checkbox('eigyo3[]','5',$eigyo_chk[2][5])}金
+      {form_checkbox('eigyo3[]','6',$eigyo_chk[2][6])}土
       <br>
       <select name="eigyo_time91">
         {foreach name=eigyo_time91 from=$opt_time_h key=num item=item01}
@@ -431,9 +438,11 @@ function optp_catelist() {
         {/foreach}
       </select>分
     </div>
+    <div class="col-sm-9 col-sm-offset-3"><br>※24時以降は「00:00 ～」を選択してください。</div>
+    <div class="col-sm-9 col-sm-offset-3">※選択がないとサイト上に「営業時間外」と表示されます。</div>
   </div>
   <div class="form-group">
-    <label for="tp_opentime" class="col-sm-3 control-label">営業時間 補足入力</label>
+    <label for="tp_opentime" class="col-sm-3 control-label">営業時間 表示用<br>(表示)</label>
     <div class="col-sm-9">
       <textarea class="form-control input-sm" id="tp_opentime" name="tp_opentime" placeholder="営業時間を入力してください。max.1000文字">{$list.tp_opentime}</textarea>
       {if form_error('tp_opentime')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_opentime')}</font></label>{/if}
@@ -441,21 +450,21 @@ function optp_catelist() {
   </div>
 
   <div class="form-group">
-    <label for="tp_eigyou" class="col-sm-3 control-label">定休日</label>
+    <label for="tp_eigyou" class="col-sm-3 control-label">定休日<font color=red>【必須】</font></label>
     <div class="col-sm-9">
-      {form_checkbox('closed[]','0',$closed_chk[0][0])}月
-      {form_checkbox('closed[]','1',$closed_chk[0][1])}火
-      {form_checkbox('closed[]','2',$closed_chk[0][2])}水
-      {form_checkbox('closed[]','3',$closed_chk[0][3])}木
-      {form_checkbox('closed[]','4',$closed_chk[0][4])}金
-      {form_checkbox('closed[]','5',$closed_chk[0][5])}土
-      {form_checkbox('closed[]','6',$closed_chk[0][6])}日
+      {form_checkbox('closed[]','0',$closed_chk[0][0])}日
+      {form_checkbox('closed[]','1',$closed_chk[0][1])}月
+      {form_checkbox('closed[]','2',$closed_chk[0][2])}火
+      {form_checkbox('closed[]','3',$closed_chk[0][3])}水
+      {form_checkbox('closed[]','4',$closed_chk[0][4])}木
+      {form_checkbox('closed[]','5',$closed_chk[0][5])}金
+      {form_checkbox('closed[]','6',$closed_chk[0][6])}土
       {form_checkbox('closed[]','7',$closed_chk[0][7])}祝日
     </div>
   </div>
 
   <div class="form-group">
-    <label for="tp_holiday" class="col-sm-3 control-label">定休日 補足入力</label>
+    <label for="tp_holiday" class="col-sm-3 control-label">定休日 表示用<br>(表示)</label>
     <div class="col-sm-9">
       <textarea class="form-control input-sm" id="tp_holiday" name="tp_holiday" placeholder="定休日を入力してください。max.1000文字">{$list.tp_holiday}</textarea>
       {if form_error('tp_holiday')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_holiday')}</font></label>{/if}
@@ -469,77 +478,170 @@ function optp_catelist() {
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_parking" class="col-sm-3 control-label">駐車場情報</label>
+    <label for="tp_parking" class="col-sm-3 control-label">駐車場情報<br>(表示)</label>
     <div class="col-sm-9">
       <textarea class="form-control input-sm" id="tp_parking" name="tp_parking" placeholder="駐車場情報を入力してください。max.200文字">{$list.tp_parking}</textarea>
       {if form_error('tp_parking')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_parking')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_seat" class="col-sm-3 control-label">座席情報</label>
+    <label for="tp_seat" class="col-sm-3 control-label">座席情報<br>(表示)</label>
     <div class="col-sm-9">
       <textarea class="form-control input-sm" id="tp_seat" name="tp_seat" placeholder="座席情報を入力してください。max.1000文字">{$list.tp_seat}</textarea>
       {if form_error('tp_seat')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_seat')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_card" class="col-sm-3 control-label">カード情報</label>
+    <label for="tp_smoking" class="col-sm-3 control-label">喫煙情報<br>(表示)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_smoking" name="tp_smoking" placeholder="喫煙情報を入力してください。max.1000文字">{$list.tp_smoking}</textarea>
+      {if form_error('tp_smoking')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_smoking')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_card" class="col-sm-3 control-label">カード情報<br>(表示)</label>
     <div class="col-sm-9">
       <textarea class="form-control input-sm" id="tp_card" name="tp_card" placeholder="カード情報を入力してください。max.1000文字">{$list.tp_card}</textarea>
       {if form_error('tp_card')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_card')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_accessinfo" class="col-sm-3 control-label">最寄駅情報<br>(検索対象)</label>
+    <label for="tp_accessinfo" class="col-sm-3 control-label">最寄駅情報<br>(表示、検索)</label>
     <div class="col-sm-9">
       {form_input('tp_accessinfo' , set_value('tp_accessinfo', $list.tp_accessinfo) , 'class="form-control" placeholder="最寄駅を入力してください。複数入力する場合は「,(カンマ)」で区切ってください。max.200文字"')}
       {if form_error('tp_accessinfo')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_accessinfo')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_access" class="col-sm-3 control-label">アクセス情報</label>
+    <label for="tp_access" class="col-sm-3 control-label">アクセス情報<br>(表示)</label>
     <div class="col-sm-9">
       <textarea class="form-control input-sm" id="tp_access" name="tp_access" placeholder="アクセス情報を入力してください。max.1000文字">{$list.tp_access}</textarea>
       {if form_error('tp_access')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_access')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_access_sub" class="col-sm-3 control-label">アクセス情報予備</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_access_sub" name="tp_access_sub" placeholder="アクセス情報予備を入力してください。max.1000文字">{$list.tp_access_sub}</textarea>
-      {if form_error('tp_access_sub')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_access_sub')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_pricerange01" class="col-sm-3 control-label">メニュー価格帯１</label>
-    <div class="col-sm-9">
-      {form_input('tp_pricerange01' , set_value('tp_pricerange01', $list.tp_pricerange01) , 'class="form-control" placeholder="メニュー価格帯を入力してください。max.200文字"')}
+    <label for="tp_pricerange01" class="col-sm-3 control-label">メニュー価格帯（円）</label>
+    <div class="col-sm-2">
+      {form_input('tp_pricerange01' , set_value('tp_pricerange01', $list.tp_pricerange01) , 'class="form-control" placeholder="「以上～」。数字のみ。"')}
       {if form_error('tp_pricerange01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_pricerange01')}</font></label>{/if}
     </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_contents01" class="col-sm-3 control-label">メニュー情報１</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_contents01" name="tp_contents01" placeholder="メニュー情報１を入力してください。max.1000文字">{$list.tp_contents01}</textarea>
-      {if form_error('tp_contents01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_contents01')}</font></label>{/if}
+    <div class="col-sm-1">
+      　～　
     </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_pricerange02" class="col-sm-3 control-label">メニュー価格帯２</label>
-    <div class="col-sm-9">
-      {form_input('tp_pricerange02' , set_value('tp_pricerange02', $list.tp_pricerange02) , 'class="form-control" placeholder="メニュー価格帯を入力してください。max.200文字"')}
+    <div class="col-sm-2">
+      {form_input('tp_pricerange02' , set_value('tp_pricerange02', $list.tp_pricerange02) , 'class="form-control" placeholder="「～以下」。数字のみ。"')}
       {if form_error('tp_pricerange02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_pricerange02')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_contents02" class="col-sm-3 control-label">メニュー情報２</label>
+    <label for="tp_contents01" class="col-sm-3 control-label">メニュー情報<br>(表示)</label>
     <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_contents02" name="tp_contents02" placeholder="メニュー情報２を入力してください。max.1000文字">{$list.tp_contents02}</textarea>
-      {if form_error('tp_contents02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_contents02')}</font></label>{/if}
+      <textarea class="form-control input-sm" id="tp_contents01" name="tp_contents01" placeholder="メニュー情報を入力してください。max.1000文字">{$list.tp_contents01}</textarea>
+      {if form_error('tp_contents01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_contents01')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="tp_overview" class="col-sm-3 control-label">事業者TOP概要<font color=red>【必須】</font><br>(検索対象)</label>
+    <label for="tp_sns01" class="col-sm-3 control-label">ＳＮＳコード１<br>(表示)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_sns01" name="tp_sns01" placeholder="ＳＮＳコード１を入力してください。">{$list.tp_sns01}</textarea>
+      {if form_error('tp_sns01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_sns01')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_sns02" class="col-sm-3 control-label">ＳＮＳコード２<br>(表示)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_sns02" name="tp_sns02" placeholder="ＳＮＳコード２を入力してください。">{$list.tp_sns02}</textarea>
+      {if form_error('tp_sns02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_sns02')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_sns03" class="col-sm-3 control-label">ＳＮＳコード３<br>(表示)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_sns03" name="tp_sns03" placeholder="ＳＮＳコード３を入力してください。">{$list.tp_sns03}</textarea>
+      {if form_error('tp_sns03')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_sns03')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_sns04" class="col-sm-3 control-label">ＳＮＳコード４<br>(表示)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_sns04" name="tp_sns04" placeholder="ＳＮＳコード４を入力してください。">{$list.tp_sns04}</textarea>
+      {if form_error('tp_sns04')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_sns04')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_sns05" class="col-sm-3 control-label">ＳＮＳコード５<br>(表示)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_sns05" name="tp_sns05" placeholder="ＳＮＳコード５を入力してください。">{$list.tp_sns05}</textarea>
+      {if form_error('tp_sns05')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_sns05')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_google_map" class="col-sm-3 control-label">Googleマップコード<br>(表示)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_google_map" name="tp_google_map" placeholder="googleマップの座標数値を入力してください。">{$list.tp_google_map}</textarea>
+      {if form_error('tp_google_map')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_google_map')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_qrcode_site" class="col-sm-3 control-label">サイトQRコード<br>(表示)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_qrcode_site" name="tp_qrcode_site" placeholder="サイトURLを入力してください。">{$list.tp_qrcode_site}</textarea>
+      {if form_error('tp_qrcode_site')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_qrcode_site')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_qrcode_google" class="col-sm-3 control-label">GoogleマップQRコード<br>(表示)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_qrcode_google" name="tp_qrcode_google" placeholder="GoogleマップURLを入力してください。">{$list.tp_qrcode_google}</textarea>
+      {if form_error('tp_qrcode_google')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_qrcode_google')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_free01" class="col-sm-3 control-label">フリー１<br>(表示)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_free01" name="tp_free01" placeholder="フリー１を入力してください。max.1000文字">{$list.tp_free01}</textarea>
+      {if form_error('tp_free01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_free01')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_free02" class="col-sm-3 control-label">フリー２<br>(未使用)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_free02" name="tp_free02" placeholder="フリー２を入力してください。max.1000文字">{$list.tp_free02}</textarea>
+      {if form_error('tp_free02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_free02')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_free03" class="col-sm-3 control-label">フリー３<br>(未使用)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_free03" name="tp_free03" placeholder="フリー３を入力してください。max.1000文字">{$list.tp_free03}</textarea>
+      {if form_error('tp_free03')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_free03')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_free04" class="col-sm-3 control-label">フリー４<br>(未使用)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_free04" name="tp_free04" placeholder="フリー４を入力してください。max.1000文字">{$list.tp_free04}</textarea>
+      {if form_error('tp_free04')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_free04')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tp_free05" class="col-sm-3 control-label">フリー５<br>(未使用)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_free05" name="tp_free05" placeholder="フリー５を入力してください。max.1000文字">{$list.tp_free05}</textarea>
+      {if form_error('tp_free05')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_free05')}</font></label>{/if}
+    </div>
+  </div>
+  <hr>
+  <div class="form-group">
+    <label for="tp_ovtitle" class="col-sm-3 control-label">事業者TOPタイトル<font color=red>【必須】</font><br>(表示、検索、一覧)</label>
+    <div class="col-sm-9">
+      <textarea class="form-control input-sm" id="tp_ovtitle" name="tp_ovtitle" placeholder="事業者TOPタイトルを入力してください。max.50文字">{$list.tp_ovtitle}</textarea>
+      {if form_error('tp_ovtitle')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_ovtitle')}</font></label>{/if}
+    </div>
+    <div class="col-sm-9 col-sm-offset-3">※表示画像の選択は画像管理より「TOP画像へ使用する」にチェックを入れてください。</div>
+  </div>
+  <div class="form-group">
+    <label for="tp_overview" class="col-sm-3 control-label">事業者TOP概要<font color=red>【必須】</font><br>(表示、検索)</label>
     <div class="col-sm-9">
       <textarea class="form-control input-sm" id="tp_overview" name="tp_overview" placeholder="事業者TOP概要を入力してください。max.1000文字">{$list.tp_overview}</textarea>
       {if form_error('tp_overview')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_overview')}</font></label>{/if}
@@ -548,7 +650,7 @@ function optp_catelist() {
   <div class="form-group">
     <label for="tp_searchword" class="col-sm-3 control-label">検索用キーワード<br>(検索対象)</label>
     <div class="col-sm-9">
-      {form_input('tp_searchword' , set_value('tp_searchword', $list.tp_searchword) , 'class="form-control" placeholder="検索用キーワードを入力してください。max.200文字"')}
+      {form_input('tp_searchword' , set_value('tp_searchword', $list.tp_searchword) , 'class="form-control" placeholder="検索用キーワードを入力してください。複数入力する場合は「,(カンマ)」で区切ってください。max.200文字"')}
       {if form_error('tp_searchword')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_searchword')}</font></label>{/if}
     </div>
   </div>
@@ -564,97 +666,6 @@ function optp_catelist() {
     <div class="col-sm-9">
       <textarea class="form-control input-sm" id="tp_keywords" name="tp_keywords" placeholder="キーワードを入力してください。max.1000文字">{$list.tp_keywords}</textarea>
       {if form_error('tp_keywords')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_keywords')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_sns01" class="col-sm-3 control-label">ＳＮＳコード１</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_sns01" name="tp_sns01" placeholder="ＳＮＳコード１を入力してください。">{$list.tp_sns01}</textarea>
-      {if form_error('tp_sns01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_sns01')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_sns02" class="col-sm-3 control-label">ＳＮＳコード２</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_sns02" name="tp_sns02" placeholder="ＳＮＳコード２を入力してください。">{$list.tp_sns02}</textarea>
-      {if form_error('tp_sns02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_sns02')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_sns03" class="col-sm-3 control-label">ＳＮＳコード３</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_sns03" name="tp_sns03" placeholder="ＳＮＳコード３を入力してください。">{$list.tp_sns03}</textarea>
-      {if form_error('tp_sns03')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_sns03')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_sns04" class="col-sm-3 control-label">ＳＮＳコード４</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_sns04" name="tp_sns04" placeholder="ＳＮＳコード４を入力してください。">{$list.tp_sns04}</textarea>
-      {if form_error('tp_sns04')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_sns04')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_sns05" class="col-sm-3 control-label">ＳＮＳコード５</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_sns05" name="tp_sns05" placeholder="ＳＮＳコード５を入力してください。">{$list.tp_sns05}</textarea>
-      {if form_error('tp_sns05')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_sns05')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_google_map" class="col-sm-3 control-label">Googleマップコード</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_google_map" name="tp_google_map" placeholder="googleマップコードを入力してください。">{$list.tp_google_map}</textarea>
-      {if form_error('tp_google_map')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_google_map')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_qrcode_site" class="col-sm-3 control-label">サイトQRコード</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_qrcode_site" name="tp_qrcode_site" placeholder="QRコードを入力してください。">{$list.tp_qrcode_site}</textarea>
-      {if form_error('tp_qrcode_site')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_qrcode_site')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_qrcode_google" class="col-sm-3 control-label">GoogleマップQRコード</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_qrcode_google" name="tp_qrcode_google" placeholder="GoogleマップQRコードを入力してください。">{$list.tp_qrcode_google}</textarea>
-      {if form_error('tp_qrcode_google')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_qrcode_google')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_free01" class="col-sm-3 control-label">フリー１</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_free01" name="tp_free01" placeholder="フリー１を入力してください。max.1000文字">{$list.tp_free01}</textarea>
-      {if form_error('tp_free01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_free01')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_free02" class="col-sm-3 control-label">フリー２</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_free02" name="tp_free02" placeholder="フリー２を入力してください。max.1000文字">{$list.tp_free02}</textarea>
-      {if form_error('tp_free02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_free02')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_free03" class="col-sm-3 control-label">フリー３</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_free03" name="tp_free03" placeholder="フリー３を入力してください。max.1000文字">{$list.tp_free03}</textarea>
-      {if form_error('tp_free03')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_free03')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_free04" class="col-sm-3 control-label">フリー４</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_free04" name="tp_free04" placeholder="フリー４を入力してください。max.1000文字">{$list.tp_free04}</textarea>
-      {if form_error('tp_free04')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_free04')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="tp_free05" class="col-sm-3 control-label">フリー５</label>
-    <div class="col-sm-9">
-      <textarea class="form-control input-sm" id="tp_free05" name="tp_free05" placeholder="フリー５を入力してください。max.1000文字">{$list.tp_free05}</textarea>
-      {if form_error('tp_free05')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('tp_free05')}</font></label>{/if}
     </div>
   </div>
 

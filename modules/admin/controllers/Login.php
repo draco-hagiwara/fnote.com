@@ -10,9 +10,6 @@ class Login extends MY_Controller
     {
         parent::__construct();
 
-        $this->_set_validation();												// バリデーション設定
-
-//         if ($_SESSION['a_login'] == TRUE)
         if (isset($_SESSION['a_login']) && $_SESSION['a_login'] == TRUE)
         {
         	$this->smarty->assign('login_chk', TRUE);
@@ -34,6 +31,8 @@ class Login extends MY_Controller
     // ログイン 初期表示
     public function index()
     {
+
+    	$this->_set_validation();												// バリデーション設定
 
     }
 

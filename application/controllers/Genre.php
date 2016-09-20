@@ -112,6 +112,16 @@ class Genre extends MY_Controller
     	$this->load->model('Tenpoinfo', 'tnp', TRUE);
     	list($tenpo_list, $tenpo_countall) = $this->tnp->get_genrelist($set_genre, $tmp_per_page, $tmp_offset);
 
+    	// 画像をリンク
+    	$this->load->model('Image', 'img', TRUE);
+    	foreach ($tenpo_list as $key => $val)
+    	{
+
+    		$get_img = $this->img->get_image_header($val['tp_cl_siteid']);
+    		$tenpo_list[$key]['img'] = $get_img[0]['im_filename'];
+
+    	}
+
     	// Pagination 設定
     	$set_pagination = $this->_get_Pagination($tenpo_countall, $tmp_per_page);
 

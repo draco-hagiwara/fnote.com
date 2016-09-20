@@ -26,6 +26,15 @@ class Tenpo_coupon extends MY_Controller
     public function index()
     {
 
+    	// セッションデータをクリア
+    	$this->load->model('comm_auth', 'comm_auth', TRUE);
+    	if (isset($_SESSION['c_adminSeq']))
+    	{
+    		$this->comm_auth->delete_session('a_client');
+    	} else {
+    		$this->comm_auth->delete_session('client');
+    	}
+
         // バリデーション・チェック
         $this->_set_validation01();												// バリデーション設定
 
@@ -163,6 +172,10 @@ class Tenpo_coupon extends MY_Controller
 	    	if ($this->form_validation->run() == TRUE)
 	    	{
 
+	    		// 店舗データの取得
+	    		$this->load->model('Tenpoinfo', 'tnp',  TRUE);
+	    		$tenpo_data = $this->tnp->get_tenpo_siteid($_SESSION['c_memSiteid']);
+
 	    		$set_data['cp_status']     = $input_post['optionsRadios01'];
 	    		$set_data['cp_template']   = $input_post['cp_template'];
 	    		$set_data['cp_title']      = $input_post['cp_title'];
@@ -175,6 +188,7 @@ class Tenpo_coupon extends MY_Controller
 	    		$set_data['cp_update']     = $input_post['optionsRadios02'];
 	    		$set_data['cp_cl_seq']     = $_SESSION['c_memSeq'];
 	    		$set_data['cp_cl_siteid']  = $_SESSION['c_memSiteid'];
+	    		$set_data['cp_tp_seq']     = $tenpo_data[0]['tp_seq'];
 
 	    		$this->load->model('Tenpocoupon', 'cp', TRUE);
 

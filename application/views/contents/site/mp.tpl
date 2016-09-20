@@ -83,9 +83,9 @@ $(function(){
       <td bgcolor="#ffffff">
         <img src="../../../images/coupon_tpl/{$tnp.tpl_img}" width=180 height=80 align="left">
         　{$tnp.cp_content}<br>
-        　提示条件：{$tnp.cp_presen}<br>
-        　利用条件：{$tnp.cp_use}<br>
-        　使用期限：{$tnp.cp_start_date}　～　{$tnp.cp_end_date}
+        　提示条件：　{$tnp.cp_presen}<br>
+        　利用条件：　{$tnp.cp_use}<br>
+        　使用期限：　{if $tnp.cp_start_date!="0000-00-00"}{$tnp.cp_start_date}　～　{/if}{$tnp.cp_end_date}　まで
       </td>
     </tr>
   {foreachelse}
@@ -99,7 +99,7 @@ $(function(){
 {if $tenpo.tp_google_map!=""}
 <hr>
 <div class="row col-sm-10 col-sm-offset-2">
-<div id="gmap" style="width : 700px; height : 450px;"></div>
+<div id="gmap" style="width : 700px; height : 450px;"></div>{* サイズを大きくしすぎると印刷で表示されない？ *}
 <script type="text/javascript">
 google.maps.event.addDomListener(window, 'load', function() {
   var latlng = new google.maps.LatLng({$tenpo.tp_google_map});
@@ -140,7 +140,7 @@ google.maps.event.addDomListener(window, 'load', function() {
         </td>
       </tr>
       <tr>
-        <td>{$tenpo.tp_access}<br>{if $tenpo.tp_access_sub}【アクセス情報その他】　：　{$tenpo.tp_access_sub}{/if}</td>
+        <td>{$tenpo.tp_access}</td>
       </tr>
     </tbody>
   </table>
@@ -174,17 +174,7 @@ google.maps.event.addDomListener(window, 'load', function() {
           その他
         </td>
         <td>
-          {if $tenpo.tp_parking}【駐車場情報】　：　{$tenpo.tp_parking}<br><br>{/if}
-          {if $tenpo.tp_seat}【座席情報】　：　{$tenpo.tp_seat}<br><br>{/if}
-          {if $tenpo.tp_card}【カード情報】　：　{$tenpo.tp_card}<br><br>{/if}
-
-          {if $tenpo.tp_contents01}【メニュー情報】　：　{$tenpo.tp_contents01}<br><br>{/if}
-          {if $tenpo.tp_contents02}【メニュー情報その他】　：　{$tenpo.tp_contents02}<br><br>{/if}
           {if $tenpo.tp_free01}{$tenpo.tp_free01}<br><br>{/if}
-          {if $tenpo.tp_free02}{$tenpo.tp_free02}<br><br>{/if}
-          {if $tenpo.tp_free03}{$tenpo.tp_free03}<br><br>{/if}
-          {if $tenpo.tp_free04}{$tenpo.tp_free04}<br><br>{/if}
-          {if $tenpo.tp_free05}{$tenpo.tp_free05}<br><br>{/if}
         </td>
       </tr>
     </tbody>

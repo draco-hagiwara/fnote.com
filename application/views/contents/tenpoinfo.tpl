@@ -7,19 +7,15 @@
       </tr>
       <tr>
         <td>ジャンル</td>
-        <td>{$tenpo.tp_cate}</td>
+        <td>{$tenpo.tp_genre}</td>
       </tr>
       <tr>
-        <td>ホームページ</td>
+        <td>公式サイト</td>
         <td>{$tenpo.tp_url}</td>
       </tr>
       <tr>
         <td>電話番号</td>
         <td>{$tenpo.tp_tel}</td>
-      </tr>
-      <tr>
-        <td>メール</td>
-        <td>{$tenpo.tp_mail}</td>
       </tr>
       <tr>
         <td>住　　所</td>
@@ -55,6 +51,10 @@ google.maps.event.addDomListener(window, 'load', function() {
         </td>
       </tr>
       <tr>
+        <td>最寄り</td>
+        <td>{$tenpo.tp_accessinfo}</td>
+      </tr>
+      <tr>
         <td>アクセス</td>
         <td>{$tenpo.tp_access}</td>
       </tr>
@@ -67,22 +67,31 @@ google.maps.event.addDomListener(window, 'load', function() {
         <td>{$tenpo.tp_holiday}</td>
       </tr>
       <tr>
+        <td>予算</td>
+        <td>{$tenpo.tp_contents01}</td>
+      </tr>
+      <tr>
+        <td>座席数</td>
+        <td>{$tenpo.tp_seat}</td>
+      </tr>
+      <tr>
+        <td>駐車場</td>
+        <td>{$tenpo.tp_parking}</td>
+      </tr>
+      <tr>
+        <td>カード情報</td>
+        <td>{$tenpo.tp_card}</td>
+      </tr>
+      <tr>
+        <td>喫煙</td>
+        <td>{$tenpo.tp_smoking}</td>
+      </tr>
+      {if $tenpo.tp_free01}<tr>
         <td>その他</td>
         <td>
-          {if $tenpo.tp_since}【創業／設立日】　：　{$tenpo.tp_since}<br><br>{/if}
-          {if $tenpo.tp_parking}【駐車場情報】　：　{$tenpo.tp_parking}<br><br>{/if}
-          {if $tenpo.tp_seat}【座席情報】　：　{$tenpo.tp_seat}<br><br>{/if}
-          {if $tenpo.tp_card}【カード情報】　：　{$tenpo.tp_card}<br><br>{/if}
-          {if $tenpo.tp_access_sub}【アクセス情報その他】　：　{$tenpo.tp_access_sub}<br><br>{/if}
-          {if $tenpo.tp_contents01}【メニュー情報】　：　{$tenpo.tp_contents01}<br><br>{/if}
-          {if $tenpo.tp_contents02}【メニュー情報その他】　：　{$tenpo.tp_contents02}<br><br>{/if}
-          {if $tenpo.tp_free01}{$tenpo.tp_free01}<br><br>{/if}
-          {if $tenpo.tp_free02}{$tenpo.tp_free02}<br><br>{/if}
-          {if $tenpo.tp_free03}{$tenpo.tp_free03}<br><br>{/if}
-          {if $tenpo.tp_free04}{$tenpo.tp_free04}<br><br>{/if}
-          {if $tenpo.tp_free05}{$tenpo.tp_free05}<br><br>{/if}
+          {$tenpo.tp_free01}<br><br>
         </td>
-      </tr>
+      </tr>{/if}
     </tbody>
   </table>
 

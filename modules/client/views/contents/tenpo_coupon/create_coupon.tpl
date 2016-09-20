@@ -67,21 +67,21 @@
 
   <div class="radio">
     <label for="cp_update" class="col-sm-2 control-label"></label>
-    <div class="col-sm-6">
+    <div class="col-sm-10">
       <label>
-        <input type="radio" name="optionsRadios02" id="optionsRadios1" value="0" >更新する（1ヶ月延長）
+        <input type="radio" name="optionsRadios02" id="optionsRadios1" value="0" >更新する（1ヶ月延長）　　
       </label>
       <label>
         <input type="radio" name="optionsRadios02" id="optionsRadios2" value="1" checked>更新しない
       </label>
+      <label>※更新は、有効期間終了日当日のみ有効です。</label>
     </div>
   </div>
-  <br>
   <div class="radio">
     <label for="cp_update" class="col-sm-2 control-label"></label>
     <div class="col-sm-6">
       <label>
-        <input type="radio" name="optionsRadios01" id="optionsRadios1" value="0" >公開する
+        <input type="radio" name="optionsRadios01" id="optionsRadios1" value="0" >公開する　　
       </label>
       <label>
         <input type="radio" name="optionsRadios01" id="optionsRadios2" value="1" checked>非公開にする

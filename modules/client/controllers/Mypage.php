@@ -25,6 +25,15 @@ class Mypage extends MY_Controller
     public function index()
     {
 
+    	// セッションデータをクリア
+    	$this->load->model('comm_auth', 'comm_auth', TRUE);
+    	if (isset($_SESSION['c_adminSeq']))
+    	{
+    		$this->comm_auth->delete_session('a_client');
+    	} else {
+    		$this->comm_auth->delete_session('client');
+    	}
+
         $this->view('mypage/index.tpl');
 
     }
@@ -109,9 +118,10 @@ class Mypage extends MY_Controller
 
     	$input_post = $this->input->post();
 
-    	$this->load->model('Client', 'cl', TRUE);
-    	$clseq_deta = $this->cl->get_cl_seq($_SESSION['c_memSeq'], TRUE);
+    	$this->load->model('Client',     'cl',  TRUE);
+    	$this->load->model('Cate_image', 'img', TRUE);
 
+    	$clseq_deta = $this->cl->get_cl_seq($_SESSION['c_memSeq'], TRUE);
 
     	if (isset($input_post['submit']) && ($input_post['submit'] == 'idpw'))
     	{
@@ -173,9 +183,77 @@ class Mypage extends MY_Controller
 
     		}
 
+    	} elseif (isset($input_post['submit']) && ($input_post['submit'] == 'image')) {
+
+    		// 画像カテゴリ分類名称設定
+
+    		// バリデーション・チェック
+    		$this->_set_validation03();
+    		if ($this->form_validation->run() == TRUE)
+    		{
+
+    			// 店舗データの取得
+    			$this->load->model('Tenpoinfo', 'tnp',  TRUE);
+    			$tenpo_data = $this->tnp->get_tenpo_siteid($_SESSION['c_memSiteid']);
+
+    			$set_data["ci_tp_seq"]        = $tenpo_data[0]['tp_seq'];
+    			$set_data["ci_cl_seq"]        = $_SESSION['c_memSeq'];
+    			$set_data["ci_cl_siteid"]     = $clseq_deta[0]['cl_siteid'];
+    			$set_data["ci_name01"]        = $input_post['ci_name01'];
+    			$set_data["ci_status01"]      = $input_post['optionsRadios01'];
+    			$set_data["ci_name02"]        = $input_post['ci_name02'];
+    			$set_data["ci_status02"]      = $input_post['optionsRadios02'];
+    			$set_data["ci_name03"]        = $input_post['ci_name03'];
+    			$set_data["ci_status03"]      = $input_post['optionsRadios03'];
+    			$set_data["ci_name04"]        = $input_post['ci_name04'];
+    			$set_data["ci_status04"]      = $input_post['optionsRadios04'];
+    			$set_data["ci_name05"]        = $input_post['ci_name05'];
+    			$set_data["ci_status05"]      = $input_post['optionsRadios05'];
+
+    			$res = $this->img->inup_cate_image($set_data);
+    			if (!$res)
+    			{
+    				log_message('error', 'Mypage::[info()]画像カテゴリ分類名称設定処理 inup_cate_imageエラー');
+    			}
+
+    		}
+
     	} else {
     		$this->_set_validation01();
     		$this->_set_validation02();
+
+    		// 画像カテゴリ分類名称
+    		$this->_set_validation03();
+    		$get_image = $this->img->get_cate_image_clseq($_SESSION['c_memSeq']);
+    		if (is_array($get_image))
+    		{
+	    		$_ci_cate = array(
+	    							'ci_name01'   => $get_image[0]['ci_name01'],
+	    							'ci_status01' => $get_image[0]['ci_status01'],
+	    							'ci_name02'   => $get_image[0]['ci_name02'],
+	    							'ci_status02' => $get_image[0]['ci_status02'],
+	    							'ci_name03'   => $get_image[0]['ci_name03'],
+	    							'ci_status03' => $get_image[0]['ci_status03'],
+	    							'ci_name04'   => $get_image[0]['ci_name04'],
+	    							'ci_status04' => $get_image[0]['ci_status04'],
+	    							'ci_name05'   => $get_image[0]['ci_name05'],
+	    							'ci_status05' => $get_image[0]['ci_status05'],
+	    		);
+    		} else {
+    			$_ci_cate = array(
+			    					'ci_name01'   => '',
+			    					'ci_status01' => 1,
+			    					'ci_name02'   => '',
+			    					'ci_status02' => 1,
+			    					'ci_name03'   => '',
+			    					'ci_status03' => 1,
+			    					'ci_name04'   => '',
+			    					'ci_status04' => 1,
+			    					'ci_name05'   => '',
+			    					'ci_status05' => 1,
+    			);
+    		}
+    		$this->smarty->assign('ci_cate', $_ci_cate);
     	}
 
     	// クライアント情報再読み込み
@@ -264,5 +342,38 @@ class Mypage extends MY_Controller
     	$this->load->library('form_validation', $rule_set);                     // バリデーションクラス読み込み
     }
 
+    // フォーム・バリデーションチェック :: 画像カテゴリ分類名称設定
+    private function _set_validation03()
+    {
+    	$rule_set = array(
+    			array(
+    					'field'   => 'ci_name01',
+    					'label'   => '名称',
+    					'rules'   => 'trim|max_length[10]'
+    			),
+    			array(
+    					'field'   => 'ci_name02',
+    					'label'   => '名称',
+    					'rules'   => 'trim|max_length[10]'
+    			),
+    			array(
+    					'field'   => 'ci_name03',
+    					'label'   => '名称',
+    					'rules'   => 'trim|max_length[10]'
+    			),
+    			array(
+    					'field'   => 'ci_name04',
+    					'label'   => '名称',
+    					'rules'   => 'trim|max_length[10]'
+    			),
+    			array(
+    					'field'   => 'ci_name05',
+    					'label'   => '名称',
+    					'rules'   => 'trim|max_length[10]'
+    			),
+    	);
+
+    	$this->load->library('form_validation', $rule_set);                     // バリデーションクラス読み込み
+    }
 
 }

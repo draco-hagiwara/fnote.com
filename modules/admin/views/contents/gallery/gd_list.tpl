@@ -121,7 +121,7 @@ function fmSubmit(formName, url, method, num) {
 <H3><p class="bg-info">画像登録・編集フォーム</p></H3>
 
 <br>
-{if $gd_mode=='chg'}
+{if $gd_mode=='chg'}{* 編集or削除モード *}
 
   <form method="post" action="/admin/gallery/gd_list/" enctype="multipart/form-data" name="form">
 
@@ -137,7 +137,7 @@ function fmSubmit(formName, url, method, num) {
   <div class="form-group">
     <label for="size" class="col-sm-2 control-label">画像</label>
     <div class="col-sm-10">
-      <img border="1" src="/images/{$list_image.im_cl_siteid}/s/{$list_image.im_filename}" height="250">
+      <img border="1" src="/images/{$list_image.im_cl_siteid}/s/{$list_image.im_filename}">
     </div>
   </div>
   <div class="form-group">
@@ -182,7 +182,22 @@ function fmSubmit(formName, url, method, num) {
     </div>
   </div>
   <div class="form-group">
-    <label for="im_status" class="col-sm-2 control-label">更新削除の選択</label>
+    <label for="im_tag" class="col-sm-2 control-label">タグ</label>
+    <div class="col-sm-8">
+      {form_input('im_tag' , set_value('im_tag', $list_image.im_tag) , 'class="form-control" placeholder="複数入力する場合は「,(半角カンマ)」で区切ってください。。max.20文字"')}
+      {if form_error('im_tag')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('im_tag')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="im_header" class="col-sm-2 control-label">TOP画像</label>
+    <div class="col-sm-8">
+      {if $list_image.im_header==0}{form_checkbox('im_header', '1', FALSE)} TOP画像へ使用する
+      {else}{form_checkbox('im_header', '1', TRUE)} TOP画像へ使用する
+      {/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="im_status" class="col-sm-2 control-label">更新 o r削除</label>
     <div class="col-sm-8">
       <label class="radio-inline">
         <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0" checked> 内容の更新
@@ -201,7 +216,7 @@ function fmSubmit(formName, url, method, num) {
 
   </form>
 
-{else}
+{else}{* 新規登録モード *}
 
   {form_open('/gallery/gd_new/' , 'name="galleryForm" enctype="multipart/form-data" class="form-horizontal"')}
 
@@ -213,7 +228,7 @@ function fmSubmit(formName, url, method, num) {
   <div class="form-group">
     <label for="im_title" class="col-sm-2 control-label">タイトル（alt）</label>
     <div class="col-sm-8">
-      {form_input('im_title' , set_value('im_title', '') , 'class="form-control" placeholder="タイトル（alt）を入力してください"')}
+      {form_input('im_title' , set_value('im_title', '') , 'class="form-control" placeholder="タイトル（alt）を入力してください。max.50文字"')}
       {if form_error('im_title')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('im_title')}</font></label>{/if}
     </div>
   </div>
@@ -240,6 +255,13 @@ function fmSubmit(formName, url, method, num) {
     <div class="col-sm-8">
       <textarea class="form-control input-sm" id="im_description" name="im_description" placeholder="画像説明を入力してください。max.255文字"></textarea>
       {if form_error('im_description')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('im_description')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="im_tag" class="col-sm-2 control-label">タグ</label>
+    <div class="col-sm-8">
+      {form_input('im_tag' , set_value('im_tag', '') , 'class="form-control" placeholder="複数入力する場合は「,(半角カンマ)」で区切ってください。。max.20文字"')}
+      {if form_error('im_tag')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('im_tag')}</font></label>{/if}
     </div>
   </div>
 

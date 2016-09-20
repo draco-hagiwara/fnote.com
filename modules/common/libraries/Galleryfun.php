@@ -11,11 +11,12 @@ class Galleryfun
     // 　関数定義（基本的に変更不可） (START)
     //----------------------------------------------------------------------
 
+
     function h($string) {
     	return htmlspecialchars($string, ENT_QUOTES,'utf-8');
     }
 
-    //IDをセット
+    // IDをセット
     function generateID(){
     	if(isset($_POST['edit_submit'])){
     		$id = $_POST['id'];
@@ -28,7 +29,7 @@ class Galleryfun
     	return $id;
     }
 
-    //パーミッションチェック関数
+    // パーミッションチェック関数
     function permissionCheck($file_path,$img_updir,$perm_check01,$perm_check02,$perm_check03){
     	$messe = '';
     	if(!is_writable($img_updir)){
@@ -45,7 +46,7 @@ class Galleryfun
     	return $messe;
     }
 
-    //完了メッセージセット
+    // 完了メッセージセット
     function compMesse($str){
     	$messe = '';
     	if($str == 'registComp'){
@@ -57,7 +58,7 @@ class Galleryfun
     	return $messe;
     }
 
-    //ニュースリストの並び順（日付順）用関数
+    // ニュースリストの並び順（日付順）用関数
     function newsListSort($lines){
     	$jj = 0;
     	$index=array();
@@ -76,7 +77,7 @@ class Galleryfun
     	return $lines;
     }
 
-    //ニュースリストの並び順（日付順）ユーザ閲覧ページ用（ページャー実装時のカウントずれ補正）
+    // ニュースリストの並び順（日付順）ユーザ閲覧ページ用（ページャー実装時のカウントずれ補正）
     function newsListSortUser($lines,$copyright){
     	if(empty($copyright)) $lines = array('01','02');
     	$linesTempArray=array();
@@ -101,7 +102,7 @@ class Galleryfun
     	return $linesTempArray;
     }
 
-    //登録文字列の置換
+    // 登録文字列の置換
     function replace_func($str){
     	$str = $this->h($str);
     	$str = str_replace("\n","<br />",$str);
@@ -111,7 +112,7 @@ class Galleryfun
     	return $str;
     }
 
-    //NULLバイト除去//
+    // NULLバイト除去//
     function sanitize($arr){
     	if(is_array($arr)){
     		return array_map('sanitize',$arr);
@@ -119,7 +120,7 @@ class Galleryfun
     	return str_replace("\0","",$arr);
     }
 
-    //ページャー関数（HTML部は変更可）
+    // ページャー関数（HTML部は変更可）
     function pager($totalPage, $pageid, $pagerDispLength){
     	global $pagerNext,$pagerPrev,$overPagerPattern,$encodingType;
     	$pager = '';
@@ -151,7 +152,7 @@ class Galleryfun
     	return $pager;
     }
 
-    //ページャー関数（HTML部は変更可） 携帯（ガラケー用）
+    // ページャー関数（HTML部は変更可） 携帯（ガラケー用）
     function pager_mobile($totalPage, $pageid, $pagerDispLength){
     	global $pagerNext,$pagerPrev,$overPagerPattern,$encodingType;
     	$pager = '';
@@ -185,7 +186,7 @@ class Galleryfun
     	return $pager;
     }
 
-    //ページャー起動（管理画面用）
+    // ページャー起動（管理画面用）
     function pagerOut($lines,$pagelength,$pagerDispLength,$str=''){
 
     	$totalPage = ceil(count($lines)/$pagelength);	// 合計ページ数 $max_i = ceil($max_i/$pagelength);
@@ -211,7 +212,7 @@ class Galleryfun
     	return $pager;
     }
 
-    //表示側日付フォーマットの設定
+    // 表示側日付フォーマットの設定
     function ymd2format($str){
     	global $up_ymd_japanese,$delimiter_text;
     	$up_ymd = explode('/',$str);
@@ -232,7 +233,7 @@ class Galleryfun
     	echo $copyright;
     }
 
-    //並び順変更
+    // 並び順変更
     function orderChange($file_path){
     	$writeData = '';
     	$fp = fopen($file_path, "r+b") or die("ファイルオープンエラー");
@@ -292,7 +293,7 @@ class Galleryfun
     	return "削除完了しました！";
     }
 
-    //画像削除
+    // 画像削除
     function fileDelFunc($img_updir,$id){
 //     	global $extensionTypeList;
     	$extensionTypeList = array('jpg','gif','png');

@@ -21,6 +21,10 @@ class Maintenance extends MY_Controller
 
     public function index()
     {
+    	// セッションデータをクリア
+    	$this->load->model('comm_auth', 'comm_auth', TRUE);
+    	$this->comm_auth->delete_session('admin');
+
     	$this->view('maintenance/maintenance.tpl');
     }
 

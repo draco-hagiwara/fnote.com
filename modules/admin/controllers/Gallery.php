@@ -29,6 +29,10 @@ class Gallery extends MY_Controller
     public function index()
     {
 
+    	// セッションデータをクリア
+    	$this->load->model('comm_auth', 'comm_auth', TRUE);
+    	$this->comm_auth->delete_session('admin');
+
         $this->view('gallery/index.tpl');
 
     }
@@ -270,6 +274,28 @@ EOS;
     		$set_data["im_seq"]         = $_SESSION['a_imgseq'];
     		$set_data["im_title"]       = $input_post['im_title'];
     		$set_data["im_description"] = $input_post['im_description'];
+    		$set_data["im_tag"]         = $input_post['im_tag'];
+
+    		// TOP画像使用の有無
+    		if (isset($input_post['im_header']))
+    		{
+    			// 既存の該当データ取得 ⇒ クリア
+    			$_header_data = $this->img->get_image_header($input_post['im_cl_siteid']);
+
+    			if (count($_header_data) > 0)
+    			{
+	    			foreach ($_header_data as $key => $val)
+	    			{
+	    				$_set_headre["im_seq"]    = $_header_data[$key]['im_seq'];
+	    				$_set_headre["im_header"] = 0;
+
+	    				$this->img->update_image_imseq($_set_headre);
+	    			}
+    			}
+
+    			$set_data["im_header"] = $input_post['im_header'];
+
+    		}
 
     		$this->img->update_image_imseq($set_data);
 
@@ -306,7 +332,7 @@ EOS;
     	$this->_set_validation();
     	if ($this->form_validation->run() == FALSE)
     	{
-    		$gd_mode = 'new';
+    		$gd_mode   = 'new';
     		$list_mode = 'edit';
 
     		// 編集モード
@@ -428,7 +454,7 @@ EOS;
 
 		    	if (is_uploaded_file($_FILES["upfile"]["tmp_name"][$i]))
 		    	{
-		    		if ($_FILES["upfile"]["size"][$i] < $maxImgSize)
+		    		if ((0 < $_FILES["upfile"]["size"][$i]) && ($_FILES["upfile"]["size"][$i] < $maxImgSize))
 		    		{
 		    			$imgType = $_FILES['upfile']['type'][$i];
 
@@ -666,6 +692,7 @@ EOS;
 		    			// DBへ書き出す
 		    			$setdate['im_title']       = $input_post['im_title'];
 		    			$setdate['im_description'] = $input_post['im_description'];
+		    			$setdate["im_tag"]         = $input_post['im_tag'];
 		    			$setdate['im_status']      = 1;
 		    			$setdate['im_type']        = $imgType;
 		    			$setdate['im_filename']    = $filename;
@@ -679,6 +706,8 @@ EOS;
 		    				log_message('error', 'gallery::[gd_add()]画像登録処理 insert_imageエラー');
 		    			}
 
+		    		} elseif (0 >= $_FILES["upfile"]["size"][$i]) {
+		    			exit("<center>【" . $_FILES['upfile']['name'][$i] . " は画像ファイルサイズが　0バイトです。】<br /><br /><a href='gd_list'>戻る&gt;&gt;</a></center>");
 		    		} else {
 		    			$maxImgSize = number_format($maxImgSize);
 		    			exit("<center>【" . $_FILES['upfile']['name'][$i] . " は画像がファイルサイズオーバーです。{$maxImgSize}バイト以下にして下さい】<br /><br /><a href='gd_list'>戻る&gt;&gt;</a></center>");
@@ -741,6 +770,11 @@ EOS;
     					'field'   => 'im_description',
     					'label'   => '画像説明',
     					'rules'   => 'trim|max_length[255]'
+    			),
+    			array(
+    					'field'   => 'im_tag',
+    					'label'   => 'タグ',
+    					'rules'   => 'trim|max_length[20]'
     			),
     	);
 

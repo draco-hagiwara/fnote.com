@@ -102,6 +102,7 @@
       <ul class="list-inline text-right">
         <li><a href="/">TOP</a></li>
         <li><a href="/client/login/">Clientログイン</a></li>
+        <li><a href="/client/login/adminlogin/">ADMIN-Client</a></li>
       </ul>
 
       <nav class="navbar navbar-inverse">

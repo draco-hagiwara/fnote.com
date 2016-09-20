@@ -44,22 +44,38 @@
 
 <body>
 
-<H3><p class="bg-info">事業者プラットフォーム　：　サイトTOP</p></H3>
+<H2>{$tenpo.tp_shopname}　（{$tenpo.tp_shopname_sub}）</H2>
 
+<p class="bg-info">事業者プラットフォーム　：　ギャラリー</p>
 
-{if $eigyo_chk==0}【定休日】{/if}
-{if $eigyo_chk==1}【営業時間外】{/if}
-{if $eigyo_chk==2}【営業中】{/if}
+<form class="form-horizontal" name="detailForm" method="post" action="/site/gl/">
 
+  {foreach from=$gallery item=gls}
+  <div class="row">
+    {foreach from=$gls key=num item=gl}
 
+    <div class="col-xs-6 col-md-2">
+      <a href="#" class="thumbnail">
+        <img src="/images/{$gl.gl_cl_siteid}/b/t_{$gl.gl_filename}" alt="{$gl.gl_title}">
+      </a>
+    </div>
 
+    {/foreach}
+  </div>
+  {foreachelse}
+    画像はありません。
+  {/foreach}
 
+</form>
 
 
 <br><br>
 <HR>
 {* 店舗情報の読み込み *}{include file="../tenpoinfo.tpl"}
 <HR>
+
+
+</section>
 
 
 <section class="container">

@@ -58,9 +58,9 @@
       <td bgcolor="#ffffff">
         <img src="../../../images/coupon_tpl/{$tnp.tpl_img}" width=180 height=80 align="left">
         　{$tnp.cp_content}<br>
-        　提示条件：{$tnp.cp_presen}<br>
-        　利用条件：{$tnp.cp_use}<br>
-        　使用期限：{$tnp.cp_start_date}　～　{$tnp.cp_end_date}
+        　提示条件：　{$tnp.cp_presen}<br>
+        　利用条件：　{$tnp.cp_use}<br>
+        　使用期限：　{if $tnp.cp_start_date!="0000-00-00"}{$tnp.cp_start_date}　～　{/if}{$tnp.cp_end_date}　まで
       </td>
     </tr>
   {foreachelse}

@@ -98,6 +98,20 @@ array(
 		"1" => "更新しない",
 );
 
+// 店舗ギャラリー画像：ステータス
+$config['CLIENT_IMG_STATUS'] =
+array(
+		"0" => "非表示",
+		"1" => "表示",
+);
+
+// 店舗ギャラリー分類：ステータス
+$config['TENPO_GALLERY_CATE_STATUS'] =
+array(
+		"0" => "表示",
+		"1" => "非表示",
+);
+
 
 // ログインロック
 $config['LOGIN_LOCK_STATUS'] =

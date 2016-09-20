@@ -26,6 +26,15 @@ class Tenpo_menu extends MY_Controller
     public function index()
     {
 
+    	// セッションデータをクリア
+    	$this->load->model('comm_auth', 'comm_auth', TRUE);
+    	if (isset($_SESSION['c_adminSeq']))
+    	{
+    		$this->comm_auth->delete_session('a_client');
+    	} else {
+    		$this->comm_auth->delete_session('client');
+    	}
+
         // バリデーション・チェック
         $this->_set_validation02();												// バリデーション設定
 
@@ -450,6 +459,10 @@ class Tenpo_menu extends MY_Controller
     	$options_menu03 = array("" => '選択してください');
 
     	$this->load->model('Tenpomenu', 'menu', TRUE);
+    	$this->load->model('Tenpoinfo', 'tnp',  TRUE);
+
+    	// 店舗データの取得
+    	$tenpo_data = $this->tnp->get_tenpo_siteid($_SESSION['c_memSiteid']);
 
     	// メニュー登録
     	if (isset($input_post['new']))
@@ -475,6 +488,7 @@ class Tenpo_menu extends MY_Controller
     				$set_data['mn_dispno']    = 0;
     				$set_data['mn_cl_seq']    = $_SESSION['c_memSeq'];
     				$set_data['mn_cl_siteid'] = $_SESSION['c_memSiteid'];
+    				$set_data['mn_tp_seq']    = $tenpo_data[0]['tp_seq'];
 
     				$_row_id = $this->menu->insert_tenpomenu($set_data);
     				if (!is_numeric($_row_id))
@@ -509,6 +523,7 @@ class Tenpo_menu extends MY_Controller
 	    				$set_data['mn_dispno']    = 0;
 	    				$set_data['mn_cl_seq']    = $_SESSION['c_memSeq'];
 	    				$set_data['mn_cl_siteid'] = $_SESSION['c_memSiteid'];
+	    				$set_data['mn_tp_seq']    = $tenpo_data[0]['tp_seq'];
 
 	    				// 第一メニューを読み込み
 	    				$_menu1_data = $this->menu->get_menu_seq($input_post['mn_seq01']);
@@ -557,6 +572,7 @@ class Tenpo_menu extends MY_Controller
 	    				$set_data['mn_dispno']    = 0;
 	    				$set_data['mn_cl_seq']    = $_SESSION['c_memSeq'];
 	    				$set_data['mn_cl_siteid'] = $_SESSION['c_memSiteid'];
+	    				$set_data['mn_tp_seq']    = $tenpo_data[0]['tp_seq'];
 
 	    				// 第一メニューを読み込み
 	    				$_menu2_data = $this->menu->get_menu_seq($input_post['mn_seq02']);

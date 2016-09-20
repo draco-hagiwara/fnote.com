@@ -4,12 +4,14 @@
 <body>
 {* ヘッダー部分　END *}
 
+<!--Body content-->
 
-<h3>メールが正しく送信されました!</h3>
-
+    <div class="jumbotron">
+      <h3>掲載希望の事業者様へ</h3>
+    </div>
 
 {* フッター部分　START *}
-    <!-- Bootstrapのグリッドシステムclass="row"で終了 -->
+    <!-- TwitterBootstrapのグリッドシステムclass="row"で終了 -->
     </div>
   </section>
 </div>

@@ -7,7 +7,7 @@
 <!--Body content-->
 
     <div class="jumbotron">
-      <h3>ご利用ガイド</h3>
+      <h3>このサイトについて</h3>
     </div>
 
 {* フッター部分　START *}

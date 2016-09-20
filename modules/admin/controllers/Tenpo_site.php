@@ -40,6 +40,10 @@ class Tenpo_site extends MY_Controller
     public function index()
     {
 
+    	// セッションデータをクリア
+    	$this->load->model('comm_auth', 'comm_auth', TRUE);
+    	$this->comm_auth->delete_session('admin');
+
         $this->view('tenpo_site/index.tpl');
 
     }
@@ -500,6 +504,11 @@ class Tenpo_site extends MY_Controller
     					'rules'   => 'trim|required|regex_match[/^[a-z0-9]{6}(,[a-z0-9]{6})*$/]|max_length[510]'		// (6+1)*50=350 : max.50個
     			),
     			array(
+    					'field'   => 'tp_genre',
+    					'label'   => 'ジャンル',
+    					'rules'   => 'trim|required|max_length[50]'
+    			),
+    			array(
     					'field'   => 'tp_shopname',
     					'label'   => '店舗名称',
     					'rules'   => 'trim|required|max_length[100]'
@@ -511,7 +520,7 @@ class Tenpo_site extends MY_Controller
     			),
     			array(
     					'field'   => 'tp_url',
-    					'label'   => '店舗サイトURL',
+    					'label'   => '店舗公式サイト',
     					'rules'   => 'trim|regex_match[/^(https?)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/]|max_length[100]'
     			),
     			array(
@@ -561,7 +570,7 @@ class Tenpo_site extends MY_Controller
     			),
     			array(
     					'field'   => 'tp_opentime',
-    					'label'   => '営業時間(テキスト)',
+    					'label'   => '営業時間 表示用(テキスト)',
     					'rules'   => 'trim|max_length[1000]'
     			),
     			array(
@@ -572,16 +581,21 @@ class Tenpo_site extends MY_Controller
     			array(
     					'field'   => 'tp_since',
     					'label'   => '創業／設立日(テキスト)',
-    					'rules'   => 'trim|max_length[200]'
+    					'rules'   => 'trim|max_length[1000]'
     			),
     			array(
     					'field'   => 'tp_parking',
     					'label'   => '駐車場情報(テキスト)',
-    					'rules'   => 'trim|max_length[200]'
+    					'rules'   => 'trim|max_length[1000]'
     			),
     			array(
     					'field'   => 'tp_seat',
     					'label'   => '座席情報(テキスト)',
+    					'rules'   => 'trim|max_length[1000]'
+    			),
+    			array(
+    					'field'   => 'tp_smoking',
+    					'label'   => '喫煙情報(テキスト)',
     					'rules'   => 'trim|max_length[1000]'
     			),
     			array(
@@ -600,14 +614,14 @@ class Tenpo_site extends MY_Controller
     					'rules'   => 'trim|max_length[1000]'
     			),
     			array(
-    					'field'   => 'tp_access_sub',
-    					'label'   => 'アクセス情報予備(テキスト)',
-    					'rules'   => 'trim|max_length[1000]'
-    			),
-    			array(
     					'field'   => 'tp_pricerange01',
     					'label'   => 'メニュー価格帯１',
-    					'rules'   => 'trim|max_length[200]'
+    					'rules'   => 'trim|max_length[10]|is_numeric'
+    			),
+    			array(
+    					'field'   => 'tp_pricerange02',
+    					'label'   => 'メニュー価格帯２',
+    					'rules'   => 'trim|max_length[10]|is_numeric'
     			),
     			array(
     					'field'   => 'tp_contents01',
@@ -615,33 +629,8 @@ class Tenpo_site extends MY_Controller
     					'rules'   => 'trim|max_length[1000]'
     			),
     			array(
-    					'field'   => 'tp_pricerange02',
-    					'label'   => 'メニュー価格帯２',
-    					'rules'   => 'trim|max_length[200]'
-    			),
-    			array(
     					'field'   => 'tp_contents02',
     					'label'   => 'メニュー情報２(テキスト)',
-    					'rules'   => 'trim|max_length[1000]'
-    			),
-    			array(
-    					'field'   => 'tp_overview',
-    					'label'   => '事業者TOP概要',
-    					'rules'   => 'trim|required|max_length[1000]'
-    			),
-    			array(
-    					'field'   => 'tp_searchword',
-    					'label'   => '検索用キーワード',
-    					'rules'   => 'trim|max_length[200]'
-    			),
-    			array(
-    					'field'   => 'tp_description',
-    					'label'   => 'ディスクリプション',
-    					'rules'   => 'trim|max_length[1000]'
-    			),
-    			array(
-    					'field'   => 'tp_keywords',
-    					'label'   => 'キーワード',
     					'rules'   => 'trim|max_length[1000]'
     			),
     			array(
@@ -677,36 +666,66 @@ class Tenpo_site extends MY_Controller
     			array(
     					'field'   => 'tp_google_map',
     					'label'   => 'googleマップコード',
-    					'rules'   => 'trim|max_length[1000]'
+    					'rules'   => 'trim|max_length[100]'
     			),
     			array(
     					'field'   => 'tp_qrcode_site',
     					'label'   => 'サイトQRコード',
-    					'rules'   => 'trim|max_length[500]'
+    					'rules'   => 'trim|max_length[200]'
     			),
     			array(
     					'field'   => 'tp_qrcode_google',
     					'label'   => 'GoogleマップQRコード',
-    					'rules'   => 'trim|max_length[500]'
+    					'rules'   => 'trim|max_length[200]'
+    			),
+    			array(
+    					'field'   => 'tp_free02',
+    					'label'   => 'フリー１',
+    					'rules'   => 'trim|max_length[5000]'
     			),
     			array(
     					'field'   => 'tp_free02',
     					'label'   => 'フリー２',
-    					'rules'   => 'trim|max_length[1000]'
+    					'rules'   => 'trim|max_length[5000]'
     			),
     			array(
     					'field'   => 'tp_free03',
     					'label'   => 'フリー３',
-    					'rules'   => 'trim|max_length[1000]'
+    					'rules'   => 'trim|max_length[5000]'
     			),
     			array(
     					'field'   => 'tp_free04',
     					'label'   => 'フリー４',
-    					'rules'   => 'trim|max_length[1000]'
+    					'rules'   => 'trim|max_length[5000]'
     			),
     			array(
     					'field'   => 'tp_free05',
     					'label'   => 'フリー５',
+    					'rules'   => 'trim|max_length[5000]'
+    			),
+    			array(
+    					'field'   => 'tp_ovtitle',
+    					'label'   => '事業者TOPタイトル',
+    					'rules'   => 'trim|required|max_length[100]'
+    			),
+    			array(
+    					'field'   => 'tp_overview',
+    					'label'   => '事業者TOP概要',
+    					'rules'   => 'trim|required|max_length[1000]'
+    			),
+    			array(
+    					'field'   => 'tp_searchword',
+    					'label'   => '検索用キーワード',
+    					'rules'   => 'trim|max_length[200]'
+    			),
+    			array(
+    					'field'   => 'tp_description',
+    					'label'   => 'ディスクリプション',
+    					'rules'   => 'trim|max_length[1000]'
+    			),
+    			array(
+    					'field'   => 'tp_keywords',
+    					'label'   => 'キーワード',
     					'rules'   => 'trim|max_length[1000]'
     			),
     	);
