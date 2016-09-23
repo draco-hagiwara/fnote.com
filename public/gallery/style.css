@@ -1,0 +1,82 @@
+charset "utf-8";
+
+/*---------------------------------
+	 ▼Gallery.php style▼
+---------------------------------*/
+body#client #gallery_wrap {
+	width:992px;
+}
+body#client #gallery_list li{
+	width:112px;
+	height:152px;
+	border:1px solid #ccc;
+	float:left;
+	margin:0 5px 5px 0;
+	overflow:hidden;
+	padding:5px;
+	text-align:center;
+	font-size:12px;
+	position:relative;
+
+}
+body#client ul.gallery_list_order li{
+	cursor:move;
+	padding-top:25px!important;
+	height:92px!important;
+}
+.gallery_list_order li a.button{
+	 display:none!important;
+}
+.hidden_text{
+	position:absolute;
+	top:50px;
+	left:27px;
+	color:#F00;
+	font-weight:bold;
+	font-size:14px;
+}
+body#client #gallery_list a{
+	display:block;
+}
+body#client #gallery_list a.photo{
+	width:100px;
+	margin:0 auto;
+	height:80px;
+	overflow:hidden;
+}
+
+body#client #gallery_list a.button{
+	padding:3px 5px;
+	text-decoration:none;
+	color:#fff;
+	margin:2px auto;
+	background:#555;
+	height:20px;
+	width:100px;
+}
+body#client #gallery_list a.button:hover{
+	background:#000;
+}
+body#client .submit_btn {
+	width:240px;
+	height:30px;
+	cursor:pointer;
+}
+
+/*------------------------------------------------
+	 ▼/application/controllers/Site.php style▼
+------------------------------------------------*/
+.gallery{
+	margin: 0;
+	padding: 0;
+}
+.gallery-item{
+	list-style: nonel;
+	margin-top: 10px;
+}
+/* 画像の読み込み中はみえないように */
+.gallery-item.is-loading{
+	opacity: 0;
+}
+
+

@@ -190,27 +190,34 @@ class Entryclient extends MY_Controller
     {
 
 	    $_salse_list = $this->ac->get_contact(1);
-
-	    foreach ($_salse_list as $value) {
-	    	foreach ($value as $key => $val) {
-				if ($key == 'ac_seq')
-				{
-					$_name = $val . ' : ';
-				} elseif ($key == 'ac_name01') {
-					$_name = $_name . $val;
-				} else {
-					$arroptions_cl_sales[] = $_name . ' ' . $val;
-				}
-	    	}
-	    }
-
-	    if ($cl_sales_id == NULL)
+	    if (count($_salse_list) > 0)
 	    {
-	    	$this->smarty->assign('options_cl_sales_id',  $arroptions_cl_sales);
+
+		    foreach ($_salse_list as $value) {
+		    	foreach ($value as $key => $val) {
+					if ($key == 'ac_seq')
+					{
+						$_name = $val . ' : ';
+					} elseif ($key == 'ac_name01') {
+						$_name = $_name . $val;
+					} else {
+						$arroptions_cl_sales[] = $_name . ' ' . $val;
+					}
+		    	}
+		    }
+
+		    if ($cl_sales_id == NULL)
+		    {
+		    	$this->smarty->assign('options_cl_sales_id',  $arroptions_cl_sales);
+		    } else {
+		    	$_salse_num = intval($cl_sales_id);
+		    	$this->smarty->assign('options_cl_sales_id',  $arroptions_cl_sales[$_salse_num]);
+		    }
+
 	    } else {
-	    	$_salse_num = intval($cl_sales_id);
-	    	$this->smarty->assign('options_cl_sales_id',  $arroptions_cl_sales[$_salse_num]);
+	    	$this->smarty->assign('options_cl_sales_id',  NULL);
 	    }
+
     }
 
     // 担当編集リスト作成
@@ -218,27 +225,32 @@ class Entryclient extends MY_Controller
     {
 
     	$_editor_list = $this->ac->get_contact(0);
+    	if (count($_editor_list) > 0)
+    	{
+		    foreach ($_editor_list as $value) {
+		    	foreach ($value as $key => $val) {
+					if ($key == 'ac_seq')
+					{
+						$_name = $val . ' : ';
+					} elseif ($key == 'ac_name01') {
+						$_name = $_name . $val;
+					} else {
+						$arroptions_cl_editor[] = $_name . ' ' . $val;
+					}
+		    	}
+		    }
 
-	    foreach ($_editor_list as $value) {
-	    	foreach ($value as $key => $val) {
-				if ($key == 'ac_seq')
-				{
-					$_name = $val . ' : ';
-				} elseif ($key == 'ac_name01') {
-					$_name = $_name . $val;
-				} else {
-					$arroptions_cl_editor[] = $_name . ' ' . $val;
-				}
-	    	}
-	    }
+		    if ($cl_editor_id == NULL)
+		    {
+		    	$this->smarty->assign('options_cl_editor_id',  $arroptions_cl_editor);
+		    } else {
+		    	$_editor_num = intval($cl_editor_id);
+		    	$this->smarty->assign('options_cl_editor_id',  $arroptions_cl_editor[$_editor_num]);
+		    }
+    	} else {
+    		$this->smarty->assign('options_cl_editor_id',  NULL);
+    	}
 
-	    if ($cl_editor_id == NULL)
-	    {
-	    	$this->smarty->assign('options_cl_editor_id',  $arroptions_cl_editor);
-	    } else {
-	    	$_editor_num = intval($cl_editor_id);
-	    	$this->smarty->assign('options_cl_editor_id',  $arroptions_cl_editor[$_editor_num]);
-	    }
     }
 
     /**

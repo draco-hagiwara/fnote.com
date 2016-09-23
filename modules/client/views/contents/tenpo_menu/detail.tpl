@@ -1,5 +1,5 @@
 {* ヘッダー部分　START *}
-    {include file="../header.tpl" head_index="1"}
+    {include file="../header_wysiwyg.tpl" head_index="1"}
 
 <!-- summernote.jsのロード -->
 <link href="../../../wysiwyg_summemote/summernote.css" rel="stylesheet" type="text/css">

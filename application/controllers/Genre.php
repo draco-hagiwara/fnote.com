@@ -74,9 +74,26 @@ class Genre extends MY_Controller
 
     	}
 
-    	$this->smarty->assign('list_cate01',  $_catelist01);
-    	$this->smarty->assign('list_cate02',  $_catelist02);
-    	$this->smarty->assign('list_cate03',  $_catelist03);
+        if (isset($_catelist01) && count($_catelist01) > 0)
+    	{
+    		$this->smarty->assign('list_cate01',  $_catelist01);
+    	} else {
+    		$this->smarty->assign('list_cate01',  NULL);
+    	}
+
+        if (isset($_catelist02) && count($_catelist02) > 0)
+    	{
+    		$this->smarty->assign('list_cate02',  $_catelist02);
+    	} else {
+    		$this->smarty->assign('list_cate02',  NULL);
+    	}
+
+        if (isset($_catelist03) && count($_catelist03) > 0)
+    	{
+    		$this->smarty->assign('list_cate03',  $_catelist03);
+    	} else {
+    		$this->smarty->assign('list_cate03',  NULL);
+    	}
 
     	$this->view('genre/index.tpl');
 

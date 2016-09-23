@@ -302,16 +302,15 @@ class Clientlist extends MY_Controller
 		    	unset($input_post["retype_password"]) ;
 
 		    	// 掲載日アップ
+		    	$set_data['tp_cl_siteid']    = $input_post['cl_siteid'];
 		    	if ($input_post['cl_status'] == 8)
 		    	{
-		    		$set_data['tp_cl_siteid']    = $input_post['cl_siteid'];
 		    		$set_data['tp_posting_date'] = date("Y-m-d H:i:s");
-		    		$this->tnp->inup_tenpo($set_data);
-
-		    		$input_post['tp_status'] = 0;													// サイトへの掲載許可！
+		    		$set_data['tp_status']       = 0;												// サイトへの掲載許可！
 		    	} else {
-		    		$input_post['tp_status'] = 1;
+		    		$set_data['tp_status']       = 1;
 		    	}
+		    	$this->tnp->inup_tenpo($set_data);
 
 		    	// DB書き込み
 		    	unset($input_post["tp_status"]);
